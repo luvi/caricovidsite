@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from "mapbox-gl";
 var https = require("https");
 const parse = require("csv-parse");
-const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibHV2aXNhY2NoYXJpbmUiLCJhIjoiY2s4NHg2MTlyMDEzbjNmcXY4bWN4dHQ5diJ9._w5I5CMTFoThTpgWWAqtHA';
+const MAPBOX_ACCESS_TOKEN =
+  "pk.eyJ1IjoibHV2aXNhY2NoYXJpbmUiLCJhIjoiY2s4NHg2MTlyMDEzbjNmcXY4bWN4dHQ5diJ9._w5I5CMTFoThTpgWWAqtHA";
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -85,9 +86,6 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-
-  
-
     //setInterval(() => {
     this.getCOVIDInfo(url, body => {
       console.log("hi");
@@ -124,24 +122,33 @@ export default class App extends Component {
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: 'mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o',
+      style: "mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o",
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom
-      });
+    });
 
-    map.on('move', () => {
+    map.on("move", () => {
       this.setState({
-      lng: map.getCenter().lng.toFixed(4),
-      lat: map.getCenter().lat.toFixed(4),
-      zoom: map.getZoom().toFixed(2)
+        lng: map.getCenter().lng.toFixed(4),
+        lat: map.getCenter().lat.toFixed(4),
+        zoom: map.getZoom().toFixed(2)
       });
-      });
+    });
+
+    var popup = new mapboxgl.Popup({ offset: 25 }).setText(
+      "Construction on the Washington Monument began in 1848."
+    );
+    // add marker to map
+    new mapboxgl.Marker()
+      .setLngLat({ lng: -61, lat: 15 })
+      .setPopup(popup)
+      .addTo(map);
   }
 
   render() {
     return (
       <div className="App">
-        <Navbar bg="dark" variant="dark" expand="lg" fixed="top" >
+        <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
           <Navbar.Brand href="#home">Caribbean COVID Map BETA</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
@@ -149,9 +156,17 @@ export default class App extends Component {
             <Nav.Item>
               <Nav.Link href="/home">Home</Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="/">Total Cases: {this.state.total} </Nav.Link>
+            </Nav.Item>
           </Nav>
         </Navbar>
-        <div ref={el => this.mapContainer = el} className="mapContainer"/>
+        <div
+          ref={el => {
+            this.mapContainer = el;
+          }}
+          className="mapContainer"
+        />
       </div>
     );
   }
