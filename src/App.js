@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Navbar, Nav } from "react-bootstrap";
+import mapboxgl from 'mapbox-gl';
 var https = require("https");
 const parse = require("csv-parse");
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibHV2aXNhY2NoYXJpbmUiLCJhIjoiY2s4NHg2MTlyMDEzbjNmcXY4bWN4dHQ5diJ9._w5I5CMTFoThTpgWWAqtHA';
+
+mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`;
 let data;
@@ -45,9 +51,11 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      output: '',
-      total: ''
-
+      output: "",
+      total: "",
+      lng: -61,
+      lat: 15,
+      zoom: 4
     };
   }
 
@@ -77,6 +85,9 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+
+  
+
     //setInterval(() => {
     this.getCOVIDInfo(url, body => {
       console.log("hi");
@@ -97,29 +108,50 @@ export default class App extends Component {
             outputString +=
               caribbeanData[country][0] === ""
                 ? caribbeanData[country][1]
-                : caribbeanData[country][0]
-            ;
+                : caribbeanData[country][0];
             outputString +=
-              " " + caribbeanData[country][caribbeanData[country].length - 1]
-            ;
+              " " +
+              caribbeanData[country][caribbeanData[country].length - 1] +
+              "   ";
           }
 
-          this.setState({output: outputString});
-          this.setState({total: caribbeanData.reduce(this.sum, 0)});
+          this.setState({ output: outputString });
+          this.setState({ total: caribbeanData.reduce(this.sum, 0) });
         }
       );
     });
     //}, 10000);
+
+    const map = new mapboxgl.Map({
+      container: this.mapContainer,
+      style: 'mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o',
+      center: [this.state.lng, this.state.lat],
+      zoom: this.state.zoom
+      });
+
+    map.on('move', () => {
+      this.setState({
+      lng: map.getCenter().lng.toFixed(4),
+      lat: map.getCenter().lat.toFixed(4),
+      zoom: map.getZoom().toFixed(2)
+      });
+      });
   }
 
   render() {
     return (
       <div className="App">
-        <h1>Caribbean COVID Map TEST</h1>
-    <h3>Countries Data </h3>
-    <div>{this.state.output}</div>
-    <h3>Total cases</h3>
-    <div>{this.state.total}</div>
+        <Navbar bg="dark" variant="dark" expand="lg" fixed="top" >
+          <Navbar.Brand href="#home">Caribbean COVID Map BETA</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
+          <Nav className="justify-content-end" activeKey="/home">
+            <Nav.Item>
+              <Nav.Link href="/home">Home</Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Navbar>
+        <div ref={el => this.mapContainer = el} className="mapContainer"/>
       </div>
     );
   }
