@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav, Modal, Button } from "react-bootstrap";
 import mapboxgl from "mapbox-gl";
 var https = require("https");
 const parse = require("csv-parse");
@@ -57,8 +57,8 @@ export default class App extends Component {
       lng: -61,
       lat: 15,
       zoom: 4,
-      caribbeanData:[],
-      date:''
+      caribbeanData: [],
+      date: ""
     };
   }
 
@@ -87,29 +87,37 @@ export default class App extends Component {
     return total + parseInt(array[array.length - 1]);
   }
 
-  setMarkers(map){
-
+  setMarkers(map) {
     let cariData = this.state.caribbeanData;
+   
 
     cariData.forEach(element => {
-      console.log(element);
+      let numCases = element[element.length - 1];
+      let size = Math.max (20 , ((parseInt(numCases)/300) *100));
+
+     
+      
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
-        `${element[element.length-1]} confirmed`
+        `${numCases} confirmed`
       );
       // add marker to map
-      new mapboxgl.Marker()
+
+      var el = document.createElement("div");
+      el.className = "marker";
+      el.style.backgroundColor = "red";
+      el.style.width = size + "px";
+      el.style.height = size + "px";
+      el.style.borderRadius = "50%"
+      el.style.opacity = "50%"
+
+      new mapboxgl.Marker(el)
         .setLngLat({ lng: element[3], lat: element[2] })
         .setPopup(popup)
         .addTo(map);
-  
     });
-      
-    };
-
-  
+  }
 
   componentDidMount() {
-
     //setInterval(() => {
     this.getCOVIDInfo(url, body => {
       console.log("hi");
@@ -122,11 +130,11 @@ export default class App extends Component {
         (err, output) => {
           const arr = output;
           let size = arr[0].length; //latest entry
-          this.setState({date: arr[0][size - 1]}); //date of latest entry
+          this.setState({ date: arr[0][size - 1] }); //date of latest entry
           let outputString = "";
 
           let caribbeanData = arr.filter(this.isCaribbeanCountry);
-          this.setState({caribbeanData: caribbeanData});
+          this.setState({ caribbeanData: caribbeanData });
           for (let country in caribbeanData) {
             outputString +=
               caribbeanData[country][0] === ""
@@ -163,13 +171,9 @@ export default class App extends Component {
         zoom: map.getZoom().toFixed(2)
       });
     });
-
-   
-    
   }
 
   render() {
-    
     return (
       <div className="App">
         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
@@ -178,10 +182,15 @@ export default class App extends Component {
           <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
           <Nav className="justify-content-end" activeKey="/home">
             <Nav.Item>
-              <Nav.Link href="/">Total Cases: {this.state.total} </Nav.Link>
+              <Nav.Link href="/">
+                Total Confirmed Cases: {this.state.total}{" "}
+              </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link href="/">Updated: {this.state.date} </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="/">Credits</Nav.Link>
             </Nav.Item>
           </Nav>
         </Navbar>
