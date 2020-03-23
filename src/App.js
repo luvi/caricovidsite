@@ -56,7 +56,8 @@ export default class App extends Component {
       total: "",
       lng: -61,
       lat: 15,
-      zoom: 4
+      zoom: 4,
+      caribbeanData:[]
     };
   }
 
@@ -85,7 +86,29 @@ export default class App extends Component {
     return total + parseInt(array[array.length - 1]);
   }
 
+  setMarkers(map){
+
+    let cariData = this.state.caribbeanData;
+
+    cariData.forEach(element => {
+      console.log(element);
+      let popup = new mapboxgl.Popup({ offset: 25 }).setText(
+        `${element[element.length-1]} confirmed`
+      );
+      // add marker to map
+      new mapboxgl.Marker()
+        .setLngLat({ lng: element[3], lat: element[2] })
+        .setPopup(popup)
+        .addTo(map);
+  
+    });
+      
+    };
+
+  
+
   componentDidMount() {
+
     //setInterval(() => {
     this.getCOVIDInfo(url, body => {
       console.log("hi");
@@ -102,6 +125,7 @@ export default class App extends Component {
           let outputString = "";
 
           let caribbeanData = arr.filter(this.isCaribbeanCountry);
+          this.setState({caribbeanData: caribbeanData});
           for (let country in caribbeanData) {
             outputString +=
               caribbeanData[country][0] === ""
@@ -112,6 +136,10 @@ export default class App extends Component {
               caribbeanData[country][caribbeanData[country].length - 1] +
               "   ";
           }
+
+          this.setMarkers(map);
+
+          console.log(this.state.caribbeanData);
 
           this.setState({ output: outputString });
           this.setState({ total: caribbeanData.reduce(this.sum, 0) });
@@ -135,17 +163,12 @@ export default class App extends Component {
       });
     });
 
-    var popup = new mapboxgl.Popup({ offset: 25 }).setText(
-      "Martinique has X cases"
-    );
-    // add marker to map
-    new mapboxgl.Marker()
-      .setLngLat({ lng: -61, lat: 15 })
-      .setPopup(popup)
-      .addTo(map);
+   
+    
   }
 
   render() {
+    
     return (
       <div className="App">
         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
