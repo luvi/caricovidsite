@@ -3,6 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
 import mapboxgl from "mapbox-gl";
+import { countryList } from './countryList.js';
 var https = require("https");
 const parse = require("csv-parse");
 const MAPBOX_ACCESS_TOKEN =
@@ -11,42 +12,10 @@ const MAPBOX_ACCESS_TOKEN =
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`;
-let data;
 
-let countryList = [
-  "Anguilla",
-  "Antigua and Barbuda",
-  "Aruba",
-  "Bahamas",
-  "Barbados",
-  "British Virgin Islands",
-  "Cayman Islands",
-  "Cuba",
-  "Dominica",
-  "Dominican Republic",
-  "Grenada",
-  "Guadeloupe",
-  "Haiti",
-  "Jamaica",
-  "Martinique",
-  "Montserrat",
-  "Netherlands Antilles",
-  "Puerto Rico",
-  "Saint Barthelemy",
-  "Saint Kitts and Nevis",
-  "Saint Lucia",
-  "St Martin",
-  "Saint Vincent and the Grenadines",
-  "Trinidad and Tobago",
-  "Turks & Caicos Islands",
-  "US Virgin Islands",
-  "Venezuela",
-  "Guyana",
-  "Belize",
-  "French Guiana",
-  "Suriname",
-  "Panama"
-];
+
+
+let data
 
 export default class App extends Component {
   constructor(props) {
@@ -63,6 +32,7 @@ export default class App extends Component {
   }
 
   getCOVIDInfo(url, callback) {
+    
     var body = "";
     https
       .get(url, function(res) {
