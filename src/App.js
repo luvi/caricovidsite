@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Navbar, Nav, Modal, Button } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import mapboxgl from "mapbox-gl";
 var https = require("https");
 const parse = require("csv-parse");
@@ -17,7 +17,7 @@ let countryList = [
   "Anguilla",
   "Antigua and Barbuda",
   "Aruba",
-  "The Bahamas",
+  "Bahamas",
   "Barbados",
   "British Virgin Islands",
   "Cayman Islands",
@@ -120,7 +120,7 @@ export default class App extends Component {
   componentDidMount() {
     //setInterval(() => {
     this.getCOVIDInfo(url, body => {
-      console.log("hi");
+      console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
       data = body;
       parse(
         body,
@@ -147,9 +147,6 @@ export default class App extends Component {
           }
 
           this.setMarkers(map);
-
-          console.log(this.state.caribbeanData);
-
           this.setState({ output: outputString });
           this.setState({ total: caribbeanData.reduce(this.sum, 0) });
         }
