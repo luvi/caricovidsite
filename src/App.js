@@ -57,7 +57,8 @@ export default class App extends Component {
       lng: -61,
       lat: 15,
       zoom: 4,
-      caribbeanData:[]
+      caribbeanData:[],
+      date:''
     };
   }
 
@@ -121,7 +122,7 @@ export default class App extends Component {
         (err, output) => {
           const arr = output;
           let size = arr[0].length; //latest entry
-          console.log(arr[0][size - 1]); //date of latest entry
+          this.setState({date: arr[0][size - 1]}); //date of latest entry
           let outputString = "";
 
           let caribbeanData = arr.filter(this.isCaribbeanCountry);
@@ -177,10 +178,10 @@ export default class App extends Component {
           <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
           <Nav className="justify-content-end" activeKey="/home">
             <Nav.Item>
-              <Nav.Link href="/home">Home</Nav.Link>
+              <Nav.Link href="/">Total Cases: {this.state.total} </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="/">Total Cases: {this.state.total} </Nav.Link>
+              <Nav.Link href="/">Updated: {this.state.date} </Nav.Link>
             </Nav.Item>
           </Nav>
         </Navbar>
