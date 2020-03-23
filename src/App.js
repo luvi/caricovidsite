@@ -4,10 +4,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
 import mapboxgl from "mapbox-gl";
 import { countryList } from './countryList.js';
+import { MAPBOX_ACCESS_TOKEN } from './MAPBOX_ACCESS_TOKEN.js';
+
 var https = require("https");
 const parse = require("csv-parse");
-const MAPBOX_ACCESS_TOKEN =
-  "pk.eyJ1IjoibHV2aXNhY2NoYXJpbmUiLCJhIjoiY2s4NHg2MTlyMDEzbjNmcXY4bWN4dHQ5diJ9._w5I5CMTFoThTpgWWAqtHA";
+ 
+
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
