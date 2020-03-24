@@ -3,39 +3,39 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
 import mapboxgl from "mapbox-gl";
-import { countryList } from './countryList.js';
-import { MAPBOX_ACCESS_TOKEN } from './MAPBOX_ACCESS_TOKEN.js';
+import { countryList } from "./countryList.js";
+import { MAPBOX_ACCESS_TOKEN } from "./MAPBOX_ACCESS_TOKEN.js";
+import { type } from "os";
 
 var https = require("https");
 const parse = require("csv-parse");
- 
+
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`;
-
-let data
+const deathsSource = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv`;
 
 let quickAdd = [
-["","Belize","17.195465","-88.268587","1"],
-["","Turks & Caicos Islands","21.799720","-71.729114","1"]
-]
+  ["", "Belize", "17.195465", "-88.268587", "1"],
+  ["", "Turks & Caicos Islands", "21.799720", "-71.729114", "1"]
+];
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      output: "",
       total: "",
+      totalDeaths: 0,
       lng: -61,
       lat: 15,
       zoom: 4,
       caribbeanData: [],
+      caribbeanDataDeaths: [],
       johnsHopkinsData: [],
       date: ""
     };
   }
 
   getCOVIDInfo(url, callback) {
-    
     var body = "";
     https
       .get(url, function(res) {
@@ -62,17 +62,24 @@ export default class App extends Component {
 
   setMarkers(map) {
     let cariData = this.state.caribbeanData;
-    
-    console.log(cariData);
+    let cariDataDeaths = this.state.caribbeanDataDeaths;
 
     cariData.forEach(element => {
-      
+      let numDeaths = 0;
+      let caribbeanName = element[0] === "" ? element[1] : element[0];
       let numCases = element[element.length - 1];
-      let size = Math.max (20 , ((parseInt(numCases)/300) *100));
-      
-      
+      let matchingDEntry = cariDataDeaths.filter(
+        entry => entry[0] === caribbeanName || entry[1] === caribbeanName
+      )[0];
+      if (typeof matchingDEntry !== "undefined") {
+        numDeaths = matchingDEntry[matchingDEntry.length - 1];
+      }
+
+      console.log(numDeaths);
+      let size = Math.max(20, (parseInt(numCases) / 300) * 100);
+
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
-        `${numCases} confirmed`
+        `${numCases} confirmed, ${numDeaths} passed`
       );
       // add marker to map
 
@@ -81,8 +88,8 @@ export default class App extends Component {
       el.style.backgroundColor = "red";
       el.style.width = size + "px";
       el.style.height = size + "px";
-      el.style.borderRadius = "50%"
-      el.style.opacity = "50%"
+      el.style.borderRadius = "50%";
+      el.style.opacity = "50%";
 
       new mapboxgl.Marker(el)
         .setLngLat({ lng: element[3], lat: element[2] })
@@ -92,45 +99,32 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    //setInterval(() => {
     this.getCOVIDInfo(url, body => {
       console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
-      data = body;
-      parse(
-        body,
-        {
-          comment: "#"
-        },
-        (err, output) => {
-          const arr = output;
-          let size = arr[0].length; //latest entry
-          this.setState({ date: arr[0][size - 1] }); //date of latest entry
-          let outputString = "";
 
-          let caribbeanData = arr.filter(this.isCaribbeanCountry);
-        
-         caribbeanData = caribbeanData.concat(quickAdd);
-          
+      parse(body, (err, output) => {
+        const arr = output;
+        let size = arr[0].length; //latest entry
+        this.setState({ date: arr[0][size - 1] }); //date of latest entry
 
-          this.setState({ caribbeanData: caribbeanData });
-          for (let country in caribbeanData) {
-            outputString +=
-              caribbeanData[country][0] === ""
-                ? caribbeanData[country][1]
-                : caribbeanData[country][0];
-            outputString +=
-              " " +
-              caribbeanData[country][caribbeanData[country].length - 1] +
-              "   ";
-          }
+        let caribbeanData = arr.filter(this.isCaribbeanCountry);
 
-          this.setMarkers(map);
-          this.setState({ output: outputString });
-          this.setState({ total: caribbeanData.reduce(this.sum, 0) });
-        }
-      );
+        caribbeanData = caribbeanData.concat(quickAdd);
+
+        this.getCOVIDInfo(deathsSource, body => {
+          parse(body, (err, output) => {
+            let caribbeanDataDeaths = output.filter(this.isCaribbeanCountry);
+            this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
+            this.setState({
+              totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0)
+            });
+            this.setState({ caribbeanData: caribbeanData });
+            this.setMarkers(map);
+            this.setState({ total: caribbeanData.reduce(this.sum, 0) });
+          });
+        });
+      });
     });
-    //}, 10000);
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
