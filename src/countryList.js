@@ -28,7 +28,6 @@ export const countryList = [
     "US Virgin Islands",
     "Venezuela",
     "Guyana",
-    "Belize",
     "French Guiana",
     "Suriname",
     "Panama"

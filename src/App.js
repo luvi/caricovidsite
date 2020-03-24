@@ -60,6 +60,7 @@ export default class App extends Component {
    
 
     cariData.forEach(element => {
+      
       let numCases = element[element.length - 1];
       let size = Math.max (20 , ((parseInt(numCases)/300) *100));
 
@@ -102,6 +103,7 @@ export default class App extends Component {
           let outputString = "";
 
           let caribbeanData = arr.filter(this.isCaribbeanCountry);
+          //console.log(caribbeanData);
           this.setState({ caribbeanData: caribbeanData });
           for (let country in caribbeanData) {
             outputString +=
