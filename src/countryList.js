@@ -7,6 +7,7 @@ export const countryList = [
     "British Virgin Islands",
     "Cayman Islands",
     "Cuba",
+    "Curacao",
     "Dominica",
     "Dominican Republic",
     "Grenada",
