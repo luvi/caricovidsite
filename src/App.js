@@ -75,11 +75,10 @@ export default class App extends Component {
         numDeaths = matchingDEntry[matchingDEntry.length - 1];
       }
 
-      console.log(numDeaths);
       let size = Math.max(20, (parseInt(numCases) / 300) * 100);
 
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
-        `${numCases} confirmed, ${numDeaths} passed`
+        `${numCases} confirmed, ${numDeaths} death(s)`
       );
       // add marker to map
 
