@@ -15,6 +15,10 @@ const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/cs
 
 let data
 
+let quickAdd = [
+["","Belize","17.195465","-88.268587","1"],
+["","Turks & Caicos Islands","21.799720","-71.729114","1"]
+]
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +29,7 @@ export default class App extends Component {
       lat: 15,
       zoom: 4,
       caribbeanData: [],
+      johnsHopkinsData: [],
       date: ""
     };
   }
@@ -57,7 +62,8 @@ export default class App extends Component {
 
   setMarkers(map) {
     let cariData = this.state.caribbeanData;
-   
+    
+    console.log(cariData);
 
     cariData.forEach(element => {
       
@@ -103,7 +109,10 @@ export default class App extends Component {
           let outputString = "";
 
           let caribbeanData = arr.filter(this.isCaribbeanCountry);
-          //console.log(caribbeanData);
+        
+         caribbeanData = caribbeanData.concat(quickAdd);
+          
+
           this.setState({ caribbeanData: caribbeanData });
           for (let country in caribbeanData) {
             outputString +=
