@@ -23,7 +23,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      total: "",
+      total: 0,
       totalDeaths: 0,
       lng: -61,
       lat: 15,
@@ -152,6 +152,11 @@ export default class App extends Component {
             <Nav.Item>
               <Nav.Link href="#">
                 Total Confirmed Cases: {this.state.total}
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link href="#">
+                Total Deaths: {this.state.totalDeaths}
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
