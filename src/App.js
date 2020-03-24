@@ -151,12 +151,12 @@ export default class App extends Component {
           <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
           <Nav className="justify-content-end" activeKey="/home">
             <Nav.Item>
-              <Nav.Link href="/">
-                Total Confirmed Cases: {this.state.total}{" "}
+              <Nav.Link href="#">
+                Total Confirmed Cases: {this.state.total}
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="/">Updated: {this.state.date} </Nav.Link>
+              <Nav.Link href="#">Updated: {this.state.date} </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link href="/">Credits</Nav.Link>
