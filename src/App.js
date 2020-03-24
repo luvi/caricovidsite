@@ -9,13 +9,9 @@ import { MAPBOX_ACCESS_TOKEN } from './MAPBOX_ACCESS_TOKEN.js';
 var https = require("https");
 const parse = require("csv-parse");
  
-
-
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`;
-
-
 
 let data
 
