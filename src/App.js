@@ -69,8 +69,7 @@ export default class App extends Component {
       
       let numCases = element[element.length - 1];
       let size = Math.max (20 , ((parseInt(numCases)/300) *100));
-
-     
+      
       
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
         `${numCases} confirmed`
