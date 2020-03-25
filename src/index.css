@@ -20,3 +20,12 @@ code {
   bottom: 0;
   
   }
+
+.statsContainer {
+    position: fixed;
+    top: 10%;
+    right: 0;
+    left: 75%;
+    z-index:99;
+    text-align: left;
+}

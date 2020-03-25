@@ -2,23 +2,17 @@ import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
-import mapboxgl from "mapbox-gl";
-import { countryList } from "./countryList.js";
-import { MAPBOX_ACCESS_TOKEN } from "./MAPBOX_ACCESS_TOKEN.js";
 import { type } from "os";
+import Map from './Map';
 
-var https = require("https");
-const parse = require("csv-parse");
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
-mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`;
-const deathsSource = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv`;
-
-let quickAdd = [
-  ["", "Belize", "17.195465", "-88.268587", "1"],
-  ["", "Turks & Caicos Islands", "21.799720", "-71.729114", "1"]
-];
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -35,145 +29,68 @@ export default class App extends Component {
     };
   }
 
-  getCOVIDInfo(url, callback) {
-    var body = "";
-    https
-      .get(url, function(res) {
-        res.on("data", function(chunk) {
-          body += chunk;
-        });
-
-        res.on("end", data => {
-          callback(body);
-        });
-      })
-      .on("error", function(e) {
-        console.log("Got an error: ", e);
-      });
-  }
-
-  isCaribbeanCountry(arr) {
-    return countryList.includes(arr[1]) || countryList.includes(arr[0]);
-  }
-
-  sum(total, array) {
-    return total + parseInt(array[array.length - 1]);
-  }
-
-  setMarkers(map) {
-    let cariData = this.state.caribbeanData;
-    let cariDataDeaths = this.state.caribbeanDataDeaths;
-
-    cariData.forEach(element => {
-      let numDeaths = 0;
-      let caribbeanName = element[0] === "" ? element[1] : element[0];
-      let numCases = element[element.length - 1];
-      let matchingDEntry = cariDataDeaths.filter(
-        entry => entry[0] === caribbeanName || entry[1] === caribbeanName
-      )[0];
-      if (typeof matchingDEntry !== "undefined") {
-        numDeaths = matchingDEntry[matchingDEntry.length - 1];
-      }
-
-      let size = Math.max(20, (parseInt(numCases) / 300) * 100);
-
-      let popup = new mapboxgl.Popup({ offset: 25 }).setText(
-        `${numCases} confirmed, ${numDeaths} death(s)`
-      );
-      // add marker to map
-
-      var el = document.createElement("div");
-      el.className = "marker";
-      el.style.backgroundColor = "red";
-      el.style.width = size + "px";
-      el.style.height = size + "px";
-      el.style.borderRadius = "50%";
-      el.style.opacity = "50%";
-
-      new mapboxgl.Marker(el)
-        .setLngLat({ lng: element[3], lat: element[2] })
-        .setPopup(popup)
-        .addTo(map);
-    });
-  }
-
-  componentDidMount() {
-    this.getCOVIDInfo(url, body => {
-      console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
-
-      parse(body, (err, output) => {
-        const arr = output;
-        let size = arr[0].length; //latest entry
-        this.setState({ date: arr[0][size - 1] }); //date of latest entry
-
-        let caribbeanData = arr.filter(this.isCaribbeanCountry);
-
-        caribbeanData = caribbeanData.concat(quickAdd);
-
-        this.getCOVIDInfo(deathsSource, body => {
-          parse(body, (err, output) => {
-            let caribbeanDataDeaths = output.filter(this.isCaribbeanCountry);
-            this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
-            this.setState({
-              totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0)
-            });
-            this.setState({ caribbeanData: caribbeanData });
-            this.setMarkers(map);
-            this.setState({ total: caribbeanData.reduce(this.sum, 0) });
-          });
-        });
-      });
-    });
-
-    const map = new mapboxgl.Map({
-      container: this.mapContainer,
-      style: "mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o",
-      center: [this.state.lng, this.state.lat],
-      zoom: this.state.zoom
-    });
-
-    map.on("move", () => {
-      this.setState({
-        lng: map.getCenter().lng.toFixed(4),
-        lat: map.getCenter().lat.toFixed(4),
-        zoom: map.getZoom().toFixed(2)
-      });
-    });
-  }
-
   render() {
     return (
       <div className="App">
+        <Router>
         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
-          <Navbar.Brand href="#home">Caribbean COVID Map BETA</Navbar.Brand>
+        <Link to="/"><Navbar.Brand>Caribbean COVID Map BETA</Navbar.Brand></Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
           <Nav className="justify-content-end" activeKey="/home">
             <Nav.Item>
-              <Nav.Link href="#">
-                Total Confirmed Cases: {this.state.total}
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link href="#">
-                Total Deaths: {this.state.totalDeaths}
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link href="#">Updated: {this.state.date} </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link href="/">Credits</Nav.Link>
+            <Link style={{color: "white"}} to="/credits">Credits</Link>
             </Nav.Item>
           </Nav>
         </Navbar>
-        <div
-          ref={el => {
-            this.mapContainer = el;
-          }}
-          className="mapContainer"
-        />
+        
+        
+      <div>
+   
+
+        {/*
+          A <Switch> looks through all its children <Route>
+          elements and renders the first one whose path
+          matches the current URL. Use a <Switch> any time
+          you have multiple routes, but you want only one
+          of them to render at a time
+        */}
+        <Switch>
+          <Route exact path="/">
+          <Map />
+          </Route>
+          <Route path="/credits">
+            <Credits />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+    
       </div>
     );
   }
 }
+
+
+function Credits() {
+  return (
+    
+    <div>
+      <div style={{backgroundColor:"#1A2637", position:"fixed", height:"100%", width: "100%", color:"white"}}>
+        
+        
+
+        
+      </div>
+      <div style={{flex:3, flexDirection: "column", position:"fixed", color: "white"}} className="statsContainer">
+        <div>Developer: <a href="https://twitter.com/JaniquekaJohn">@JaniquekaJohn</a></div>
+      <div>Disclaimer: Data shown on this site is for information purposes only, please keep update delays in mind.</div>
+      <div> Data Sources: Johns Hopkins, @KevzPolitics</div> 
+      <div>BVI News</div>
+       </div>
+      </div>
+
+    
+  );
+}
+
