@@ -16,17 +16,7 @@ import {
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      total: 0,
-      totalDeaths: 0,
-      lng: -61,
-      lat: 15,
-      zoom: 4,
-      caribbeanData: [],
-      caribbeanDataDeaths: [],
-      johnsHopkinsData: [],
-      date: ""
-    };
+  
   }
 
   render() {
