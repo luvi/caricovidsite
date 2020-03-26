@@ -14,9 +14,13 @@ let quickAdd = [
   ["", "Belize", "17.195465", "-88.268587", "1"],
   ["", "Turks & Caicos Islands", "21.799720", "-71.729114", "1"],
   ["", "British Virgin Islands", "18.432713", "-64.594438", "2"],
-  ["","Dominica","15.415","-61.371","7"],
-  ["","Trinidad and Tobago","10.6918","-61.2225","60"],
-  ["","Saint Kitts and Nevis","17.328661","-62.778625","2"]
+  ["", "Dominica", "15.415", "-61.371", "11"],
+  ["", "Trinidad and Tobago", "10.6918", "-61.2225", "60"],
+  ["", "Saint Kitts and Nevis", "17.328661", "-62.778625", "2"]
+];
+
+let quickAddD = [
+  ["", "Trinidad and Tobago", "10.6918", "-61.2225", "1"]
 ];
 
 export default class Map extends Component {
@@ -56,6 +60,8 @@ export default class Map extends Component {
     return countryList.includes(arr[1]) || countryList.includes(arr[0]);
   }
 
+  
+
   sum(total, array) {
     return total + parseInt(array[array.length - 1]);
   }
@@ -75,7 +81,7 @@ export default class Map extends Component {
         numDeaths = matchingDEntry[matchingDEntry.length - 1];
       }
 
-      let size = Math.max(20, (parseInt(numCases) / 300) * 100);
+      let size = Math.max(20, (parseInt(numCases) / 500) * 100);
 
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
         `${caribbeanName}: ${numCases} confirmed, ${numDeaths} death(s)`
@@ -106,20 +112,52 @@ export default class Map extends Component {
         let size = arr[0].length; //latest entry
         this.setState({ date: arr[0][size - 1] }); //date of latest entry
 
-        let caribbeanData = arr.filter(this.isCaribbeanCountry);
+        let johnsHopkinsData = arr.filter(this.isCaribbeanCountry);
+        let johnsHopkinsCountries = new Set();
 
-        caribbeanData = caribbeanData.concat(quickAdd);
+        //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
+        // johnsHopkinsData.forEach(jhDataElement => {
+        //   let caribbeanName =
+        //     jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
+        //   johnsHopkinsCountries.add(caribbeanName);
+        //   let numCases = jhDataElement[jhDataElement.length - 1];
+        //   let matchingDEntry = quickAdd.filter(
+        //     entry => entry[0] === caribbeanName || entry[1] === caribbeanName
+        //   );
+
+        //   if (typeof matchingDEntry[0] !== "undefined") {
+        //     matchingDEntry = matchingDEntry[0];
+        //     let myCaseCount = matchingDEntry[matchingDEntry.length - 1];
+        //     jhDataElement[jhDataElement.length - 1] = Math.max(
+        //       numCases,
+        //       myCaseCount
+        //     );
+        //   }
+
+          // add the data that I have that Johns Hopkins does not.
+          //console.log(johnsHopkinsCountries.has("Trinidad and Tobago"),johnsHopkinsCountries);
+
+        //   quickAdd = quickAdd.filter((arr) => {            
+        //     return !(
+        //       johnsHopkinsCountries.has(arr[0]) ||
+        //       johnsHopkinsCountries.has(arr[1])
+        //     );
+        //   })
+      //  });
+
+        johnsHopkinsData = johnsHopkinsData.concat(quickAdd);
 
         this.getCOVIDInfo(deathsSource, body => {
           parse(body, (err, output) => {
             let caribbeanDataDeaths = output.filter(this.isCaribbeanCountry);
+            caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddD);
             this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
             this.setState({
               totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0)
             });
-            this.setState({ caribbeanData: caribbeanData });
+            this.setState({ caribbeanData: johnsHopkinsData });
             this.setMarkers(map);
-            this.setState({ total: caribbeanData.reduce(this.sum, 0) });
+            this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
           });
         });
       });
@@ -145,9 +183,16 @@ export default class Map extends Component {
     return (
       <div>
         <div className="statsContainer">
-          <Card type="rounded-0" style={{ width: "18rem", backgroundColor: "#1A2637", borderRadius: "0" }}>
+          <Card
+            type="rounded-0"
+            style={{
+              width: "18rem",
+              backgroundColor: "#1A2637",
+              borderRadius: "0"
+            }}
+          >
             <Card.Body>
-              <Card.Text style={{color: "white"}}>
+              <Card.Text style={{ color: "white" }}>
                 <div>Updated: {this.state.date}</div>
                 <div>Total Confirmed Cases: {this.state.total}</div>
                 <div>Total Deaths: {this.state.totalDeaths}</div>

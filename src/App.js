@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
-import { type } from "os";
 import Map from './Map';
 
 import {
