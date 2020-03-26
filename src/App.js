@@ -76,6 +76,7 @@ function Credits() {
       <div>Disclaimer: Data shown on this site is for information purposes only, please keep update delays in mind.</div>
       <div> Data Sources: Johns Hopkins, @KevzPolitics</div> 
       <div>BVI News</div>
+      <div><a href="https://t.co/beIX5FprqY"> A COVID-19 patient has died - Trinidad Express</a></div>
        </div>
       </div>
 
