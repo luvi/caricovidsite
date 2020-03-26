@@ -18,14 +18,18 @@ code {
   right: 0;
   left: 0;
   bottom: 0;
+  z-index:98;
   
   }
 
 .statsContainer {
+    
+   justify-content: space-between;
     position: fixed;
+
     top: 10%;
-    right: 0;
-    left: 75%;
+    right: 30%;
+    left: 70%;
     z-index:99;
     text-align: left;
 }

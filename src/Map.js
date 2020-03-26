@@ -15,8 +15,7 @@ let quickAdd = [
   ["", "Turks & Caicos Islands", "21.799720", "-71.729114", "1"],
   ["", "British Virgin Islands", "18.432713", "-64.594438", "2"],
   ["", "Dominica", "15.415", "-61.371", "11"],
-  ["", "Trinidad and Tobago", "10.6918", "-61.2225", "60"],
-  ["", "Saint Kitts and Nevis", "17.328661", "-62.778625", "2"]
+  ["", "Trinidad and Tobago", "10.6918", "-61.2225", "60"]
 ];
 
 let quickAddD = [
