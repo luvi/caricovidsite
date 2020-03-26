@@ -1,5 +1,5 @@
 export const countryList = [
-    "Anguilla",
+    //"Anguilla",
     "Antigua and Barbuda",
     "Aruba",
     "Bahamas",
