@@ -9,19 +9,10 @@ const parse = require("csv-parse");
 
 const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`;
 const deathsSource = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv`;
+const myOverrideURL = `https://raw.githubusercontent.com/luvi/caricoviddata/master/casesOverride.csv`;
 
-let quickAdd = [
-  ["", "Belize", "17.195465", "-88.268587", "1"],
-  ["", "Turks & Caicos Islands", "21.799720", "-71.729114", "2"],
-  ["", "British Virgin Islands", "18.432713", "-64.594438", "2"],
-  ["", "Dominica", "15.415", "-61.371", "11"],
-  ["", "Trinidad and Tobago", "10.6918", "-61.2225", "61"],
-  ["", "Anguilla", "18.225438", "-63.039873", "2"]
-];
 
-let quickAddD = [
-  ["", "Trinidad and Tobago", "10.6918", "-61.2225", "1"]
-];
+let quickAddD = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "1"]];
 
 export default class Map extends Component {
   constructor(props) {
@@ -60,8 +51,6 @@ export default class Map extends Component {
     return countryList.includes(arr[1]) || countryList.includes(arr[0]);
   }
 
-  
-
   sum(total, array) {
     return total + parseInt(array[array.length - 1]);
   }
@@ -95,7 +84,7 @@ export default class Map extends Component {
       el.style.height = size + "px";
       el.style.borderRadius = "50%";
       el.style.opacity = "50%";
-
+      console.log(element[3], element[2]);
       new mapboxgl.Marker(el)
         .setLngLat({ lng: element[3], lat: element[2] })
         .setPopup(popup)
@@ -105,6 +94,7 @@ export default class Map extends Component {
 
   componentDidMount() {
     this.getCOVIDInfo(url, body => {
+      //readJohnsCSV
       console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
 
       parse(body, (err, output) => {
@@ -115,51 +105,31 @@ export default class Map extends Component {
         let johnsHopkinsData = arr.filter(this.isCaribbeanCountry);
         let johnsHopkinsCountries = new Set();
 
-        //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
-        // johnsHopkinsData.forEach(jhDataElement => {
-        //   let caribbeanName =
-        //     jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
-        //   johnsHopkinsCountries.add(caribbeanName);
-        //   let numCases = jhDataElement[jhDataElement.length - 1];
-        //   let matchingDEntry = quickAdd.filter(
-        //     entry => entry[0] === caribbeanName || entry[1] === caribbeanName
-        //   );
-
-        //   if (typeof matchingDEntry[0] !== "undefined") {
-        //     matchingDEntry = matchingDEntry[0];
-        //     let myCaseCount = matchingDEntry[matchingDEntry.length - 1];
-        //     jhDataElement[jhDataElement.length - 1] = Math.max(
-        //       numCases,
-        //       myCaseCount
-        //     );
-        //   }
-
-          // add the data that I have that Johns Hopkins does not.
-          //console.log(johnsHopkinsCountries.has("Trinidad and Tobago"),johnsHopkinsCountries);
-
-        //   quickAdd = quickAdd.filter((arr) => {            
-        //     return !(
-        //       johnsHopkinsCountries.has(arr[0]) ||
-        //       johnsHopkinsCountries.has(arr[1])
-        //     );
-        //   })
-      //  });
-
-        johnsHopkinsData = johnsHopkinsData.concat(quickAdd);
-
         this.getCOVIDInfo(deathsSource, body => {
+          //Read JohnsDeathCSV
           parse(body, (err, output) => {
             let caribbeanDataDeaths = output.filter(this.isCaribbeanCountry);
             caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddD);
-            this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
-            this.setState({
-              totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0)
-            });
-            this.setState({ caribbeanData: johnsHopkinsData });
-            this.setMarkers(map);
-            this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
+
+            this.getCOVIDInfo(myOverrideURL, body => {
+              //Read my CSV
+              parse(body, (err, output) => {
+                let quickAddd = output;
+
+                console.log(output);
+
+                johnsHopkinsData = johnsHopkinsData.concat(quickAddd);
+                this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
+                this.setState({
+                  totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0)
+                });
+                this.setState({ caribbeanData: johnsHopkinsData });
+                this.setMarkers(map);
+                this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
+              }); //parse
+            }); //end read my csv
           });
-        });
+        }); // end read Johns Hopkins Death CSV
       });
     });
 
