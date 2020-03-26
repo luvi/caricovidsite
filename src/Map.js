@@ -84,7 +84,7 @@ export default class Map extends Component {
       el.style.height = size + "px";
       el.style.borderRadius = "50%";
       el.style.opacity = "50%";
-      console.log(element[3], element[2]);
+      
       new mapboxgl.Marker(el)
         .setLngLat({ lng: element[3], lat: element[2] })
         .setPopup(popup)
@@ -116,9 +116,39 @@ export default class Map extends Component {
               parse(body, (err, output) => {
                 let quickAddd = output;
 
-                console.log(output);
+               
+      //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
+       johnsHopkinsData.forEach(jhDataElement => {
+         let caribbeanName =
+           jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
+         johnsHopkinsCountries.add(caribbeanName); //create set of all countries johns has
+         let numCases = jhDataElement[jhDataElement.length - 1];
+         let matchingDEntry = quickAddd.filter(
+           entry => entry[0] === caribbeanName || entry[1] === caribbeanName
+         );
+
+         if (typeof matchingDEntry[0] !== "undefined") {
+           matchingDEntry = matchingDEntry[0];
+           let myCaseCount = matchingDEntry[matchingDEntry.length - 1];
+           jhDataElement[jhDataElement.length - 1] = Math.max(
+             numCases,
+            myCaseCount
+           );
+         }
+       //add the data that I have that Johns Hopkins does not.
+      
+        quickAddd = quickAddd.filter((arr) => {            
+           return !(
+             johnsHopkinsCountries.has(arr[0]) ||
+             johnsHopkinsCountries.has(arr[1])
+           );
+         })
+        });
+
+        console.log(quickAddd + "hi");
 
                 johnsHopkinsData = johnsHopkinsData.concat(quickAddd);
+
                 this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
                 this.setState({
                   totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0)
