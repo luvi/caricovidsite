@@ -12,7 +12,7 @@ const deathsSource = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/
 const myOverrideURL = `https://raw.githubusercontent.com/luvi/caricoviddata/master/casesOverride.csv`;
 
 
-let quickAddD = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "1"]];
+let quickAddD = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"]];
 
 export default class Map extends Component {
   constructor(props) {
