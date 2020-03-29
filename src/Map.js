@@ -146,7 +146,7 @@ export default class Map extends Component {
          })
         });
 
-        console.log(caribbeanDataDeaths.concat(quickAddDeaths));
+        
 
                 johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
 
