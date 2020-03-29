@@ -12,7 +12,8 @@ const deathsSource = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/
 const myOverrideURL = `https://raw.githubusercontent.com/luvi/caricoviddata/master/casesOverride.csv`;
 
 
-let quickAddD = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"]];
+let quickAddDeaths = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"]];
+
 
 export default class Map extends Component {
   constructor(props) {
@@ -70,7 +71,7 @@ export default class Map extends Component {
         numDeaths = matchingDEntry[matchingDEntry.length - 1];
       }
 
-      let size = Math.max(20, (parseInt(numCases) / 500) * 100);
+      let size = Math.max(20, (parseInt(numCases) / 1000) * 100);
 
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
         `${caribbeanName}: ${numCases} confirmed, ${numDeaths} death(s)`
@@ -109,12 +110,12 @@ export default class Map extends Component {
           //Read JohnsDeathCSV
           parse(body, (err, output) => {
             let caribbeanDataDeaths = output.filter(this.isCaribbeanCountry);
-            caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddD);
+            caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddDeaths);
 
             this.getCOVIDInfo(myOverrideURL, body => {
               //Read my CSV
               parse(body, (err, output) => {
-                let quickAddd = output;
+                let myCSVData = output;
 
                
       //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
@@ -123,7 +124,7 @@ export default class Map extends Component {
            jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
          johnsHopkinsCountries.add(caribbeanName); //create set of all countries johns has
          let numCases = jhDataElement[jhDataElement.length - 1];
-         let matchingDEntry = quickAddd.filter(
+         let matchingDEntry = myCSVData.filter(
            entry => entry[0] === caribbeanName || entry[1] === caribbeanName
          );
 
@@ -137,7 +138,7 @@ export default class Map extends Component {
          }
        //add the data that I have that Johns Hopkins does not.
       
-        quickAddd = quickAddd.filter((arr) => {            
+        myCSVData = myCSVData.filter((arr) => {            
            return !(
              johnsHopkinsCountries.has(arr[0]) ||
              johnsHopkinsCountries.has(arr[1])
@@ -145,9 +146,9 @@ export default class Map extends Component {
          })
         });
 
-        console.log(quickAddd + "hi");
+        console.log(caribbeanDataDeaths.concat(quickAddDeaths));
 
-                johnsHopkinsData = johnsHopkinsData.concat(quickAddd);
+                johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
 
                 this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
                 this.setState({
