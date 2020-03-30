@@ -10,3 +10,6 @@ Pull requests & issues welcome.
 
 Have fun :) 
 Janique-ka
+
+
+Filed under: React, Javascript
