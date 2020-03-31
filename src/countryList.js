@@ -27,9 +27,9 @@ export const countryList = [
     "Trinidad and Tobago",
     "Turks & Caicos Islands",
     "US Virgin Islands",
-    "Venezuela",
+   // "Venezuela",
     "Guyana",
     "French Guiana",
     "Suriname",
-    "Panama"
+   // "Panama"
   ];

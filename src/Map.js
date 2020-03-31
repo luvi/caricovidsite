@@ -7,9 +7,10 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 var https = require("https");
 const parse = require("csv-parse");
 
-const url = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`;
-const deathsSource = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv`;
-const myOverrideURL = `https://raw.githubusercontent.com/luvi/caricoviddata/master/casesOverride.csv`;
+const url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv';
+const deathsSource = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv';
+const myOverrideURL = 'https://raw.githubusercontent.com/luvi/caricoviddata/master/casesOverride.csv';
+const recoveredSourceURL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv'
 
 
 let quickAddDeaths = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"]];
@@ -26,6 +27,7 @@ export default class Map extends Component {
       zoom: 4,
       caribbeanData: [],
       caribbeanDataDeaths: [],
+      caribbeanDataRecovered:[],
       johnsHopkinsData: [],
       date: ""
     };
@@ -59,9 +61,11 @@ export default class Map extends Component {
   setMarkers(map) {
     let cariData = this.state.caribbeanData;
     let cariDataDeaths = this.state.caribbeanDataDeaths;
+    let caribbeanDataRecovered = this.state.caribbeanDataRecovered;
 
     cariData.forEach(element => {
       let numDeaths = 0;
+      let numRecovered = 0;
       let caribbeanName = element[0] === "" ? element[1] : element[0];
       let numCases = element[element.length - 1];
       let matchingDEntry = cariDataDeaths.filter(
@@ -71,10 +75,20 @@ export default class Map extends Component {
         numDeaths = matchingDEntry[matchingDEntry.length - 1];
       }
 
+      //filter and find array element with info on relevant country recovery data.
+      let matchingRecoveredEntry = caribbeanDataRecovered.filter(
+        entry => entry[0] === caribbeanName || entry[1] === caribbeanName
+      )[0];
+      if (typeof matchingRecoveredEntry !== "undefined") {
+        numRecovered = matchingRecoveredEntry[matchingRecoveredEntry.length - 1];
+      }
+
+
+
       let size = Math.max(20, (parseInt(numCases) / 1000) * 100);
 
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
-        `${caribbeanName}: ${numCases} confirmed, ${numDeaths} death(s)`
+        `${caribbeanName}: ${numCases} confirmed, ${numDeaths} death(s), ${numRecovered} recovered`
       );
       // add marker to map
 
@@ -94,6 +108,7 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
+
     this.getCOVIDInfo(url, body => {
       //readJohnsCSV
       console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
@@ -145,18 +160,33 @@ export default class Map extends Component {
            );
          })
         });
+                 this.getCOVIDInfo(recoveredSourceURL, body => {
 
+                  parse(body, (err, output) => {
+
+                    let recoveredArr = output.filter(this.isCaribbeanCountry);
+                   this.setState({caribbeanDataRecovered: recoveredArr});
+
+
+                  johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
+
+                  this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
+                  this.setState({totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0)});
+                  this.setState({ caribbeanData: johnsHopkinsData });
+                  this.setMarkers(map);
+                  this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
+  
+  
+                }) 
+              
+              
+              });
         
+              
+              
 
-                johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
 
-                this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
-                this.setState({
-                  totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0)
-                });
-                this.setState({ caribbeanData: johnsHopkinsData });
-                this.setMarkers(map);
-                this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
+
               }); //parse
             }); //end read my csv
           });
