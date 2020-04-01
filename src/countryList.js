@@ -25,7 +25,7 @@ export const countryList = [
     "St Martin",
     "Saint Vincent and the Grenadines",
     "Trinidad and Tobago",
-    "Turks & Caicos Islands",
+    "Turks and Caicos Islands",
     "US Virgin Islands",
    // "Venezuela",
     "Guyana",
