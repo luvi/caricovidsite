@@ -84,8 +84,8 @@ export default class Map extends Component {
       }
 
 
-
-      let size = Math.max(20, (parseInt(numCases) / 1000) * 100);
+      //shows a different size based on the number of cases, but minimum size is 20
+      let size = Math.max(20, parseInt(numCases)/20);
 
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
         `${caribbeanName}: ${numCases} confirmed, ${numDeaths} death(s), ${numRecovered} recovered`
