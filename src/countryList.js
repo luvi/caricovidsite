@@ -4,6 +4,7 @@ export const countryList = [
     "Aruba",
     "Bahamas",
     "Barbados",
+    "Bermuda",
     //"Belize",
     "British Virgin Islands",
     "Cayman Islands",
