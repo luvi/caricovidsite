@@ -1,4 +1,4 @@
-Caribbean COVID Map
+[![Netlify Status](https://api.netlify.com/api/v1/badges/53d9d6af-6934-4b01-a7d8-5c675882e32d/deploy-status)](https://app.netlify.com/sites/determined-blackwell-e8c2d9/deploys)  www.caricovidmap.com 
 
 Please note, this was quickly put together( so it's very hacky :) ) at the request of a journalist, who needed a more focused view on the Caribbean COVID Situation.
 
