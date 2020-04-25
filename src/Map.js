@@ -207,7 +207,7 @@ export default class Map extends Component {
   render() {
     return (
       <div>
-        <div className="statsContainer">
+        <div className="statsContainer2">
           <Card
             type="rounded-0"
             style={{
