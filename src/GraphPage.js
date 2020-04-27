@@ -17,50 +17,7 @@ import {
 const url =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
  const data = [];
-  const datax = [
-  {
-    name: "Page A",
-    confirmed: 4000,
-    deaths: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    confirmed: 3000,
-    deaths: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    confirmed: 2000,
-    deaths: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    confirmed: 2780,
-    deaths: 3908,
-    amt: 200,
-  },
-  {
-    name: "Page E",
-    confirmed: 1890,
-    deaths: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    confirmed: 2390,
-    deaths: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    confirmed: 3490,
-    deaths: 4300,
-    amt: 2100,
-  },
-];
+  
 
 export default class GraphPage extends Component {
   constructor(props) {
