@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { countryList } from "./countryList.js";
+
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "./MAPBOX_ACCESS_TOKEN.js";
 import { Card } from "react-bootstrap";
+import getCOVIDInfo from './fetchFromURL';
+import parse from 'csv-parse';
+import isCaribbeanCountry from './isCaribbeanCountry'
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
-var https = require("https");
-const parse = require("csv-parse");
+
 
 const url =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
@@ -35,26 +37,7 @@ export default class Map extends Component {
     };
   }
 
-  getCOVIDInfo(url, callback) {
-    var body = "";
-    https
-      .get(url, function (res) {
-        res.on("data", function (chunk) {
-          body += chunk;
-        });
-
-        res.on("end", (data) => {
-          callback(body);
-        });
-      })
-      .on("error", function (e) {
-        console.log("Got an error: ", e);
-      });
-  }
-
-  isCaribbeanCountry(arr) {
-    return countryList.includes(arr[1]) || countryList.includes(arr[0]);
-  }
+ 
 
   sum(total, array) {
     return total + parseInt(array[array.length - 1]);
@@ -110,7 +93,8 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
-    this.getCOVIDInfo(url, (body) => {
+    
+    getCOVIDInfo(url, (body) => {
       //readJohnsCSV
       console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
 
@@ -119,16 +103,16 @@ export default class Map extends Component {
         let size = arr[0].length; //latest entry
         this.setState({ date: arr[0][size - 1] }); //date of latest entry
 
-        let johnsHopkinsData = arr.filter(this.isCaribbeanCountry);
+        let johnsHopkinsData = arr.filter(isCaribbeanCountry);
         let johnsHopkinsCountries = new Set();
 
-        this.getCOVIDInfo(deathsSource, (body) => {
+        getCOVIDInfo(deathsSource, (body) => {
           //Read JohnsDeathCSV
           parse(body, (err, output) => {
-            let caribbeanDataDeaths = output.filter(this.isCaribbeanCountry);
+            let caribbeanDataDeaths = output.filter(isCaribbeanCountry);
             caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddDeaths);
 
-            this.getCOVIDInfo(myOverrideURL, (body) => {
+            getCOVIDInfo(myOverrideURL, (body) => {
               //Read my CSV
               parse(body, (err, output) => {
                 let myCSVData = output;
@@ -163,9 +147,9 @@ export default class Map extends Component {
                     );
                   });
                 });
-                this.getCOVIDInfo(recoveredSourceURL, (body) => {
+                getCOVIDInfo(recoveredSourceURL, (body) => {
                   parse(body, (err, output) => {
-                    let recoveredArr = output.filter(this.isCaribbeanCountry);
+                    let recoveredArr = output.filter(isCaribbeanCountry);
                     this.setState({ caribbeanDataRecovered: recoveredArr });
 
                     johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
