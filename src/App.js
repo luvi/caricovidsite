@@ -23,7 +23,7 @@ export default class App extends Component {
             </Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
-            <Nav className="justify-content-end" activeKey={Route.pathname}>
+            <Nav className="justify-content-end" activeKey="/home">
               <Nav.Link href="/graphs" >
                 
                   Case Graphs
