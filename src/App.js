@@ -24,16 +24,21 @@ export default class App extends Component {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
             <Nav className="justify-content-end" activeKey="/home">
-              <Nav.Link href="/graphs" >
-                
-                  Case Graphs
-                
-              </Nav.Link>
-              <Nav.Link href="/credits">
+            <Nav.Item>
+            <Link style={{color: "white"}} to="/graphs">Case Graphs</Link>
+            </Nav.Item>
+            <Nav.Item>
+          ""
+            </Nav.Item>
+            <Nav.Item>
+            <Link style={{color: "white"}} to="/credits">Credits</Link>
+            </Nav.Item>
+
+
             
-                  Credits
-                
-              </Nav.Link>
+              
+              
+            
             </Nav>
           </Navbar>
 
