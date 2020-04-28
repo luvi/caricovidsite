@@ -74,7 +74,6 @@ export default class GraphPage extends Component {
         }
 
         this.setState({data})
-        console.log(data)
         
       });
     });
