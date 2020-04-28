@@ -93,10 +93,12 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
+
+    console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
     
     getCOVIDInfo(url, (body) => {
       //readJohnsCSV
-      console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
+      
 
       parse(body, (err, output) => {
         const arr = output;

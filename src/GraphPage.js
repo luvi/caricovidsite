@@ -42,9 +42,7 @@ export default class GraphPage extends Component {
 
     document.body.style.backgroundColor = "#1A2637";
 
-    getCOVIDInfo(url, (body) => {
-      //readJohnsCSV
-      console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
+    getCOVIDInfo(url, (body) => { 
 
       parse(body, (err, output) => {
         const arr = output;
@@ -98,13 +96,42 @@ export default class GraphPage extends Component {
        
       >
 
+
+
 <Form>
-  <Form.Group controlId="exampleForm.SelectCustom">
+  <Form.Group controlId="caribbeanForm.SelectCustom">
     <Form.Label>Choose a country</Form.Label>
     <Form.Control ref={select => { this.select = select }} as="select"custom onChange={this.handleChange}>
       
+      <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+      <option value="Bahamas">Bahamas</option>
       <option value="Barbados">Barbados</option>
+      <option value="Cuba">Cuba</option>
+      <option value="Dominican Republic">Dominican Republic</option>
+      <option value="French Guiana">French Guiana</option>
+      <option value="Guadeloupe">Guadeloupe</option>
+      <option value="Saint Barthelemy">Saint Barthelemy</option>
+      <option value="St Martin">St Martin</option>
+      <option value="Guadeloupe">Guadeloupe</option>
+      <option value="Guyana">Guyana</option>
+      <option value="Martinique">Martinique</option>
+      <option value="Haiti">Haiti</option>
       <option value="Jamaica">Jamaica</option>
+      <option value="Aruba">Aruba</option>
+      <option value="Curacao">Curacao</option>
+      <option value="Saint Lucia">Saint Lucia</option>
+      <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+      <option value="Suriname">Suriname</option>
+      <option value="Trindad and Tobago">Trindad and Tobago</option>
+      <option value="Bermuda">Bermuda</option>
+      <option value="Cayman Islands">Cayman Islands</option>
+      <option value="Montserrat">Montserrat</option>
+      <option value="Dominica">Dominica</option>
+      <option value="Grenada">Grenada</option>
+      <option value=" Saint Kitts and Nevis"> Saint Kitts and Nevis</option>
+      <option value="Anguilla"> Anguilla</option>
+      <option value="British Virgin Islands">British Virgin Islands</option>
+      <option value="Turks and Caicos Islands">Turks and Caicos Islands</option>
 
     </Form.Control>
   </Form.Group>
