@@ -144,12 +144,12 @@ export default class GraphPage extends Component {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip/>} />
             <Legend />
             <Line
               type="monotone"
               dataKey="Confirmed cases"
-              stroke="#82ca9d"
+              stroke="#03f4fc"
               dot={false}
             />
           </LineChart>
@@ -158,4 +158,25 @@ export default class GraphPage extends Component {
       </div>
     );
   }
+}
+
+export class CustomTooltip extends Component {
+
+    render() {
+        const { active } = this.props;
+    
+        if (active) {
+          const { payload, label } = this.props;
+          return (
+            <div className="custom-tooltip">
+              <p className="label">{`${label}`}</p>
+              <p className="desc">{`${payload[0].value} case(s)`}</p>
+            </div>
+          );
+        }
+    
+        return null;
+      }
+
+
 }

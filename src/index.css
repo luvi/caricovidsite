@@ -29,11 +29,38 @@ code {
   position: relative;
   display: flex;
   padding-top: 100px;
+  width:100%;
+  z-index: 99;
+  text-align: left;
+
+}
+
+.custom-tooltip {
+
+  background-color: rgb(18, 27, 38,0.7);
+  padding-top: 5px;
+  padding-bottom: 2px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+
+}
+
+.statsCard{
+
+  justify-content: "right";
+  align-Content: "right";
+  align-Items: "right";
+  flex-Direction: "row";
+  position: relative;
+  display: flex;
+  padding-top: 100px;
   top: 50%;
   left: 60%;
   right: 40%;
   z-index: 99;
   text-align: left;
+
 
 }
 

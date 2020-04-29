@@ -194,7 +194,7 @@ export default class Map extends Component {
     return (
       <div>
         <div className="statsContainer">
-          <Card
+          <div className="statsCard"><Card
             type="rounded-0"
             style={{
               width: "18rem",
@@ -210,6 +210,7 @@ export default class Map extends Component {
               </Card.Text>
             </Card.Body>
           </Card>
+          </div>
         </div>
         <div
           ref={(el) => {

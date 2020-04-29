@@ -33,12 +33,6 @@ export default class App extends Component {
             <Nav.Item>
             <Link style={{color: "white"}} to="/credits">Credits</Link>
             </Nav.Item>
-
-
-            
-              
-              
-            
             </Nav>
           </Navbar>
 
