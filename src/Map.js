@@ -18,7 +18,7 @@ const myOverrideURL =
 const recoveredSourceURL =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
 
-let quickAddDeaths = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"]];
+let quickAddDeaths = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],["","Puerto Rico","18.2208","-66.5901","84"],["","Belize","17.195465","-88.268587","2"] ];
 
 export default class Map extends Component {
   constructor(props) {

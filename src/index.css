@@ -23,26 +23,16 @@ code {
 
 .statsContainer {
   justify-content: space-between;
+  align-self: flex-end;
+  align-Content: "right";
+  align-Items: "right";
   position: relative;
-
+  display: flex;
   padding-top: 100px;
   top: 50%;
   right: 50%;
-  left: 50%;
   z-index: 99;
   text-align: left;
-}
-
-.statsContainer2 {
-  justify-content: space-between;
-  position: fixed;
-  
-  top: 10%;
-  right: 30%;
-  left: 70%;
-  z-index: 99;
-  text-align: left;
-  overflow-y: scroll;
 }
 
 .sourcesContainer {
