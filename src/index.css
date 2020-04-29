@@ -22,17 +22,19 @@ code {
 }
 
 .statsContainer {
-  justify-content: space-between;
-  align-self: flex-end;
+  justify-content: "right";
   align-Content: "right";
   align-Items: "right";
+  flex-Direction: "row";
   position: relative;
   display: flex;
   padding-top: 100px;
   top: 50%;
-  right: 50%;
+  left: 60%;
+  right: 40%;
   z-index: 99;
   text-align: left;
+
 }
 
 .sourcesContainer {
