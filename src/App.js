@@ -6,7 +6,8 @@ import Map from "./Map";
 import Credits from "./Credits";
 import GraphPage from "./GraphPage";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, NavLink, useHistory } from "react-router-dom";
+
 
 export default class App extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ export default class App extends Component {
   render() {
     return (
       <div className="App">
-        <Router>
+        <Router >
           <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
             <Link to="/">
               <Navbar.Brand>Caribbean COVID Map</Navbar.Brand>
@@ -25,10 +26,10 @@ export default class App extends Component {
             <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
             <Nav className="justify-content-end" activeKey="/home">
             <Nav.Item>
-            <Link style={{color: "white"}} to="/graphs">Case Graphs</Link>
+            <NavLink style={{color: "white", paddingRight: 10}} to="/graphs">Case Graphs</NavLink>
             </Nav.Item>
             <Nav.Item>
-          ""
+               <div> </div>
             </Nav.Item>
             <Nav.Item>
             <Link style={{color: "white"}} to="/credits">Credits</Link>

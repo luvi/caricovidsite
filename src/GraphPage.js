@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import isCaribbeanCountry from "./isCaribbeanCountry";
+import isCaribbeanCountry from "./isCaribbeanCountryFull.js";
 import {countryList} from "./fullCountryList.js";
 import getCOVIDInfo from "./fetchFromURL";
 import parse from "csv-parse";
@@ -87,7 +87,7 @@ export default class GraphPage extends Component {
 
           allCases.push(res);
         }
-        //console.log(allCases);
+        
         this.setState({ allCountriesData: allCases });
       });
     });
@@ -128,7 +128,9 @@ export default class GraphPage extends Component {
         </Form>
 
         {this.state.selectedCountry === "All countries" ? (
-         <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
+         
+         <div> Graph for all countries coming soon </div>
+        //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
         ) : (
           <LineChart
             width={700}
@@ -168,10 +170,12 @@ export class CustomTooltip extends Component {
         if (active) {
           const { payload, label } = this.props;
           return (
-            <div className="custom-tooltip">
-              <p className="label">{`${label}`}</p>
-              <p className="desc">{`${payload[0].value} case(s)`}</p>
-            </div>
+
+            <div>    { !!payload ?            <div className="custom-tooltip">
+            <p className="label">{`${label}`}</p>
+            <p className="desc">{`${payload[0].value} case(s)`}</p>
+          </div> : <div> </div>} </div>
+           
           );
         }
     

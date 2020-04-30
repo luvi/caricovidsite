@@ -37,13 +37,10 @@ export default class AllCountriesGraph extends Component {
   render() {
     
 
-    return (
-    
-    <div>
-        Coming soon
-        {/* <LineChart
-        width={1000}
-        height={700}
+    return (    
+        <LineChart
+        width={700}
+        height={500}
         data={this.state.data}
         margin={{
           top: 5,
@@ -55,20 +52,40 @@ export default class AllCountriesGraph extends Component {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
         <YAxis />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip/>}/>
         <Legend />
         {countryList.map(country =>
              <Line
              type="monotone"
              dataKey={country}
-             stroke="#82ca9d"
+             stroke={'#'+Math.floor(Math.random()*16777215).toString(16)}
              dot={false}
            />
           )}
-      </LineChart> */}
-      </div>
+      </LineChart>
+      
     );
   }
 }
+
+export class CustomTooltip extends Component {
+
+    render() {
+        const { active } = this.props;
+    
+        if (active) {
+          const { payload, label } = this.props;
+          return (
+            <div className="custom-tooltip">
+              <p className="label">{`${label}`}</p>
+            </div>
+          );
+        }
+    
+        return null;
+      }
+    }
+
+
 
 
