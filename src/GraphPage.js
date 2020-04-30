@@ -133,6 +133,7 @@ export default class GraphPage extends Component {
         //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
         ) : (
           <LineChart
+
             width={700}
             height={500}
             data={this.state.data[this.state.selectedCountry]}

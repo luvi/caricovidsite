@@ -94,7 +94,7 @@ export default class Map extends Component {
 
   componentDidMount() {
 
-    console.log("developer: @JaniquekaJohn, data: Johns Hopkins");
+    console.log("developer: @JaniquekaJohn, Open Source https://github.com/luvi/caricovidsite");
     
     getCOVIDInfo(url, (body) => {
       //readJohnsCSV

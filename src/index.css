@@ -28,10 +28,21 @@ code {
   flex-Direction: "row";
   position: relative;
   display: flex;
+  margin:auto;
   padding-top: 100px;
   width:100%;
   z-index: 99;
   text-align: left;
+
+}
+
+.statsCard{
+
+  position: absolute;
+  right: 30px;
+  text-align: left;
+  flex: 2 2 20em;
+
 
 }
 
@@ -48,23 +59,8 @@ code {
 
 
 
-.statsCard{
-
-  justify-content: "right";
-  align-Content: "right";
-  align-Items: "right";
-  flex-Direction: "row";
-  position: relative;
-  display: flex;
-  padding-top: 100px;
-  top: 50%;
-  left: 60%;
-  right: 40%;
-  z-index: 99;
-  text-align: left;
 
 
-}
 
 .sourcesContainer {
   position: fixed;
