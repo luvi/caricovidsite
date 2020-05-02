@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.4.1",
     "csv": "^5.3.2",
+    "d3-scale": "^3.2.1",
     "mapbox-gl": "^1.9.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",

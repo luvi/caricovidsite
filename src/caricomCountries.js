@@ -1,0 +1,23 @@
+export const caricomCountries = [
+    "Anguilla",
+    "Antigua and Barbuda",
+    "Aruba",
+    "Bahamas",
+    "Barbados",
+    "Bermuda",
+    "Belize",
+    "British Virgin Islands",
+    "Cayman Islands",
+    "Dominica",
+    "Grenada",
+    "Haiti",
+    "Jamaica",
+    "Montserrat",
+    "Saint Kitts and Nevis",
+    "Saint Lucia",
+    "Saint Vincent and the Grenadines",
+    "Trinidad and Tobago",
+    "Turks and Caicos Islands",
+    "Guyana",
+    "Suriname"
+  ];

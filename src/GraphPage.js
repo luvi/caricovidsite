@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import isCaribbeanCountry from "./isCaribbeanCountryFull.js";
-import {countryList} from "./fullCountryList.js";
+import isCaricomCountry from "./isCaricomCountry";
+import { countryList } from "./fullCountryList.js";
 import getCOVIDInfo from "./fetchFromURL";
 import parse from "csv-parse";
 import { Form } from "react-bootstrap";
@@ -72,9 +73,11 @@ export default class GraphPage extends Component {
         this.setState({ data });
 
         let allCases = [];
+        let caricomCases = [];
 
         for (let j = 40; j < labels.length; j++) {
           let res = [];
+          let cariRes = [];
           res["name"] = labels[j];
 
           for (let i = 0; i < johnsHopkinsData.length; i++) {
@@ -83,12 +86,19 @@ export default class GraphPage extends Component {
                 ? johnsHopkinsData[i][1]
                 : johnsHopkinsData[i][0];
             res[cname] = parseInt(johnsHopkinsData[i][j]);
-          }
 
+            if (isCaricomCountry(cname)) cariRes[cname] = parseInt(johnsHopkinsData[i][j]);
+            
+          }
+          
+          caricomCases.push(cariRes);
           allCases.push(res);
         }
-        
-        this.setState({ allCountriesData: allCases });
+
+        this.setState({
+          allCountriesData: allCases,
+          caricomCountryData: caricomCases,
+        });
       });
     });
   }
@@ -117,23 +127,21 @@ export default class GraphPage extends Component {
               custom
               onChange={this.handleChange}
             >
-                <option value="All countries">All countries</option>
-                {countryList.map(country =>
-            <option value={country}>{country}</option>
-          )}
-              
-              
+              <option value="All countries">All countries</option>
+              <option value="CARICOM countries">CARICOM countries</option>
+              {countryList.map((country) => (
+                <option value={country}>{country}</option>
+              ))}
             </Form.Control>
           </Form.Group>
         </Form>
 
         {this.state.selectedCountry === "All countries" ? (
-         
-         <div> Graph for all countries coming soon </div>
-        //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
+          <AllCountriesGraph countryData={[this.state.allCountriesData]} />
+        ) : this.state.selectedCountry === "CARICOM countries" ? (
+          <AllCountriesGraph countryData={[this.state.caricomCountryData]} />
         ) : (
           <LineChart
-
             width={700}
             height={500}
             data={this.state.data[this.state.selectedCountry]}
@@ -147,7 +155,7 @@ export default class GraphPage extends Component {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip content={<CustomTooltip/>} />
+            <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Line
               type="monotone"
@@ -164,24 +172,26 @@ export default class GraphPage extends Component {
 }
 
 export class CustomTooltip extends Component {
+  render() {
+    const { active } = this.props;
 
-    render() {
-        const { active } = this.props;
-    
-        if (active) {
-          const { payload, label } = this.props;
-          return (
+    if (active) {
+      const { payload, label } = this.props;
+      return (
+        <div>
+          {" "}
+          {!!payload ? (
+            <div className="custom-tooltip">
+              <p className="label">{`${label}`}</p>
+              <p className="desc">{`${payload[0].value} case(s)`}</p>
+            </div>
+          ) : (
+            <div> </div>
+          )}{" "}
+        </div>
+      );
+    }
 
-            <div>    { !!payload ?            <div className="custom-tooltip">
-            <p className="label">{`${label}`}</p>
-            <p className="desc">{`${payload[0].value} case(s)`}</p>
-          </div> : <div> </div>} </div>
-           
-          );
-        }
-    
-        return null;
-      }
-
-
+    return null;
+  }
 }

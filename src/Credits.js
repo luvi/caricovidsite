@@ -9,7 +9,12 @@ export default class Credits extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{
+     
+        margin: "auto"
+        
+        
+      }}>
         <div
           style={{
             marginTop: "100px",
