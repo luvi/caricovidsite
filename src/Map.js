@@ -3,11 +3,10 @@ import React, { Component } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "./MAPBOX_ACCESS_TOKEN.js";
 import { Card } from "react-bootstrap";
-import getCOVIDInfo from './fetchFromURL';
-import parse from 'csv-parse';
-import isCaribbeanCountry from './isCaribbeanCountry'
+import getCOVIDInfo from "./fetchFromURL";
+import parse from "csv-parse";
+import isCaribbeanCountry from "./isCaribbeanCountry";
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
-
 
 const url =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
@@ -18,7 +17,14 @@ const myOverrideURL =
 const recoveredSourceURL =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
 
-let quickAddDeaths = [["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],["","Puerto Rico","18.2208","-66.5901","84"],["","Belize","17.195465","-88.268587","2"] ];
+let quickAddDeaths = [
+  ["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],
+  ["", "Puerto Rico", "18.2208", "-66.5901", "84"],
+  ["", "Belize", "17.195465", "-88.268587", "2"],
+];
+
+const unitedStatesCaseSource =
+  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv";
 
 export default class Map extends Component {
   constructor(props) {
@@ -36,8 +42,6 @@ export default class Map extends Component {
       date: "",
     };
   }
-
- 
 
   sum(total, array) {
     return total + parseInt(array[array.length - 1]);
@@ -93,86 +97,95 @@ export default class Map extends Component {
   }
 
   componentDidMount() {
+    console.log(
+      "developer: @JaniquekaJohn, Open Source https://github.com/luvi/caricovidsite"
+    );
 
-    console.log("developer: @JaniquekaJohn, Open Source https://github.com/luvi/caricovidsite");
-    
-    getCOVIDInfo(url, (body) => {
-      //readJohnsCSV
-      
+    let johnsHopkinsData
+    let johnsHopkinsCountries
+    let myCSVData
+    let caribbeanDataDeaths
 
-      parse(body, (err, output) => {
-        const arr = output;
-        let size = arr[0].length; //latest entry
-        this.setState({ date: arr[0][size - 1] }); //date of latest entry
+    getCOVIDInfo(url)
+      .then((body) => {
+        parse(body, (err, output) => {
+          const arr = output;
+          let size = arr[0].length; //latest entry
+          this.setState({ date: arr[0][size - 1] }); //date of latest entry
 
-        let johnsHopkinsData = arr.filter(isCaribbeanCountry);
-        let johnsHopkinsCountries = new Set();
+          johnsHopkinsData = arr.filter(isCaribbeanCountry);
+          johnsHopkinsCountries = new Set();
+        });
 
-        getCOVIDInfo(deathsSource, (body) => {
-          //Read JohnsDeathCSV
-          parse(body, (err, output) => {
-            let caribbeanDataDeaths = output.filter(isCaribbeanCountry);
-            caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddDeaths);
+        return getCOVIDInfo(deathsSource);
+      })
+      .then((body) => {
+        //Read JohnsDeathCSV
+        parse(body, (err, output) => {
+          caribbeanDataDeaths = output.filter(isCaribbeanCountry);
+          caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddDeaths);
+        });
 
-            getCOVIDInfo(myOverrideURL, (body) => {
-              //Read my CSV
-              parse(body, (err, output) => {
-                let myCSVData = output;
+        return getCOVIDInfo(myOverrideURL);
+      })
+      .then((body) => {
+        //Read my CSV
+        parse(body, (err, output) => {
+          myCSVData = output;
 
-                //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
-                johnsHopkinsData.forEach((jhDataElement) => {
-                  let caribbeanName =
-                    jhDataElement[0] === ""
-                      ? jhDataElement[1]
-                      : jhDataElement[0];
-                  johnsHopkinsCountries.add(caribbeanName); //create set of all countries johns has
-                  let numCases = jhDataElement[jhDataElement.length - 1];
-                  let matchingDEntry = myCSVData.filter(
-                    (entry) =>
-                      entry[0] === caribbeanName || entry[1] === caribbeanName
-                  );
+          //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
+          johnsHopkinsData.forEach((jhDataElement) => {
+            let caribbeanName =
+              jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
+            johnsHopkinsCountries.add(caribbeanName); //create set of all countries johns has
+            let numCases = jhDataElement[jhDataElement.length - 1];
+            let matchingDEntry = myCSVData.filter(
+              (entry) =>
+                entry[0] === caribbeanName || entry[1] === caribbeanName
+            );
 
-                  if (typeof matchingDEntry[0] !== "undefined") {
-                    matchingDEntry = matchingDEntry[0];
-                    let myCaseCount = matchingDEntry[matchingDEntry.length - 1];
-                    jhDataElement[jhDataElement.length - 1] = Math.max(
-                      numCases,
-                      myCaseCount
-                    );
-                  }
-                  //add the data that I have that Johns Hopkins does not.
+            if (typeof matchingDEntry[0] !== "undefined") {
+              matchingDEntry = matchingDEntry[0];
+              let myCaseCount = matchingDEntry[matchingDEntry.length - 1];
+              jhDataElement[jhDataElement.length - 1] = Math.max(
+                numCases,
+                myCaseCount
+              );
+            }
+            //add the data that I have that Johns Hopkins does not.
 
-                  myCSVData = myCSVData.filter((arr) => {
-                    return !(
-                      johnsHopkinsCountries.has(arr[0]) ||
-                      johnsHopkinsCountries.has(arr[1])
-                    );
-                  });
-                });
-                getCOVIDInfo(recoveredSourceURL, (body) => {
-                  parse(body, (err, output) => {
-                    let recoveredArr = output.filter(isCaribbeanCountry);
-                    this.setState({ caribbeanDataRecovered: recoveredArr });
-
-                    johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
-
-                    this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
-                    this.setState({
-                      totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0),
-                    });
-                    this.setState({ caribbeanData: johnsHopkinsData });
-                    this.setMarkers(map);
-                    this.setState({
-                      total: johnsHopkinsData.reduce(this.sum, 0),
-                    });
-                  });
-                });
-              }); //parse
-            }); //end read my csv
+            myCSVData = myCSVData.filter((arr) => {
+              return !(
+                johnsHopkinsCountries.has(arr[0]) ||
+                johnsHopkinsCountries.has(arr[1])
+              );
+            });
           });
-        }); // end read Johns Hopkins Death CSV
+        });
+
+        return getCOVIDInfo(myOverrideURL);
+      })
+      .then(() => {
+        return getCOVIDInfo(recoveredSourceURL);
+      })
+      .then((body) => {
+        parse(body, (err, output) => {
+          let recoveredArr = output.filter(isCaribbeanCountry);
+          this.setState({ caribbeanDataRecovered: recoveredArr });
+
+          johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
+
+          this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
+          this.setState({
+            totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0),
+          });
+          this.setState({ caribbeanData: johnsHopkinsData });
+          this.setMarkers(map);
+          this.setState({
+            total: johnsHopkinsData.reduce(this.sum, 0),
+          });
+        });
       });
-    });
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -194,22 +207,23 @@ export default class Map extends Component {
     return (
       <div>
         <div className="statsContainer">
-          <div className="statsCard"><Card
-            type="rounded-0"
-            style={{
-              width: "18rem",
-              backgroundColor: "#1A2637",
-              borderRadius: "0",
-            }}
-          >
-            <Card.Body>
-              <Card.Text style={{ color: "white" }}>
-                <div>Updated: {this.state.date}</div>
-                <div>Total Confirmed Cases: {this.state.total}</div>
-                <div>Total Deaths: {this.state.totalDeaths}</div>
-              </Card.Text>
-            </Card.Body>
-          </Card>
+          <div className="statsCard">
+            <Card
+              type="rounded-0"
+              style={{
+                width: "18rem",
+                backgroundColor: "#1A2637",
+                borderRadius: "0",
+              }}
+            >
+              <Card.Body>
+                <Card.Text style={{ color: "white" }}>
+                  <div>Updated: {this.state.date}</div>
+                  <div>Total Confirmed Cases: {this.state.total}</div>
+                  <div>Total Deaths: {this.state.totalDeaths}</div>
+                </Card.Text>
+              </Card.Body>
+            </Card>
           </div>
         </div>
         <div
