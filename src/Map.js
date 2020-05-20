@@ -19,7 +19,7 @@ const recoveredSourceURL =
 
 let quickAddDeaths = [
   ["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],
-  ["", "Puerto Rico", "18.2208", "-66.5901", "84"],
+  ["", "Puerto Rico", "18.2208", "-66.5901", "99"],
   ["", "Belize", "17.195465", "-88.268587", "2"],
 ];
 
@@ -101,10 +101,11 @@ export default class Map extends Component {
       "developer: @JaniquekaJohn, Open Source https://github.com/luvi/caricovidsite"
     );
 
-    let johnsHopkinsData
-    let johnsHopkinsCountries
-    let myCSVData
-    let caribbeanDataDeaths
+    let johnsHopkinsData;
+    let johnsHopkinsCountries;
+    let myCSVData;
+    let caribbeanDataDeaths;
+    let recoveredArr;
 
     getCOVIDInfo(url)
       .then((body) => {
@@ -128,9 +129,9 @@ export default class Map extends Component {
 
         return getCOVIDInfo(myOverrideURL);
       })
-      .then((body) => {
+      .then((myOverrideData) => {
         //Read my CSV
-        parse(body, (err, output) => {
+        parse(myOverrideData, (err, output) => {
           myCSVData = output;
 
           //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
@@ -170,21 +171,31 @@ export default class Map extends Component {
       })
       .then((body) => {
         parse(body, (err, output) => {
-          let recoveredArr = output.filter(isCaribbeanCountry);
-          this.setState({ caribbeanDataRecovered: recoveredArr });
-
-          johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
-
-          this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
-          this.setState({
-            totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0),
-          });
-          this.setState({ caribbeanData: johnsHopkinsData });
-          this.setMarkers(map);
-          this.setState({
-            total: johnsHopkinsData.reduce(this.sum, 0),
-          });
+          recoveredArr = output.filter(isCaribbeanCountry);
         });
+
+        return getCOVIDInfo(unitedStatesCaseSource);
+      })
+      .then((body) => {
+
+        //TODO: Make Puerto Rico Data read from US JohnsHopkins file
+        // let puertoRicoData;
+
+        // parse(body, (output) => {
+        //   puertoRicoData = output[0].filter((data) => {
+        //     return data[7] === "Puerto Rico";
+        //   });
+        // });
+        // johnsHopkinsData.concat(puertoRicoData);
+
+        this.setState({ caribbeanDataRecovered: recoveredArr });
+        johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
+    
+        this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
+        this.setState({ totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0) });
+        this.setState({ caribbeanData: johnsHopkinsData });
+        this.setMarkers(map);
+        this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
       });
 
     const map = new mapboxgl.Map({

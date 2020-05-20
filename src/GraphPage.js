@@ -41,7 +41,9 @@ export default class GraphPage extends Component {
   componentDidMount() {
     document.body.style.backgroundColor = "#1A2637";
 
-    getCOVIDInfo(url, (body) => {
+    
+    getCOVIDInfo(url)
+    .then((body) => {
       parse(body, (err, output) => {
         const arr = output;
         let size = arr[0].length; //latest entry
@@ -70,6 +72,7 @@ export default class GraphPage extends Component {
         }
 
         this.setState({ data });
+        console.log('data' + data)
 
         let allCases = [];
 
@@ -130,6 +133,7 @@ export default class GraphPage extends Component {
         {this.state.selectedCountry === "All countries" ? (
          
          <div> Graph for all countries coming soon </div>
+         
         //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
         ) : (
           <LineChart
@@ -157,7 +161,7 @@ export default class GraphPage extends Component {
             />
           </LineChart>
         )}
-        <div class="disclaimer">Data source: JHU, updated once per day</div>
+        <div className="disclaimer">Data source: JHU, updated once per day</div>
       </div>
     );
   }

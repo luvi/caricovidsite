@@ -1,4 +1,4 @@
-var https = require("https");
+import https from 'https'
 
 export default (url) => {
   return new Promise((resolve,rej) => {
@@ -10,7 +10,7 @@ export default (url) => {
           body += chunk;
         });
   
-        res.on("end", (data) => {
+        res.on("end", () => {
           resolve(body);
         });
       })
