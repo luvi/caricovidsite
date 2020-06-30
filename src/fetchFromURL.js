@@ -18,9 +18,6 @@ export default (url) => {
         rej(e);
         console.log("Got an error: ", e);
       });
-
-
-
   })
   
 };

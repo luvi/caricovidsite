@@ -51,29 +51,6 @@ export default class Credits extends Component {
             color: "white",
             
           }}>
-          <div>
-          <div>&nbsp;</div>
-          <div>&nbsp;</div>
-          <div>&nbsp;</div>
-            <h4>Fundraiser</h4>
-          </div>
-          <div>
-            <div>Help a student in Dominica get connected</div>
-          </div>
-          <iframe
-            style={{
-              margin: "auto",
-              maxHeight: "100%",
-              width: "300px",
-              height: "180px",
-              border: "0px solid #cfcfcf",
-            }}
-            src="https://www.gofundme.com/f/student-axecess/widget/medium"
-          ></iframe>
-          <div
-            class="gfm-embed"
-            data-url="https://www.gofundme.com/f/student-axecess/widget/large"
-          ></div>
         </div>
       </div>
     );
