@@ -5,7 +5,7 @@ export const countryList = [
     "Bahamas",
     "Barbados",
     "Bermuda",
-    //"Belize",
+    "Belize",
     "British Virgin Islands",
     "Cayman Islands",
     "Cuba",

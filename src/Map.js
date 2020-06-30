@@ -145,6 +145,15 @@ export default class Map extends Component {
                 entry[0] === caribbeanName || entry[1] === caribbeanName
             );
 
+
+
+            if (caribbeanName === 'Belize') { //Johns Hopkins coordinates are incorrect
+
+              jhDataElement[2] = '17.195465';
+              jhDataElement[3] = '-88.268587';
+
+            }
+
             if (typeof matchingDEntry[0] !== "undefined") {
               matchingDEntry = matchingDEntry[0];
               let myCaseCount = matchingDEntry[matchingDEntry.length - 1];
