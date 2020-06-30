@@ -7,7 +7,7 @@ import { LineChart,
     Tooltip,
     Legend } from "recharts";
 
-import {countryList} from "./fullCountryList.js";
+import {countryList} from "../../fullCountryList.js";
 
 
 

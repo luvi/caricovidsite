@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
-import Map from "./Map";
-import Credits from "./Credits";
-import GraphPage from "./GraphPage";
+import Map from "../pages/MapPage/Map";
+import Credits from "../pages/CreditsPage/Credits";
+import GraphPage from "../pages/GraphPage/GraphPage";
 
 import { BrowserRouter as Router, Switch, Route, Link, NavLink } from "react-router-dom";
 

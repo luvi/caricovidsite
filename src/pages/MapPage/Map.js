@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 
 import mapboxgl from "mapbox-gl";
-import { MAPBOX_ACCESS_TOKEN } from "./MAPBOX_ACCESS_TOKEN.js";
+import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import { Card } from "react-bootstrap";
-import getCOVIDInfo from "./fetchFromURL";
+import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
-import isCaribbeanCountry from "./isCaribbeanCountry";
+import isCaribbeanCountry from "../../functions/isCaribbeanCountry";
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const url =
@@ -144,8 +144,6 @@ export default class Map extends Component {
               (entry) =>
                 entry[0] === caribbeanName || entry[1] === caribbeanName
             );
-
-
 
             if (caribbeanName === 'Belize') { //Johns Hopkins coordinates are incorrect
 

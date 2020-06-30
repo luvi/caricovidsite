@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import isCaribbeanCountry from "./isCaribbeanCountryFull.js";
-import {countryList} from "./fullCountryList.js";
-import getCOVIDInfo from "./fetchFromURL";
+import isCaribbeanCountry from "../../functions/isCaribbeanCountryFull";
+import {countryList} from "../../data/fullCountryList";
+import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
 import { Form } from "react-bootstrap";
 import ReactDOM from "react-dom";
@@ -14,7 +14,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import AllCountriesGraph from "./allCountriesGraph";
+//import AllCountriesGraph from "./allCountriesGraph";
 
 const url =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
