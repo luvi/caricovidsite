@@ -19,7 +19,7 @@ const recoveredSourceURL =
 
 let quickAddDeaths = [
   ["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],
-  ["", "Puerto Rico", "18.2208", "-66.5901", "99"],
+  ["", "Puerto Rico", "18.2208", "-66.5901", "155"],
   ["", "Belize", "17.195465", "-88.268587", "2"],
 ];
 
