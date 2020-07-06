@@ -32,6 +32,7 @@ export default class Map extends Component {
     this.state = {
       total: 0,
       totalDeaths: 0,
+      totalActiveCases: 0,
       lng: -61,
       lat: 15,
       zoom: 4,
@@ -77,8 +78,9 @@ export default class Map extends Component {
       //shows a different size based on the number of cases, but minimum size is 20
       let size = Math.max(15, Math.min(parseInt(numCases) / 5, 60));
 
-      let popup = new mapboxgl.Popup({ offset: 25 }).setText(
-        `${caribbeanName}: ${numCases - numRecovered} active cases, ${numCases} confirmed, ${numDeaths} death(s), ${numRecovered} recovered`
+      let popup = new mapboxgl.Popup({ offset: 25, className: 'popups' }).setHTML(
+        `<h6>${caribbeanName}</h6> <strong>${numCases - numRecovered}</strong> active cases, <strong>${numCases}</strong> confirmed, <strong>${numDeaths}</strong> death(s), <strong>${numRecovered}</strong> recovered`
+        
       );
       // add marker to map
 
@@ -198,12 +200,15 @@ export default class Map extends Component {
 
         this.setState({ caribbeanDataRecovered: recoveredArr });
         johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
+
+         let totalRecovered = this.state.caribbeanDataRecovered.reduce(this.sum, 0)
     
         this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
         this.setState({ totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0) });
         this.setState({ caribbeanData: johnsHopkinsData });
         this.setMarkers(map);
         this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
+        this.setState({totalActiveCases: this.state.total - totalRecovered })
       });
 
     const map = new mapboxgl.Map({
@@ -238,6 +243,7 @@ export default class Map extends Component {
               <Card.Body>
                 <Card.Text style={{ color: "white" }}>
                   <div>Updated: {this.state.date}</div>
+                  <div>Total Active Cases: {this.state.totalActiveCases}</div>
                   <div>Total Confirmed Cases: {this.state.total}</div>
                   <div>Total Deaths: {this.state.totalDeaths}</div>
                 </Card.Text>
