@@ -1,30 +1,20 @@
 import React, { Component } from "react";
-
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import { Card } from "react-bootstrap";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountry";
+import {url,deathsSource,myOverrideURL,recoveredSourceURL,unitedStatesCaseSource} from "../../constants"
+import setMarkers from './setMarkers'
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const url =
-  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
-const deathsSource =
-  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
-const myOverrideURL =
-  "https://raw.githubusercontent.com/luvi/caricoviddata/master/casesOverride.csv";
-const recoveredSourceURL =
-  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
 
 let quickAddDeaths = [
   ["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],
   ["", "Puerto Rico", "18.2208", "-66.5901", "155"],
   ["", "Belize", "17.195465", "-88.268587", "2"],
 ];
-
-const unitedStatesCaseSource =
-  "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv";
 
 export default class Map extends Component {
   constructor(props) {
@@ -49,55 +39,7 @@ export default class Map extends Component {
     return total + parseInt(array[array.length - 1]);
   }
 
-  setMarkers(map) {
-    let cariData = this.state.caribbeanData;
-    let cariDataDeaths = this.state.caribbeanDataDeaths;
-    let caribbeanDataRecovered = this.state.caribbeanDataRecovered;
 
-    cariData.forEach((element) => {
-      let numDeaths = 0;
-      let numRecovered = 0;
-      let caribbeanName = element[0] === "" ? element[1] : element[0];
-      let numCases = element[element.length - 1];
-      let matchingDEntry = cariDataDeaths.filter(
-        (entry) => entry[0] === caribbeanName || entry[1] === caribbeanName
-      )[0];
-      if (typeof matchingDEntry !== "undefined") {
-        numDeaths = matchingDEntry[matchingDEntry.length - 1];
-      }
-
-      //filter and find array element with info on relevant country recovery data.
-      let matchingRecoveredEntry = caribbeanDataRecovered.filter(
-        (entry) => entry[0] === caribbeanName || entry[1] === caribbeanName
-      )[0];
-      if (typeof matchingRecoveredEntry !== "undefined") {
-        numRecovered =
-          matchingRecoveredEntry[matchingRecoveredEntry.length - 1];
-      }
-
-      //shows a different size based on the number of cases, but minimum size is 20
-      let size = Math.max(15, Math.min(parseInt(numCases) / 5, 60));
-
-      let popup = new mapboxgl.Popup({ offset: 25, className: 'popups' }).setHTML(
-        `<h6>${caribbeanName}</h6> <strong>${numCases - numRecovered}</strong> active cases, <strong>${numCases}</strong> confirmed, <strong>${numDeaths}</strong> death(s), <strong>${numRecovered}</strong> recovered`
-        
-      );
-      // add marker to map
-
-      var el = document.createElement("div");
-      el.className = "marker";
-      el.style.backgroundColor = "red";
-      el.style.width = size + "px";
-      el.style.height = size + "px";
-      el.style.borderRadius = "50%";
-      el.style.opacity = "50%";
-
-      new mapboxgl.Marker(el)
-        .setLngLat({ lng: element[3], lat: element[2] })
-        .setPopup(popup)
-        .addTo(map);
-    });
-  }
 
   componentDidMount() {
     console.log(
@@ -206,7 +148,7 @@ export default class Map extends Component {
         this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
         this.setState({ totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0) });
         this.setState({ caribbeanData: johnsHopkinsData });
-        this.setMarkers(map);
+        setMarkers(map, mapboxgl, this.state.caribbeanData, this.state.caribbeanDataDeaths, this.state.caribbeanDataRecovered);
         this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
         this.setState({totalActiveCases: this.state.total - totalRecovered })
       });
