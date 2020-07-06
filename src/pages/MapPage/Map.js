@@ -38,6 +38,7 @@ export default class Map extends Component {
       caribbeanData: [],
       caribbeanDataDeaths: [],
       caribbeanDataRecovered: [],
+      caribbeanDataActiveCases: [],
       johnsHopkinsData: [],
       date: "",
     };
@@ -77,7 +78,7 @@ export default class Map extends Component {
       let size = Math.max(15, Math.min(parseInt(numCases) / 5, 60));
 
       let popup = new mapboxgl.Popup({ offset: 25 }).setText(
-        `${caribbeanName}: ${numCases} confirmed, ${numDeaths} death(s), ${numRecovered} recovered`
+        `${caribbeanName}: ${numCases - numRecovered} active cases, ${numCases} confirmed, ${numDeaths} death(s), ${numRecovered} recovered`
       );
       // add marker to map
 
