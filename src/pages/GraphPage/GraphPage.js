@@ -24,7 +24,7 @@ export default class GraphPage extends Component {
     super(props);
     this.state = {
       data: [],
-      selectedCountry: "All countries",
+      selectedCountry: "Antigua and Barbuda",
       allCountriesData: [],
     };
   }
@@ -157,6 +157,7 @@ export default class GraphPage extends Component {
               as="select"
               custom
               onChange={this.handleChange}
+              defaultValue="Antigua and Barbuda"
             >
               <option value="All countries">All countries</option>
               {countryList.map((country) => (
