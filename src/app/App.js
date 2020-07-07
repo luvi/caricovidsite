@@ -9,9 +9,6 @@ import GraphPage from "../pages/GraphPage/GraphPage";
 import { BrowserRouter as Router, Switch, Route, Link, NavLink } from "react-router-dom";
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (
