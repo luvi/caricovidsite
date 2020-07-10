@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
-import { Card } from "react-bootstrap";
+import { Card, Accordion, Button } from "react-bootstrap";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountry";
 import {url,deathsSource,myOverrideURL,recoveredSourceURL,unitedStatesCaseSource} from "../../constants"
+import createCaribbeanDataArray from './createCaribbeanDataArray'
+import TinyQueue from 'tinyqueue'
 import setMarkers from './setMarkers'
+import emojiFlags from 'emoji-flags'
+import fetchCountryCode from '../../functions/fetchCountryCode'
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+
 
 
 let quickAddDeaths = [
@@ -15,6 +20,33 @@ let quickAddDeaths = [
   ["", "Puerto Rico", "18.2208", "-66.5901", "155"],
   ["", "Belize", "17.195465", "-88.268587", "2"],
 ];
+
+const cardStyle = {
+    width: "260px",
+    backgroundColor: "#1A2637",
+    borderRadius: "1",
+    marginTop: "0px"
+};
+
+const dismissMessageStyle = {
+  color: "white",
+  fontSize: "11px",
+  textDecoration: "underline",
+  bordersize: "1px",
+  borderColor: "white",
+  marginTop: "0px",
+  marginLeft: "80%"
+};
+
+const cardTextStyle = {
+  color: "white",
+  padding: "0px"
+};
+
+
+
+
+
 
 export default class Map extends Component {
   constructor(props) {
@@ -32,7 +64,19 @@ export default class Map extends Component {
       caribbeanDataActiveCases: [],
       johnsHopkinsData: [],
       date: "",
+      lowestActiveCases:[],
+      highestActiveCases:[],
+      hideHighestActiveBox: false,
+      hideLowestActiveBox: false,
     };
+  }
+
+  onClickHideHighest = () => {
+    this.setState({hideHighestActiveBox: true})
+  }
+
+  onClickHideLowest = () => {
+    this.setState({hideLowestActiveBox: true})
   }
 
   sum(total, array) {
@@ -45,6 +89,8 @@ export default class Map extends Component {
     console.log(
       "developer: @JaniquekaJohn, Open Source https://github.com/luvi/caricovidsite"
     );
+
+    
 
     let johnsHopkinsData;
     let johnsHopkinsCountries;
@@ -148,10 +194,37 @@ export default class Map extends Component {
         this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
         this.setState({ totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0) });
         this.setState({ caribbeanData: johnsHopkinsData });
-        setMarkers(map, mapboxgl, this.state.caribbeanData, this.state.caribbeanDataDeaths, this.state.caribbeanDataRecovered);
+        let cleanedUpArray = createCaribbeanDataArray(this.state.caribbeanData, this.state.caribbeanDataDeaths, this.state.caribbeanDataRecovered)
+        this.setState(cleanedUpArray);
+        setMarkers(map, mapboxgl, cleanedUpArray);
         this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
         this.setState({totalActiveCases: this.state.total - totalRecovered })
+
+
+        let queue = new TinyQueue([...cleanedUpArray], function (a, b) {
+          return a.activeCases - b.activeCases;
+        });
+        let highestActiveQueue = new TinyQueue([...cleanedUpArray], function (a, b) {
+          return b.activeCases - a.activeCases;
+        });
+        let lowestActiveCases = []
+        let highestActiveCases = []
+        let topNumberOfCases = 5
+        for (let i=0; i<topNumberOfCases; i++){
+        
+          lowestActiveCases.push(queue.pop())
+          highestActiveCases.push(highestActiveQueue.pop())
+          
+        }
+
+        this.setState({lowestActiveCases})
+        this.setState({highestActiveCases})
+
       });
+
+      
+  
+      
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -173,26 +246,88 @@ export default class Map extends Component {
     return (
       <div>
         <div className="statsContainer">
+        <div className="statsCard">
+            <Card
+              type="rounded-0"
+              style={cardStyle}
+            >
+              <Card.Body>
+              
+                <Card.Text style={cardTextStyle}>
+                  <div>Updated: <b>{this.state.date}</b></div>
+                </Card.Text>      
+              </Card.Body>
+            </Card>
+          </div>
           <div className="statsCard">
             <Card
               type="rounded-0"
-              style={{
-                width: "18rem",
-                backgroundColor: "#1A2637",
-                borderRadius: "0",
-              }}
+              style={cardStyle}
             >
               <Card.Body>
-                <Card.Text style={{ color: "white" }}>
-                  <div>Updated: {this.state.date}</div>
-                  <div>Total Active Cases: {this.state.totalActiveCases}</div>
-                  <div>Total Confirmed Cases: {this.state.total}</div>
-                  <div>Total Deaths: {this.state.totalDeaths}</div>
+                <Card.Text style={cardTextStyle}>
+                  <div>Active Cases: <b>{this.state.totalActiveCases}</b></div>
+                  <div>Confirmed Cases: <b>{this.state.total}</b></div>
+                  <div>Deaths: <b>{this.state.totalDeaths}</b></div>
                 </Card.Text>
               </Card.Body>
             </Card>
           </div>
+          
+          {this.state.hideLowestActiveBox ? null : <div className="statsCard">
+          <Accordion>
+            <Card
+              type="rounded-0"
+              style={cardStyle}
+            >
+              <Card.Body>
+                <Card.Text style={cardTextStyle}>
+                <div style={dismissMessageStyle} onClick={this.onClickHideLowest}>dismiss</div>
+                <Accordion.Toggle as={Button} variant="link" eventKey="1" style={cardTextStyle}><h6>Lowest Active Cases</h6></Accordion.Toggle>
+                  <Accordion.Collapse eventKey="1">
+                  <div style={{fontSize: 12}}> 
+                  
+                  {  
+                  this.state.lowestActiveCases.map((caseEntry) => (
+                  <div><b>{caseEntry.activeCases}</b>{' '}{emojiFlags.countryCode(fetchCountryCode(caseEntry.caribbeanName)).emoji}{' '}{caseEntry.caribbeanName}</div>
+                  ))
+                  }
+                   </div>
+                   </Accordion.Collapse>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Accordion> 
+          </div>}
+
+          {this.state.hideHighestActiveBox ? null :      
+          <div className="statsCard">
+          <Accordion>
+              <Card
+                type="rounded-0"
+                style={cardStyle}
+             >
+                <Card.Body>
+                  <Card.Text style={cardTextStyle}>
+                  <div style={dismissMessageStyle} onClick={this.onClickHideHighest}>dismiss</div>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="1" style={cardTextStyle}><h6>Highest Active Cases</h6></Accordion.Toggle>
+                  <Accordion.Collapse eventKey="1">
+                   <div style={{fontSize: 12}}> 
+                    {  
+                   this.state.highestActiveCases.map((caseEntry) => (
+                    <div><b>{caseEntry.activeCases}</b>{' '}{emojiFlags.countryCode(fetchCountryCode(caseEntry.caribbeanName)).emoji}{' '}{caseEntry.caribbeanName}</div>
+                   ))
+                    }
+                     </div>
+                  </Accordion.Collapse>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Accordion>
+          </div>
+          }
         </div>
+        
         <div
           ref={(el) => {
             this.mapContainer = el;

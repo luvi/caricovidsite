@@ -13,7 +13,6 @@ code {
 }
 
 .popups {
-
   overflow-y: scroll;
   overflow-x: scroll;
   max-width: 200px;
@@ -21,8 +20,6 @@ code {
   font: 12px/20px 'Open Sans', sans-serif;
   border-radius: 9px;
   text-align: center;
-
-
 }
 
 .mapContainer {
@@ -35,45 +32,32 @@ code {
 }
 
 .statsContainer {
-  justify-content: "right";
-  align-Content: "right";
-  align-Items: "right";
-  flex-Direction: "row";
-  position: relative;
+  justify-content: space-between;
+  align-Content: right;
+  flex-flow: column wrap;
+  position: absolute;
   display: flex;
   margin:auto;
-  padding-top: 100px;
-  width:100%;
+  top: 120px;
+  right: 30px;
   z-index: 99;
   text-align: left;
-
 }
 
 .statsCard{
-
-  position: absolute;
-  right: 30px;
+  margin-bottom: 10px; 
+  position: relative;
   text-align: left;
-  flex: 2 2 20em;
-
-
+  display: flex;
 }
 
 .custom-tooltip {
-
   background-color: rgb(18, 27, 38,0.7);
   padding-top: 5px;
   padding-bottom: 2px;
   padding-left: 20px;
   padding-right: 20px;
-
-
 }
-
-
-
-
-
 
 .sourcesContainer {
   position: fixed;

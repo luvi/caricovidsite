@@ -33,10 +33,6 @@ export default class GraphPage extends Component {
     this.setState({ selectedCountry: ReactDOM.findDOMNode(this.select).value });
   };
 
-  getData = () => {
-    console.log(this.state.data);
-    return this.state.data["Barbados"];
-  };
   componentDidMount() {
     document.body.style.backgroundColor = "#1A2637";
 
@@ -73,24 +69,21 @@ export default class GraphPage extends Component {
 
           this.setState({ data });
 
-          let allCases = [];
+          // let allCases = [];
+          // for (let j = 40; j < labels.length; j++) {
+          //   let res = [];
+          //   res["name"] = labels[j];
+          //   for (let i = 0; i < johnsHopkinsData.length; i++) {
+          //     let countryName =
+          //       johnsHopkinsData[i][0] === ""
+          //         ? johnsHopkinsData[i][1]
+          //         : johnsHopkinsData[i][0];
+          //     res[countryName] = parseInt(johnsHopkinsData[i][j]);
+          //   }
+          //   allCases.push(res);
+          // }
 
-          for (let j = 40; j < labels.length; j++) {
-            let res = [];
-            res["name"] = labels[j];
-
-            for (let i = 0; i < johnsHopkinsData.length; i++) {
-              let countryName =
-                johnsHopkinsData[i][0] === ""
-                  ? johnsHopkinsData[i][1]
-                  : johnsHopkinsData[i][0];
-              res[countryName] = parseInt(johnsHopkinsData[i][j]);
-            }
-
-            allCases.push(res);
-          }
-
-          this.setState({ allCountriesData: allCases });
+          // this.setState({ allCountriesData: allCases });
         });
 
         return getCOVIDInfo(recoveredSourceURL);
@@ -98,12 +91,9 @@ export default class GraphPage extends Component {
       }).then((recoveredData) => {
         parse(recoveredData, (err, output) => {
 
-         
-
           let labels = output[0];
           let recoveryData = output.filter(isCaribbeanCountry)
           let data = this.state.data
-
 
           for (let i = 0; i < recoveryData.length; i++) {
 
