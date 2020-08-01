@@ -13,8 +13,6 @@ import emojiFlags from 'emoji-flags'
 import fetchCountryCode from '../../functions/fetchCountryCode'
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-
-
 let quickAddDeaths = [
   ["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],
   ["", "Puerto Rico", "18.2208", "-66.5901", "155"],
@@ -42,11 +40,6 @@ const cardTextStyle = {
   color: "white",
   padding: "0px"
 };
-
-
-
-
-
 
 export default class Map extends Component {
   constructor(props) {
@@ -103,7 +96,7 @@ export default class Map extends Component {
         parse(body, (err, output) => {
           const arr = output;
           let size = arr[0].length; //latest entry
-          this.setState({ date: arr[0][size - 1] }); //date of latest entry
+          this.setState({ date: arr[0][size - 1] }); //date of latest entry (change to use last)
 
           johnsHopkinsData = arr.filter(isCaribbeanCountry);
           johnsHopkinsCountries = new Set();
@@ -129,9 +122,10 @@ export default class Map extends Component {
           johnsHopkinsData.forEach((jhDataElement) => {
             let caribbeanName =
               jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
+
             johnsHopkinsCountries.add(caribbeanName); //create set of all countries johns has
-            let numCases = jhDataElement[jhDataElement.length - 1];
-            let matchingDEntry = myCSVData.filter(
+            let numCases = jhDataElement[jhDataElement.length - 1]; //check for .last   jansArr = [a,b,c]  length = 3  jansArr[2]
+            let myDataCountry = myCSVData.filter(
               (entry) =>
                 entry[0] === caribbeanName || entry[1] === caribbeanName
             );
@@ -143,9 +137,9 @@ export default class Map extends Component {
 
             }
 
-            if (typeof matchingDEntry[0] !== "undefined") {
-              matchingDEntry = matchingDEntry[0];
-              let myCaseCount = matchingDEntry[matchingDEntry.length - 1];
+            if (typeof myDataCountry[0] !== "undefined") {
+              myDataCountry = myDataCountry[0];
+              let myCaseCount = myDataCountry[myDataCountry.length - 1];
               jhDataElement[jhDataElement.length - 1] = Math.max(
                 numCases,
                 myCaseCount
