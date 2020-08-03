@@ -14,6 +14,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer
 } from "recharts";
 //import AllCountriesGraph from "./allCountriesGraph";
 
@@ -157,13 +158,15 @@ export default class GraphPage extends Component {
           </Form.Group>
         </Form>
 
+              
+
+                
         {this.state.selectedCountry === "All countries" ? (
-          <div> Graph for all countries coming soon </div>
+          <div> Graph for all countries coming soon </div> //ReactComponent
         ) : (
           //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
+          <ResponsiveContainer width="70%" height={500}> 
           <LineChart
-            width={700}
-            height={500}
             data={this.state.data[this.state.selectedCountry]}
             margin={{
               top: 5,
@@ -190,6 +193,7 @@ export default class GraphPage extends Component {
               dot={false}
             />
           </LineChart>
+          </ResponsiveContainer>
         )}
         <div className="disclaimer">Data source: JHU, updated once per day</div>
       </div>
