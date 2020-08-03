@@ -19,9 +19,11 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 let quickAddDeaths = [
   ["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],
-  ["", "Puerto Rico", "18.2208", "-66.5901", "155"],
+  ["", "Puerto Rico", "18.2208", "-66.5901", "230"],
   ["", "Belize", "17.195465", "-88.268587", "2"],
 ];
+
+// let puertoRicoRecovered = "100"
 
 const cardStyle = {
     width: "260px",
@@ -165,6 +167,14 @@ export default class Map extends Component {
       .then((body) => {
         parse(body, (err, output) => {
           recoveredArr = output.filter(isCaribbeanCountry);
+          
+          // recoveredArr.forEach((jhDataElement) => {
+          //   let caribbeanName = jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
+
+          //   if (caribbeanName === 'Puerto Rico') { //Johns Hopkins coordinates are incorrect
+          //     jhDataElement[recoveredArr.size - 1] = puertoRicoRecovered;
+          //   }})
+          
         });
 
         return getCOVIDInfo(unitedStatesCaseSource);
@@ -206,9 +216,20 @@ export default class Map extends Component {
         let highestActiveCases = []
         let topNumberOfCases = 5
         for (let i=0; i<topNumberOfCases; i++){
-        
+ 
           lowestActiveCases.push(queue.pop())
-          highestActiveCases.push(highestActiveQueue.pop())
+          
+        }
+
+        for (let i=0; i<topNumberOfCases; i++){
+
+          let value = highestActiveQueue.pop()
+
+          if (value.caribbeanName !== "Puerto Rico"){
+          highestActiveCases.push(value)
+          } else {
+            i--;
+          }
           
         }
 
@@ -309,7 +330,9 @@ export default class Map extends Component {
                     <div><b>{caseEntry.activeCases}</b>{' '}{emojiFlags.countryCode(fetchCountryCode(caseEntry.caribbeanName)).emoji}{' '}{caseEntry.caribbeanName}</div>
                    ))
                     }
+                    <div style={{fontSize:"7px"}}>Note that Puerto Rico is excluded as we do not have their recovery data</div>
                      </div>
+
                   </Accordion.Collapse>
                   </Card.Text>
                 </Card.Body>
