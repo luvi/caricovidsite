@@ -165,7 +165,7 @@ export default class GraphPage extends Component {
           <div> Graph for all countries coming soon </div> //ReactComponent
         ) : (
           //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
-          <ResponsiveContainer width="70%" height={500}> 
+          <ResponsiveContainer width="99%" height={500}> 
           <LineChart
             data={this.state.data[this.state.selectedCountry]}
             margin={{
