@@ -11,6 +11,10 @@ import TinyQueue from 'tinyqueue'
 import setMarkers from './setMarkers'
 import emojiFlags from 'emoji-flags'
 import fetchCountryCode from '../../functions/fetchCountryCode'
+import _ from 'lodash'
+import moment from 'moment'
+
+
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 let quickAddDeaths = [
@@ -83,8 +87,6 @@ export default class Map extends Component {
       "developer: @JaniquekaJohn, Open Source https://github.com/luvi/caricovidsite"
     );
 
-    
-
     let johnsHopkinsData;
     let johnsHopkinsCountries;
     let myCSVData;
@@ -95,8 +97,7 @@ export default class Map extends Component {
       .then((body) => {
         parse(body, (err, output) => {
           const arr = output;
-          let size = arr[0].length; //latest entry
-          this.setState({ date: arr[0][size - 1] }); //date of latest entry (change to use last)
+          this.setState({ date: moment(_.last(arr[0])).format('dddd, MMMM Do YYYY')}); //date of latest entry
 
           johnsHopkinsData = arr.filter(isCaribbeanCountry);
           johnsHopkinsCountries = new Set();
@@ -124,7 +125,7 @@ export default class Map extends Component {
               jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
 
             johnsHopkinsCountries.add(caribbeanName); //create set of all countries johns has
-            let numCases = jhDataElement[jhDataElement.length - 1]; //check for .last   jansArr = [a,b,c]  length = 3  jansArr[2]
+            let numCases = _.last(jhDataElement); 
             let myDataCountry = myCSVData.filter(
               (entry) =>
                 entry[0] === caribbeanName || entry[1] === caribbeanName
@@ -215,10 +216,6 @@ export default class Map extends Component {
         this.setState({highestActiveCases})
 
       });
-
-      
-  
-      
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
