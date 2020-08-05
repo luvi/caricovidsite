@@ -13,10 +13,6 @@ code {
 }
 
 .popups {
-  overflow-y: scroll;
-  overflow-x: scroll;
-  max-width: 200px;
-  max-height: 400px;
   font: 12px/20px 'Open Sans', sans-serif;
   border-radius: 9px;
   text-align: center;
