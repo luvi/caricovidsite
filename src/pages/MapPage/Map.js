@@ -5,7 +5,7 @@ import { Card, Accordion, Button } from "react-bootstrap";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountry";
-import {url,deathsSource,myOverrideURL,recoveredSourceURL,unitedStatesCaseSource} from "../../constants"
+import { url, deathsSource, myOverrideURL, recoveredSourceURL, unitedStatesCaseSource } from "../../constants"
 import createCaribbeanDataArray from './createCaribbeanDataArray'
 import TinyQueue from 'tinyqueue'
 import setMarkers from './setMarkers'
@@ -14,6 +14,7 @@ import fetchCountryCode from '../../functions/fetchCountryCode'
 import _ from 'lodash'
 import moment from 'moment'
 
+import AccordionToggle from '../../components/AccordionToggle'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -26,10 +27,10 @@ let quickAddDeaths = [
 // let puertoRicoRecovered = "100"
 
 const cardStyle = {
-    width: "260px",
-    backgroundColor: "#1A2637",
-    borderRadius: "1",
-    marginTop: "0px"
+  width: "260px",
+  backgroundColor: "#1A2637",
+  borderRadius: "1",
+  marginTop: "0px"
 };
 
 const dismissMessageStyle = {
@@ -63,19 +64,19 @@ export default class Map extends Component {
       caribbeanDataActiveCases: [],
       johnsHopkinsData: [],
       date: "",
-      lowestActiveCases:[],
-      highestActiveCases:[],
+      lowestActiveCases: [],
+      highestActiveCases: [],
       hideHighestActiveBox: false,
       hideLowestActiveBox: false,
     };
   }
 
   onClickHideHighest = () => {
-    this.setState({hideHighestActiveBox: true})
+    this.setState({ hideHighestActiveBox: true })
   }
 
   onClickHideLowest = () => {
-    this.setState({hideLowestActiveBox: true})
+    this.setState({ hideLowestActiveBox: true })
   }
 
   sum(total, array) {
@@ -99,7 +100,7 @@ export default class Map extends Component {
       .then((body) => {
         parse(body, (err, output) => {
           const arr = output;
-          this.setState({ date: moment(_.last(arr[0])).format('dddd, MMMM Do YYYY')}); //date of latest entry
+          this.setState({ date: moment(_.last(arr[0])).format('dddd, MMMM Do YYYY') }); //date of latest entry
 
           johnsHopkinsData = arr.filter(isCaribbeanCountry);
           johnsHopkinsCountries = new Set();
@@ -127,7 +128,7 @@ export default class Map extends Component {
               jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
 
             johnsHopkinsCountries.add(caribbeanName); //create set of all countries johns has
-            let numCases = _.last(jhDataElement); 
+            let numCases = _.last(jhDataElement);
             let myDataCountry = myCSVData.filter(
               (entry) =>
                 entry[0] === caribbeanName || entry[1] === caribbeanName
@@ -167,14 +168,14 @@ export default class Map extends Component {
       .then((body) => {
         parse(body, (err, output) => {
           recoveredArr = output.filter(isCaribbeanCountry);
-          
+
           // recoveredArr.forEach((jhDataElement) => {
           //   let caribbeanName = jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
 
           //   if (caribbeanName === 'Puerto Rico') { //Johns Hopkins coordinates are incorrect
           //     jhDataElement[recoveredArr.size - 1] = puertoRicoRecovered;
           //   }})
-          
+
         });
 
         return getCOVIDInfo(unitedStatesCaseSource);
@@ -194,8 +195,8 @@ export default class Map extends Component {
         this.setState({ caribbeanDataRecovered: recoveredArr });
         johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
 
-         let totalRecovered = this.state.caribbeanDataRecovered.reduce(this.sum, 0)
-    
+        let totalRecovered = this.state.caribbeanDataRecovered.reduce(this.sum, 0)
+
         this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
         this.setState({ totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0) });
         this.setState({ caribbeanData: johnsHopkinsData });
@@ -203,7 +204,7 @@ export default class Map extends Component {
         this.setState(cleanedUpArray);
         setMarkers(map, mapboxgl, cleanedUpArray);
         this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
-        this.setState({totalActiveCases: this.state.total - totalRecovered })
+        this.setState({ totalActiveCases: this.state.total - totalRecovered })
 
 
         let queue = new TinyQueue([...cleanedUpArray], function (a, b) {
@@ -215,26 +216,26 @@ export default class Map extends Component {
         let lowestActiveCases = []
         let highestActiveCases = []
         let topNumberOfCases = 5
-        for (let i=0; i<topNumberOfCases; i++){
- 
+        for (let i = 0; i < topNumberOfCases; i++) {
+
           lowestActiveCases.push(queue.pop())
-          
+
         }
 
-        for (let i=0; i<topNumberOfCases; i++){
+        for (let i = 0; i < topNumberOfCases; i++) {
 
           let value = highestActiveQueue.pop()
 
-          if (value.caribbeanName !== "Puerto Rico"){
-          highestActiveCases.push(value)
+          if (value.caribbeanName !== "Puerto Rico") {
+            highestActiveCases.push(value)
           } else {
             i--;
           }
-          
+
         }
 
-        this.setState({lowestActiveCases})
-        this.setState({highestActiveCases})
+        this.setState({ lowestActiveCases })
+        this.setState({ highestActiveCases })
 
       });
 
@@ -258,16 +259,16 @@ export default class Map extends Component {
     return (
       <div>
         <div className="statsContainer">
-        <div className="statsCard">
+          <div className="statsCard">
             <Card
               type="rounded-0"
               style={cardStyle}
             >
               <Card.Body>
-              
+
                 <Card.Text style={cardTextStyle}>
                   <div>Updated: <b>{this.state.date}</b></div>
-                </Card.Text>      
+                </Card.Text>
               </Card.Body>
             </Card>
           </div>
@@ -285,63 +286,63 @@ export default class Map extends Component {
               </Card.Body>
             </Card>
           </div>
-          
-          {this.state.hideLowestActiveBox ? null : <div className="statsCard">
-          <Accordion>
-            <Card
-              type="rounded-0"
-              style={cardStyle}
-            >
-              <Card.Body>
-                <Card.Text style={cardTextStyle}>
-                <div style={dismissMessageStyle} onClick={this.onClickHideLowest}>dismiss</div>
-                <Accordion.Toggle as={Button} variant="link" eventKey="1" style={cardTextStyle}><h6>Lowest Active Cases</h6></Accordion.Toggle>
-                  <Accordion.Collapse eventKey="1">
-                  <div style={{fontSize: 12}}> 
-                  
-                  {  
-                  this.state.lowestActiveCases.map((caseEntry) => (
-                  <div><b>{caseEntry.activeCases}</b>{' '}{emojiFlags.countryCode(fetchCountryCode(caseEntry.caribbeanName)).emoji}{' '}{caseEntry.caribbeanName}</div>
-                  ))
-                  }
-                   </div>
-                   </Accordion.Collapse>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Accordion> 
-          </div>}
 
-          {this.state.hideHighestActiveBox ? null :      
-          <div className="statsCard">
-          <Accordion>
+          {this.state.hideLowestActiveBox ? null : <div className="statsCard">
+            <Accordion>
               <Card
                 type="rounded-0"
                 style={cardStyle}
-             >
+              >
                 <Card.Body>
                   <Card.Text style={cardTextStyle}>
-                  <div style={dismissMessageStyle} onClick={this.onClickHideHighest}>dismiss</div>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="1" style={cardTextStyle}><h6>Highest Active Cases</h6></Accordion.Toggle>
-                  <Accordion.Collapse eventKey="1">
-                   <div style={{fontSize: 12}}> 
-                    {  
-                   this.state.highestActiveCases.map((caseEntry) => (
-                    <div><b>{caseEntry.activeCases}</b>{' '}{emojiFlags.countryCode(fetchCountryCode(caseEntry.caribbeanName)).emoji}{' '}{caseEntry.caribbeanName}</div>
-                   ))
-                    }
-                    <div style={{fontSize:"7px"}}>Note that Puerto Rico is excluded as we do not have their recovery data</div>
-                     </div>
+                    <div style={dismissMessageStyle} onClick={this.onClickHideLowest}>dismiss</div>
+                    <AccordionToggle eventKey="1" style={cardTextStyle}>Lowest Active Cases</AccordionToggle>
+                    <Accordion.Collapse eventKey="1">
+                      <div style={{ fontSize: 12 }}>
 
-                  </Accordion.Collapse>
+                        {
+                          this.state.lowestActiveCases.map((caseEntry) => (
+                            <div><b>{caseEntry.activeCases}</b>{' '}{emojiFlags.countryCode(fetchCountryCode(caseEntry.caribbeanName)).emoji}{' '}{caseEntry.caribbeanName}</div>
+                          ))
+                        }
+                      </div>
+                    </Accordion.Collapse>
                   </Card.Text>
                 </Card.Body>
               </Card>
             </Accordion>
-          </div>
+          </div>}
+
+          {this.state.hideHighestActiveBox ? null :
+            <div className="statsCard">
+              <Accordion>
+                <Card
+                  type="rounded-0"
+                  style={cardStyle}
+                >
+                  <Card.Body>
+                    <Card.Text style={cardTextStyle}>
+                      <div style={dismissMessageStyle} onClick={this.onClickHideHighest}>dismiss</div>
+                      <AccordionToggle eventKey="1" style={cardTextStyle}>Highest Active Cases</AccordionToggle>
+                      <Accordion.Collapse eventKey="1">
+                        <div style={{ fontSize: 12 }}>
+                          {
+                            this.state.highestActiveCases.map((caseEntry) => (
+                              <div><b>{caseEntry.activeCases}</b>{' '}{emojiFlags.countryCode(fetchCountryCode(caseEntry.caribbeanName)).emoji}{' '}{caseEntry.caribbeanName}</div>
+                            ))
+                          }
+                          <div style={{ fontSize: "7px" }}>Note that Puerto Rico is excluded as we do not have their recovery data</div>
+                        </div>
+
+                      </Accordion.Collapse>
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Accordion>
+            </div>
           }
         </div>
-        
+
         <div
           ref={(el) => {
             this.mapContainer = el;
