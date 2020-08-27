@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
-import { Card, Accordion, Button } from "react-bootstrap";
+import { Card, Accordion } from "react-bootstrap";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountry";
@@ -68,6 +68,7 @@ export default class Map extends Component {
       highestActiveCases: [],
       hideHighestActiveBox: false,
       hideLowestActiveBox: false,
+      puertoRicoConfirmedCases: 0
     };
   }
 
@@ -121,6 +122,12 @@ export default class Map extends Component {
         //Read my CSV
         parse(myOverrideData, (err, output) => {
           myCSVData = output;
+      
+          let prData = myCSVData.filter(
+            (entry) => entry[1] === 'Puerto Rico'
+          )
+
+          this.setState({puertoRicoConfirmedCases: parseInt(_.last(prData[0]))})
 
           //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
           johnsHopkinsData.forEach((jhDataElement) => {
@@ -141,13 +148,17 @@ export default class Map extends Component {
 
             }
 
+           
+            
             if (typeof myDataCountry[0] !== "undefined") {
               myDataCountry = myDataCountry[0];
-              let myCaseCount = myDataCountry[myDataCountry.length - 1];
+              let myCaseCount = _.last(myDataCountry);
+
               jhDataElement[jhDataElement.length - 1] = Math.max(
                 numCases,
                 myCaseCount
               );
+
             }
             //add the data that I have that Johns Hopkins does not.
 
@@ -157,6 +168,7 @@ export default class Map extends Component {
                 johnsHopkinsCountries.has(arr[1])
               );
             });
+
           });
         });
 
@@ -204,7 +216,8 @@ export default class Map extends Component {
         this.setState(cleanedUpArray);
         setMarkers(map, mapboxgl, cleanedUpArray);
         this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
-        this.setState({ totalActiveCases: this.state.total - totalRecovered })
+        
+        this.setState({ totalActiveCases: this.state.total - totalRecovered - this.state.puertoRicoConfirmedCases})
 
 
         let queue = new TinyQueue([...cleanedUpArray], function (a, b) {
@@ -279,9 +292,10 @@ export default class Map extends Component {
             >
               <Card.Body>
                 <Card.Text style={cardTextStyle}>
-                  <div>Active Cases: <b>{this.state.totalActiveCases}</b></div>
+                  <div>Active Cases: <b>{this.state.totalActiveCases}</b> </div>
                   <div>Confirmed Cases: <b>{this.state.total}</b></div>
                   <div>Deaths: <b>{this.state.totalDeaths}</b></div>
+                  <div style={{ fontSize: "7px" }}>*Note that Puerto Rico is now excluded from active case count as we do not have their recovery data</div>
                 </Card.Text>
               </Card.Body>
             </Card>

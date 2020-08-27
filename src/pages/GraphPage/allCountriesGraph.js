@@ -23,9 +23,6 @@ export default class AllCountriesGraph extends Component {
   }
   
   componentDidMount(){
-
-    console.log(!!this.state.data[0] ? this.state.data[0]["name"] : "");
-    console.log(this.state.data);
     this.setState({data: this.props.countryData[0]})
   }
 
