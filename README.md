@@ -59,7 +59,7 @@ Needed! See open issues.
 Contributions are welcome, especially if you are a caribbean dev ;) Good beginner issues are labelled. Here is the [contributing guideline]() coming soon.
 
 ## Credits
-Thank you [Clydeen McDonald] (https://twitter.com/ClydeenMcdonald) for approaching me with your need!
+Thank you [Clydeen McDonald](https://twitter.com/ClydeenMcdonald) for approaching me with your need!
 
 ## License
 
