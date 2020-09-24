@@ -11,8 +11,8 @@ Just about when the situation was evolving into a pandemic, a journalist contact
 
 ## Screenshots
 
-![Map page](https://imgur.com/GbnzXFE)
-
+![Map page](mappage.png)
+![Case graphs](casegraphs.png)
 ## Tech Stack
 
 ###### Frontend
