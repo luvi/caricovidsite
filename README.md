@@ -1,4 +1,4 @@
-# Caricovidmap
+# caricovidmap
 This is a map (live at caricovidmap.com) that aggregates Johns Hopkins University open global data, but with a focus on the Caribbean region. There are two main views. The map page which is the home page, and Case evolution graphs which plots the data over time on a graph.
 
 ## Motivation
