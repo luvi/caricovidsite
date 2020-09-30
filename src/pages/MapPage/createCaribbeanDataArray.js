@@ -29,7 +29,7 @@ export default (caribbeanData, caribbeanDataDeaths, caribbeanRecoveryData) => {
 
       
       if (caribbeanName !== "") {
-        arr.push({caribbeanName: caribbeanName, longitude:element[3], latitude: element[2], confirmedCases: parseInt(numCases), recoveredCases:parseInt(numRecovered), activeCases:(numCases - numRecovered), numDeaths:parseInt(numDeaths) })
+        arr.push({caribbeanName: caribbeanName, longitude:element[3], latitude: element[2], confirmedCases: parseInt(numCases), recoveredCases:parseInt(numRecovered), activeCases:(numCases - numRecovered - numDeaths), numDeaths:parseInt(numDeaths) })
       }
 
 

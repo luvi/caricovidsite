@@ -217,7 +217,7 @@ export default class Map extends Component {
         setMarkers(map, mapboxgl, cleanedUpArray);
         this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
         
-        this.setState({ totalActiveCases: this.state.total - totalRecovered - this.state.puertoRicoConfirmedCases})
+        this.setState({ totalActiveCases: this.state.total - totalRecovered - this.state.totalDeaths - this.state.puertoRicoConfirmedCases})
 
 
         let queue = new TinyQueue([...cleanedUpArray], function (a, b) {
