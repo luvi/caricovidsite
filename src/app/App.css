@@ -17,6 +17,13 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+@media (min-width: 992px) {
+  .navbar-expand-lg .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+    justify-content: flex-end;
+  }
+}
 
 
 
