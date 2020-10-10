@@ -40,7 +40,8 @@ const dismissMessageStyle = {
   bordersize: "1px",
   borderColor: "white",
   marginTop: "0px",
-  marginLeft: "80%"
+  marginLeft: "80%",
+  cursor: "pointer"
 };
 
 const cardTextStyle = {
@@ -309,7 +310,7 @@ export default class Map extends Component {
               >
                 <Card.Body>
                   <Card.Text style={cardTextStyle}>
-                    <div style={dismissMessageStyle} onClick={this.onClickHideLowest}>dismiss</div>
+                    <div style={dismissMessageStyle} onClick={this.onClickHideLowest}>x</div>
                     <AccordionToggle eventKey="1" style={cardTextStyle}>Lowest Active Cases</AccordionToggle>
                     <Accordion.Collapse eventKey="1">
                       <div style={{ fontSize: 12 }}>
@@ -336,7 +337,7 @@ export default class Map extends Component {
                 >
                   <Card.Body>
                     <Card.Text style={cardTextStyle}>
-                      <div style={dismissMessageStyle} onClick={this.onClickHideHighest}>dismiss</div>
+                      <div style={dismissMessageStyle} onClick={this.onClickHideHighest}>x</div>
                       <AccordionToggle eventKey="1" style={cardTextStyle}>Highest Active Cases</AccordionToggle>
                       <Accordion.Collapse eventKey="1">
                         <div style={{ fontSize: 12 }}>
