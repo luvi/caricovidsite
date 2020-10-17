@@ -71,7 +71,7 @@ export class CustomTooltip extends Component {
         const { active } = this.props;
     
         if (active) {
-          const { payload, label } = this.props;
+          const { label } = this.props;
           return (
             <div className="custom-tooltip">
               <p className="label">{`${label}`}</p>
