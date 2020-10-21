@@ -19,18 +19,16 @@ export default class App extends Component {
               <Navbar.Brand>Caribbean COVID Map</Navbar.Brand>
             </Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
-            <Nav className="justify-content-end" activeKey="/home">
-            <Nav.Item>
-            <NavLink style={{color: "white", paddingRight: 10}} to="/graphs">Case Graphs</NavLink>
-            </Nav.Item>
-            <Nav.Item>
-               <div> </div>
-            </Nav.Item>
-            <Nav.Item>
-            <Link style={{color: "white"}} to="/credits">Credits</Link>
-            </Nav.Item>
-            </Nav>
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="justify-content-end" activeKey="/home">
+                <Nav.Item>
+                  <NavLink style={{color: "white", paddingRight: 10}} to="/graphs">Case Graphs</NavLink>
+                </Nav.Item>
+                <Nav.Item>
+                  <Link style={{color: "white"}} to="/credits">Credits</Link>
+                </Nav.Item>
+              </Nav>
+            </Navbar.Collapse>
           </Navbar>
 
           <div>
