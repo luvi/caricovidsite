@@ -1,0 +1,34 @@
+name: Caricovidsite CI
+
+on:
+  pull_request:
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+
+    # Run for both NodeJS 12 and NodeJS 14
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    # Install all dependencies, including eslint
+    - run: npm ci
+
+    # Start eslint runner for PR annotations
+    - name: eslint runner
+      uses: reviewdog/action-eslint@v1
+      with:
+        reporter: github-pr-review # Change reporter.
+        fail_on_error: true
+        filter_mode: 'file'
+        eslint_flags: 'src/'
