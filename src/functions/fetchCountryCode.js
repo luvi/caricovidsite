@@ -6,6 +6,7 @@ let countryCodeDictionary = {
     "Barbados": "BB",
     "Bermuda": "BM",
     "Belize": "BZ",
+    "Bonaire": "BQ",
     "British Virgin Islands": "VI",
     "Cayman Islands": "KY",
     "Cuba": "CU",
