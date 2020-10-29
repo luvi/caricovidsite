@@ -48,11 +48,11 @@ Once the componentDidMount, a series of promises are triggered by the core getCO
 
 ## Installation
 
-Once you git clone this repo, an "npm start" would spin up a development server with a local instance.
+Once you git clone this repository, an "npm start" would spin up a development server with a local instance.
 Please use your own mapbox API token when running your own instance of the project. You have to replace the TOKEN in src/MAPBOX_ACCESS_TOKEN.js with your own, as it is restricted to only work on caricovidsite.com. You can grab one for free at [mapbox.com](https://account.mapbox.com/)
 
 ## Tests
-Needed! See open issues.
+Needed! See all open issues.
 
 ## Contribute
 
