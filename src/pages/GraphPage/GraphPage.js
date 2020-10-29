@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountryFull";
 import { countryList } from "../../data/fullCountryList";
 import getCOVIDInfo from "../../functions/fetchFromURL";
-import { url, recoveredSourceURL } from "../../constants";
+import { url, recoveredSourceURL, deathsSource } from "../../constants";
 import parse from "csv-parse";
 import { Form } from "react-bootstrap";
 import ReactDOM from "react-dom";
@@ -27,6 +27,7 @@ export default class GraphPage extends Component {
       data: [],
       selectedCountry: "Antigua and Barbuda",
       allCountriesData: [],
+      deathsdata: []
     };
   }
 
@@ -37,8 +38,19 @@ export default class GraphPage extends Component {
   componentDidMount() {
     document.body.style.backgroundColor = "#1A2637";
 
-    getCOVIDInfo(url)
-      .then((body) => {
+    getCOVIDInfo(deathsSource).then((deathsBody) => {
+      console.log(deathsBody);
+
+      parse(deathsBody, (err, output) => {
+        
+        output = output.filter(isCaribbeanCountry);
+        this.setState({deathsdata: output})
+
+    
+      });
+
+      return getCOVIDInfo(url);
+    }).then((body) => {
         parse(body, (err, output) => {
           const arr = output;
           let size = arr[0].length; //latest entry
@@ -55,7 +67,7 @@ export default class GraphPage extends Component {
               dataArrayPerCountry["name"] = labels[j];
               dataArrayPerCountry["Confirmed cases"] = parseInt(johnsHopkinsData[i][j]);
               dataArrayPerCountry["Active cases"] = 2;
-
+              dataArrayPerCountry["Deaths"] = parseInt(this.state.deathsdata[i][j]);
               inner.push(dataArrayPerCountry);
               
             }
@@ -69,22 +81,6 @@ export default class GraphPage extends Component {
           }
 
           this.setState({ data });
-
-          // let allCases = [];
-          // for (let j = 40; j < labels.length; j++) {
-          //   let res = [];
-          //   res["name"] = labels[j];
-          //   for (let i = 0; i < johnsHopkinsData.length; i++) {
-          //     let countryName =
-          //       johnsHopkinsData[i][0] === ""
-          //         ? johnsHopkinsData[i][1]
-          //         : johnsHopkinsData[i][0];
-          //     res[countryName] = parseInt(johnsHopkinsData[i][j]);
-          //   }
-          //   allCases.push(res);
-          // }
-
-          // this.setState({ allCountriesData: allCases });
         });
 
         return getCOVIDInfo(recoveredSourceURL);
@@ -103,12 +99,15 @@ export default class GraphPage extends Component {
             let count = 0;
             let indexOfFirstDateLabel = 4;
 
+        
+
             for (let j = indexOfFirstDateLabel; j < labels.length; j++) {
 
               let numberOfRecoveredCasesOnThisDate = recoveryData[i][j];
               let numberOfConfirmedCasesOnThisDate = innerArr[count]["Confirmed cases"];
+              let numberOfDeathsOnThisDate = innerArr[count]["Deaths"];
 
-              innerArr[count]["Active cases"] = numberOfConfirmedCasesOnThisDate - numberOfRecoveredCasesOnThisDate;
+              innerArr[count]["Active cases"] = numberOfConfirmedCasesOnThisDate - numberOfRecoveredCasesOnThisDate - numberOfDeathsOnThisDate;
               count++
 
             }
@@ -118,9 +117,6 @@ export default class GraphPage extends Component {
           }
 
           this.setState({data: data})
-
-
-
         });
       });
   }
@@ -192,6 +188,12 @@ export default class GraphPage extends Component {
               stroke="#ff3300"
               dot={false}
             />
+            <Line
+              type="monotone"
+              dataKey="Deaths"
+              stroke="#FFA51C"
+              dot={false}
+            />
           </LineChart>
           </ResponsiveContainer>
         )}
@@ -213,7 +215,7 @@ export class CustomTooltip extends Component {
           {!!payload ? (
             <div className="custom-tooltip">
               <p className="label">{`${label}`}</p>
-              <p className="desc">{`${payload[0].value} confirmed case(s), ${payload[1].value} active case(s) `}</p>
+              <p className="desc">{`${payload[0].value} confirmed case(s), ${payload[1].value} active case(s), ${payload[2].value} total deaths `}</p>
             </div>
           ) : (
             <div> </div>
