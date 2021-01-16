@@ -117,9 +117,11 @@ export default class GraphPage extends Component {
           }
 
           this.setState({data: data})
+          console.log(this.state.data["Barbados"])
         });
       });
   }
+  
   render() {
     return (
       <div
@@ -161,6 +163,7 @@ export default class GraphPage extends Component {
           <div> Graph for all countries coming soon </div> //ReactComponent
         ) : (
           //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
+          
           <ResponsiveContainer width="99%" height={500}> 
           <LineChart
             data={this.state.data[this.state.selectedCountry]}

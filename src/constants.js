@@ -8,3 +8,4 @@ export const recoveredSourceURL =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
 export const unitedStatesCaseSource =
   "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv";
+  export const testsURL = "https://raw.githubusercontent.com/luvi/caricoviddata/master/test.csv"
