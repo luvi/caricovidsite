@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import getCOVIDInfo from "../../functions/fetchFromURL";
-import { testsURL } from "../../constants";
+import { testsURL,graphGridColour } from "../../constants";
 import parse from "csv-parse";
 import { Form } from "react-bootstrap";
 import ReactDOM from "react-dom";
@@ -95,9 +95,7 @@ export default class TestsPage extends Component {
             
             </Form.Control>
           </Form.Group>
-        </Form>
-
-              
+        </Form>     
           <ResponsiveContainer width="99%" height={500}> 
           <LineChart
             data={this.state.data}
@@ -108,9 +106,9 @@ export default class TestsPage extends Component {
               bottom: 5,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke={graphGridColour} />
             <XAxis dataKey="date" />
-            <YAxis domain={[0, 40000]} />
+            <YAxis domain={[0, 30000]} />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Line

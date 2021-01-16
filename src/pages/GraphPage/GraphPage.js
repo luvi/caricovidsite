@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountryFull";
 import { countryList } from "../../data/fullCountryList";
 import getCOVIDInfo from "../../functions/fetchFromURL";
-import { url, recoveredSourceURL, deathsSource } from "../../constants";
+import { url, recoveredSourceURL, deathsSource,graphGridColour } from "../../constants";
 import parse from "csv-parse";
 import { Form } from "react-bootstrap";
 import ReactDOM from "react-dom";
@@ -39,7 +39,7 @@ export default class GraphPage extends Component {
     document.body.style.backgroundColor = "#1A2637";
 
     getCOVIDInfo(deathsSource).then((deathsBody) => {
-      console.log(deathsBody);
+   
 
       parse(deathsBody, (err, output) => {
         
@@ -117,7 +117,7 @@ export default class GraphPage extends Component {
           }
 
           this.setState({data: data})
-          console.log(this.state.data["Barbados"])
+
         });
       });
   }
@@ -174,7 +174,7 @@ export default class GraphPage extends Component {
               bottom: 5,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke={graphGridColour} />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip content={<CustomTooltip />} />
