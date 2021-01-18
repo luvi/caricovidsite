@@ -52,7 +52,7 @@ export default class TestsPage extends Component {
   };
 
   componentDidMount() {
-    document.body.style.backgroundColor = "#212f45";
+    document.body.style.backgroundColor = "#1A2637";
 
     getCOVIDInfo(testsURL).then((testsBody) => {
 
