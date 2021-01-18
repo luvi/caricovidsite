@@ -15,7 +15,7 @@
       return (
         <div className="App">
           <Router>
-            <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+            <Navbar className={"header-color"}  variant="dark" expand="lg" fixed="top">
               <Link to="/">
                 <Navbar.Brand>Caribbean COVID Map</Navbar.Brand>
               </Link>

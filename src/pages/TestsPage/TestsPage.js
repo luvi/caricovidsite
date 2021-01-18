@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import getCOVIDInfo from "../../functions/fetchFromURL";
-import { testsURL,graphGridColour } from "../../constants";
+import { testsURL, graphGridColour, barbadosTestsURL } from "../../constants";
 import parse from "csv-parse";
 import { Form } from "react-bootstrap";
 import ReactDOM from "react-dom";
@@ -12,58 +12,60 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
 
+const svg = "Saint Vincent and the Grenadines"
+const bb = "Barbados"
 
 export default class TestsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
-      selectedCountry: "Saint Vincent and the Grenadines"
+      selectedCountry: svg,
     };
   }
 
-  handleChange = (option) => {
+  parseDataForCountry = (body, countryName)=> {
+
+    parse(body, (err, output) => {
+        err ?? console.warn(err);
+
+        let inner = [];
+        output.map((entry) => {
+          let outputSet = [];
+          outputSet["date"] = entry[0];
+          outputSet["tests"] = parseInt(entry[1]);
+          inner.push(outputSet);
+          return inner;
+        });
+        let localData = this.state.data
+        localData[countryName] = inner
+        this.setState({ data: localData });
+        console.log(this.state.data)
+    })
+}
+
+  handleChange = () => {
     this.setState({ selectedCountry: ReactDOM.findDOMNode(this.select).value });
   };
 
   componentDidMount() {
-    document.body.style.backgroundColor = "#1A2637";
+    document.body.style.backgroundColor = "#212f45";
 
     getCOVIDInfo(testsURL).then((testsBody) => {
 
+        this.parseDataForCountry(testsBody,svg)
+ 
+      return getCOVIDInfo(barbadosTestsURL);
 
-      parse(testsBody, (err, output) => {
+    }).then((barbadosTestBody) =>{
+
+        this.parseDataForCountry(barbadosTestBody,bb)
         
-        err ?? console.warn(err)
-
-
-        
-        let inner = [];
-        output.map((entry) => {
-
-            let outputSet = []
-            outputSet["date"] = entry[0];
-            outputSet["tests"] = parseInt(entry[1]);
-            inner.push(outputSet);
-
-            return inner
-
-        })
-       
-   
-
-
-        this.setState({data: inner})
-        
-    
-      });
-
-      
-    }) 
-}
+    });
+  }
   render() {
     return (
       <div
@@ -88,17 +90,20 @@ export default class TestsPage extends Component {
               as="select"
               custom
               onChange={this.handleChange}
-              defaultValue="Saint Vincent and the Grenadines"
+              defaultValue={svg}
             >
-              
-                <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
-            
+             <option value={bb}>
+                {bb}
+              </option>
+              <option value={svg}>
+              {svg}
+              </option>
             </Form.Control>
           </Form.Group>
-        </Form>     
-          <ResponsiveContainer width="99%" height={500}> 
+        </Form>
+        <ResponsiveContainer width="99%" height={500}>
           <LineChart
-            data={this.state.data}
+            data={this.state.data[this.state.selectedCountry]}
             margin={{
               top: 5,
               right: 30,
@@ -118,8 +123,8 @@ export default class TestsPage extends Component {
               dot={false}
             />
           </LineChart>
-          </ResponsiveContainer>
-        
+        </ResponsiveContainer>
+
         <div className="disclaimer">Beta, not yet updated daily</div>
       </div>
     );

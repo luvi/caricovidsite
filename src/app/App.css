@@ -7,8 +7,12 @@
   pointer-events: none;
 }
 
+.header-color{
+  background-color: #212f45;
+}
+
 .App-header {
-  background-color: #282c34;
+  background-color: #181b26;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

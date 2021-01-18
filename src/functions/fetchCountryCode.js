@@ -20,7 +20,7 @@ let countryCodeDictionary = {
     "Martinique": "MQ",
     "Montserrat": "MS",
     "Netherlands Antilles": "NL",
-    "Puerto Rico": "PR",
+    //"Puerto Rico": "PR",
     "Saint Barthelemy": "BL",
     "Saint Kitts and Nevis": "KN",
     "Saint Lucia": "LC",
