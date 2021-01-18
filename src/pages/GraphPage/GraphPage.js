@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountryFull";
 import { countryList } from "../../data/fullCountryList";
 import getCOVIDInfo from "../../functions/fetchFromURL";
-import { url, recoveredSourceURL, deathsSource,graphGridColour } from "../../constants";
+import {
+  url,
+  recoveredSourceURL,
+  deathsSource,
+  graphGridColour,
+} from "../../constants";
 import parse from "csv-parse";
 import { Form } from "react-bootstrap";
 import ReactDOM from "react-dom";
@@ -14,8 +19,14 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
+import "./GraphPage.css";
+import {
+  activeCasesLineColour,
+  confirmedCasesLineColour,
+  deathsLineColour,
+} from "./graph-line-colours";
 //import AllCountriesGraph from "./allCountriesGraph";
 
 const data = [];
@@ -27,30 +38,27 @@ export default class GraphPage extends Component {
       data: [],
       selectedCountry: "Antigua and Barbuda",
       allCountriesData: [],
-      deathsdata: []
+      deathsdata: [],
     };
   }
 
-  handleChange = (option) => {
+  handleChange = () => {
     this.setState({ selectedCountry: ReactDOM.findDOMNode(this.select).value });
   };
 
   componentDidMount() {
     document.body.style.backgroundColor = "#1A2637";
 
-    getCOVIDInfo(deathsSource).then((deathsBody) => {
-   
+    getCOVIDInfo(deathsSource)
+      .then((deathsBody) => {
+        parse(deathsBody, (err, output) => {
+          output = output.filter(isCaribbeanCountry);
+          this.setState({ deathsdata: output });
+        });
 
-      parse(deathsBody, (err, output) => {
-        
-        output = output.filter(isCaribbeanCountry);
-        this.setState({deathsdata: output})
-
-    
-      });
-
-      return getCOVIDInfo(url);
-    }).then((body) => {
+        return getCOVIDInfo(url);
+      })
+      .then((body) => {
         parse(body, (err, output) => {
           const arr = output;
           let size = arr[0].length; //latest entry
@@ -65,11 +73,14 @@ export default class GraphPage extends Component {
             for (let j = 4; j < labels.length; j++) {
               let dataArrayPerCountry = [];
               dataArrayPerCountry["name"] = labels[j];
-              dataArrayPerCountry["Confirmed cases"] = parseInt(johnsHopkinsData[i][j]);
+              dataArrayPerCountry["Confirmed cases"] = parseInt(
+                johnsHopkinsData[i][j]
+              );
               dataArrayPerCountry["Active cases"] = 2;
-              dataArrayPerCountry["Deaths"] = parseInt(this.state.deathsdata[i][j]);
+              dataArrayPerCountry["Deaths"] = parseInt(
+                this.state.deathsdata[i][j]
+              );
               inner.push(dataArrayPerCountry);
-              
             }
 
             let countryName =
@@ -84,58 +95,46 @@ export default class GraphPage extends Component {
         });
 
         return getCOVIDInfo(recoveredSourceURL);
-
-      }).then((recoveredData) => {
+      })
+      .then((recoveredData) => {
         parse(recoveredData, (err, output) => {
-
           let labels = output[0];
-          let recoveryData = output.filter(isCaribbeanCountry)
-          let data = this.state.data
+          let recoveryData = output.filter(isCaribbeanCountry);
+          let data = this.state.data;
 
           for (let i = 0; i < recoveryData.length; i++) {
-
-            let countryName = recoveryData[i][0] === "" ? recoveryData[i][1]: recoveryData[i][0];
+            let countryName =
+              recoveryData[i][0] === ""
+                ? recoveryData[i][1]
+                : recoveryData[i][0];
             let innerArr = data[countryName];
             let count = 0;
             let indexOfFirstDateLabel = 4;
 
-        
-
             for (let j = indexOfFirstDateLabel; j < labels.length; j++) {
-
               let numberOfRecoveredCasesOnThisDate = recoveryData[i][j];
-              let numberOfConfirmedCasesOnThisDate = innerArr[count]["Confirmed cases"];
+              let numberOfConfirmedCasesOnThisDate =
+                innerArr[count]["Confirmed cases"];
               let numberOfDeathsOnThisDate = innerArr[count]["Deaths"];
 
-              innerArr[count]["Active cases"] = numberOfConfirmedCasesOnThisDate - numberOfRecoveredCasesOnThisDate - numberOfDeathsOnThisDate;
-              count++
-
+              innerArr[count]["Active cases"] =
+                numberOfConfirmedCasesOnThisDate -
+                numberOfRecoveredCasesOnThisDate -
+                numberOfDeathsOnThisDate;
+              count++;
             }
 
-            data[countryName] = innerArr
-          
+            data[countryName] = innerArr;
           }
 
-          this.setState({data: data})
-
+          this.setState({ data: data });
         });
       });
   }
-  
+
   render() {
     return (
-      <div
-        style={{
-          display: "flex",
-          marginTop: 100,
-          flexDirection: "column",
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          position: "relative",
-          color: "white",
-        }}
-      >
+      <div className={"graph-style"}>
         <Form>
           <Form.Group controlId="caribbeanForm.SelectCustom">
             <Form.Label>Choose a country</Form.Label>
@@ -156,48 +155,45 @@ export default class GraphPage extends Component {
           </Form.Group>
         </Form>
 
-              
-
-                
         {this.state.selectedCountry === "All countries" ? (
           <div> Graph for all countries coming soon </div> //ReactComponent
         ) : (
           //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
-          
-          <ResponsiveContainer width="99%" height={500}> 
-          <LineChart
-            data={this.state.data[this.state.selectedCountry]}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke={graphGridColour} />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="Confirmed cases"
-              stroke="#03f4fc"
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="Active cases"
-              stroke="#ff3300"
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="Deaths"
-              stroke="#FFA51C"
-              dot={false}
-            />
-          </LineChart>
+
+          <ResponsiveContainer width="99%" height={500}>
+            <LineChart
+              data={this.state.data[this.state.selectedCountry]}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke={graphGridColour} />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="Confirmed cases"
+                stroke={confirmedCasesLineColour}
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="Active cases"
+                stroke={activeCasesLineColour}
+                dot={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="Deaths"
+                stroke={deathsLineColour}
+                dot={false}
+              />
+            </LineChart>
           </ResponsiveContainer>
         )}
         <div className="disclaimer">Data source: JHU, updated once per day</div>

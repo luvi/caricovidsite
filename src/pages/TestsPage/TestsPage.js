@@ -14,9 +14,13 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { testPageLineColour } from "../GraphPage/graph-line-colours";
+import { TestsCustomTooltip } from "./CustomTestPageTooltip";
+import "./TestsPage.css";
 
-const svg = "Saint Vincent and the Grenadines"
-const bb = "Barbados"
+const svg = "Saint Vincent and the Grenadines";
+const bb = "Barbados";
+const kevzCredit = "| Test data collected from @KevzPolitics on Twitter";
 
 export default class TestsPage extends Component {
   constructor(props) {
@@ -27,25 +31,24 @@ export default class TestsPage extends Component {
     };
   }
 
-  parseDataForCountry = (body, countryName)=> {
-
+  parseDataForCountry = (body, countryName) => {
     parse(body, (err, output) => {
-        err ?? console.warn(err);
+      err ?? console.warn(err);
 
-        let inner = [];
-        output.map((entry) => {
-          let outputSet = [];
-          outputSet["date"] = entry[0];
-          outputSet["tests"] = parseInt(entry[1]);
-          inner.push(outputSet);
-          return inner;
-        });
-        let localData = this.state.data
-        localData[countryName] = inner
-        this.setState({ data: localData });
-        console.log(this.state.data)
-    })
-}
+      let inner = [];
+      output.map((entry) => {
+        let outputSet = [];
+        outputSet["date"] = entry[0];
+        outputSet["tests"] = parseInt(entry[1]);
+        inner.push(outputSet);
+        return inner;
+      });
+      let localData = this.state.data;
+      localData[countryName] = inner;
+      this.setState({ data: localData });
+    
+    });
+  };
 
   handleChange = () => {
     this.setState({ selectedCountry: ReactDOM.findDOMNode(this.select).value });
@@ -54,35 +57,22 @@ export default class TestsPage extends Component {
   componentDidMount() {
     document.body.style.backgroundColor = "#1A2637";
 
-    getCOVIDInfo(testsURL).then((testsBody) => {
+    getCOVIDInfo(testsURL)
+      .then((testsBody) => {
+        this.parseDataForCountry(testsBody, svg);
 
-        this.parseDataForCountry(testsBody,svg)
- 
-      return getCOVIDInfo(barbadosTestsURL);
-
-    }).then((barbadosTestBody) =>{
-
-        this.parseDataForCountry(barbadosTestBody,bb)
-        
-    });
+        return getCOVIDInfo(barbadosTestsURL);
+      })
+      .then((barbadosTestBody) => {
+        this.parseDataForCountry(barbadosTestBody, bb);
+      });
   }
   render() {
     return (
-      <div
-        style={{
-          display: "flex",
-          marginTop: 100,
-          flexDirection: "column",
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          position: "relative",
-          color: "white",
-        }}
-      >
+      <div className={"graph-style"}>
         <Form>
           <Form.Group controlId="caribbeanForm.SelectCustom">
-            <Form.Label>Choose a country</Form.Label>
+            <Form.Label>Choose a country to view test data</Form.Label>
             <Form.Control
               ref={(select) => {
                 this.select = select;
@@ -92,12 +82,8 @@ export default class TestsPage extends Component {
               onChange={this.handleChange}
               defaultValue={svg}
             >
-             <option value={bb}>
-                {bb}
-              </option>
-              <option value={svg}>
-              {svg}
-              </option>
+              <option value={bb}>{bb}</option>
+              <option value={svg}>{svg}</option>
             </Form.Control>
           </Form.Group>
         </Form>
@@ -114,44 +100,19 @@ export default class TestsPage extends Component {
             <CartesianGrid strokeDasharray="3 3" stroke={graphGridColour} />
             <XAxis dataKey="date" />
             <YAxis domain={[0, 30000]} />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<TestsCustomTooltip />} />
             <Legend />
             <Line
               type="monotone"
               dataKey="tests"
-              stroke="#03f4fc"
+              stroke={testPageLineColour}
               dot={false}
             />
           </LineChart>
         </ResponsiveContainer>
 
-        <div className="disclaimer">Beta, not yet updated daily</div>
+        <div className="disclaimer">Beta, not yet updated daily {this.state.selectedCountry === bb? kevzCredit : ""}</div>
       </div>
     );
-  }
-}
-
-export class CustomTooltip extends Component {
-  render() {
-    const { active } = this.props;
-
-    if (active) {
-      const { payload, label } = this.props;
-      return (
-        <div>
-          {" "}
-          {!!payload ? (
-            <div className="custom-tooltip">
-              <p className="label">{`${label}`}</p>
-              <p className="desc">{`${payload[0].value} tests completed`}</p>
-            </div>
-          ) : (
-            <div> </div>
-          )}{" "}
-        </div>
-      );
-    }
-
-    return null;
   }
 }
