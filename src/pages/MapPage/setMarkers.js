@@ -11,7 +11,9 @@
     let size = Math.max(15, Math.min(parseInt(numCases) / 5, 60));
 
     let popup = new mapboxgl.Popup({ offset: 25, className: 'popups' }).setHTML(
-      `<h6>${caribbeanName}</h6> <strong>${element.activeCases}</strong> active cases, <strong>${numCases}</strong> confirmed, <strong>${numDeaths}</strong> death(s), <strong>${numRecovered}</strong> recovered`
+      `<h6>${caribbeanName}</h6> <strong>${element.activeCases}</strong> active cases, 
+      <strong>${numCases}</strong> confirmed, <strong>${numDeaths}</strong> death(s), 
+      <strong>${numRecovered}</strong> recovered`
     );
     
     // add marker to map

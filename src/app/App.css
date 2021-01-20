@@ -7,8 +7,12 @@
   pointer-events: none;
 }
 
+.header-color{
+  background-color: #212f45;
+}
+
 .App-header {
-  background-color: #282c34;
+  background-color: #181b26;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -16,6 +20,13 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+@media (min-width: 992px) {
+  .navbar-expand-lg .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+    justify-content: flex-end;
+  }
 }
 
 
