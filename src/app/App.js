@@ -23,7 +23,7 @@
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="justify-content-end" activeKey="/home">
                 <Nav.Item>
-                    <Nav.Link style={{ color: "white", paddingRight: 10 }} href="/tests">Tests (beta)</Nav.Link>
+                    <Nav.Link style={{ color: "white", paddingRight: 10 }} href="/tests">Tests</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link style={{ color: "white", paddingRight: 10 }} href="/graphs">Case Graphs</Nav.Link>

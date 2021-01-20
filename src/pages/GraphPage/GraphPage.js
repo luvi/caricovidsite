@@ -9,7 +9,7 @@ import {
   graphGridColour,
 } from "../../constants";
 import parse from "csv-parse";
-import { Form } from "react-bootstrap";
+import { Form,Alert } from "react-bootstrap";
 import ReactDOM from "react-dom";
 import {
   LineChart,
@@ -28,6 +28,7 @@ import {
   deathsLineColour,
 } from "./graph-line-colours";
 //import AllCountriesGraph from "./allCountriesGraph";
+import {CustomTooltip} from './GraphCustomTooltip'
 
 const data = [];
 
@@ -196,33 +197,12 @@ export default class GraphPage extends Component {
             </LineChart>
           </ResponsiveContainer>
         )}
-        <div className="disclaimer">Data source: JHU, updated once per day</div>
+         <Alert dismissable={true} key={1} variant={'secondary'} style={{color: 'gray', fontSize: '0.75rem',backgroundColor: '#273852', borderColor: '#273852', padding:'0.45rem', marginTop:'1rem'}}>
+         Data source: JHU, updated once per day
+       </Alert>
+        
       </div>
     );
   }
 }
 
-export class CustomTooltip extends Component {
-  render() {
-    const { active } = this.props;
-
-    if (active) {
-      const { payload, label } = this.props;
-      return (
-        <div>
-          {" "}
-          {!!payload ? (
-            <div className="custom-tooltip">
-              <p className="label">{`${label}`}</p>
-              <p className="desc">{`${payload[0].value} confirmed case(s), ${payload[1].value} active case(s), ${payload[2].value} total deaths `}</p>
-            </div>
-          ) : (
-            <div> </div>
-          )}{" "}
-        </div>
-      );
-    }
-
-    return null;
-  }
-}
