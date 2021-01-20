@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withTranslation } from 'react-i18next'
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import { testsURL, graphGridColour, barbadosTestsURL } from "../../constants";
 import parse from "csv-parse";
@@ -20,11 +21,11 @@ import "./TestsPage.css";
 
 const svg = "Saint Vincent and the Grenadines";
 const bb = "Barbados";
-const kevzCredit = "| Test data collected from @KevzPolitics on Twitter";
 
-export default class TestsPage extends Component {
+class TestsPage extends Component {
   constructor(props) {
     super(props);
+    this.t = props.t
     this.state = {
       data: [],
       selectedCountry: svg,
@@ -39,7 +40,7 @@ export default class TestsPage extends Component {
       output.map((entry) => {
         let outputSet = [];
         outputSet["date"] = entry[0];
-        outputSet["tests"] = parseInt(entry[1]);
+        outputSet[this.t('tests')] = parseInt(entry[1]);
         inner.push(outputSet);
         return inner;
       });
@@ -104,15 +105,20 @@ export default class TestsPage extends Component {
             <Legend />
             <Line
               type="monotone"
-              dataKey="tests"
+              dataKey={this.t('tests')}
               stroke={testPageLineColour}
               dot={false}
             />
           </LineChart>
         </ResponsiveContainer>
 
-        <div className="disclaimer">Beta, not yet updated daily {this.state.selectedCountry === bb? kevzCredit : ""}</div>
+        <div className="disclaimer">
+          {this.t('tests_disclaimer')} 
+          {this.state.selectedCountry === bb ? this.t('credit_kevz') : ""}
+        </div>
       </div>
     );
   }
 }
+
+export default withTranslation()(TestsPage)
