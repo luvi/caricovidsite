@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React from "react"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 import { useTranslation } from 'react-i18next'
 import { Navbar, Nav } from "react-bootstrap"

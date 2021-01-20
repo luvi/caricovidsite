@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
-import i18n from '../src/locales'
+import i18n from '../src/locales' //eslint-ignore-line
 
 ReactDOM.render(
   <React.StrictMode>
