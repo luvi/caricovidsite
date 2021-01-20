@@ -58,6 +58,32 @@ Needed! See open issues.
 
 Contributions are welcome, especially if you are a caribbean dev ;) Good beginner issues are labelled. Here is the [contributing guideline]() coming soon.
 
+### Language Support
+
+If you want to add a language, please copy the file `src/locales/en.js` to `src/locales/__language__.js` and translate provided strings to your language. 
+Remember to add a translation for your change language button too :)
+
+Then import your newly created translations file inside `src/locales/index.js`. 
+
+```
+import __language__ from './__language__'
+```
+
+Add your imported object to i18n's resources:
+```
+  resources: {
+    en,
+    __language__,
+  },
+```
+
+Finally, add a button inside `src/app/App.js` to switch to your new language:
+```
+  <Nav.Item>
+    <Nav.Link style={{ color: "white", paddingRight: 10 }} onClick={() => i18n.changeLanguage('__language__')}>{t('language___language__')}</Nav.Link>
+  </Nav.Item>
+```
+
 ## Credits
 Thank you [Clydeen McDonald](https://twitter.com/ClydeenMcdonald) for approaching me with your need!
 
