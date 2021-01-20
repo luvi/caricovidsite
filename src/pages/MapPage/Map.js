@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withTranslation } from 'react-i18next'
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import { Card, Accordion } from "react-bootstrap";
@@ -55,9 +56,10 @@ const cardTextStyle = {
   padding: "0px",
 };
 
-export default class Map extends Component {
+class Map extends Component {
   constructor(props) {
     super(props);
+    this.t=props.t
     this.state = {
       total: 0,
       totalDeaths: 0,
@@ -288,7 +290,7 @@ export default class Map extends Component {
               <Card.Body>
                 <Card.Text style={cardTextStyle}>
                   <div>
-                    Updated: <b>{this.state.date}</b>
+                    {this.t('updated')}: <b>{this.state.date}</b>
                   </div>
                 </Card.Text>
               </Card.Body>
@@ -299,17 +301,16 @@ export default class Map extends Component {
               <Card.Body>
                 <Card.Text style={cardTextStyle}>
                   <div>
-                    Active Cases: <b>{this.state.totalActiveCases}</b>{" "}
+                    {this.t('active_cases')}: <b>{this.state.totalActiveCases}</b>{" "}
                   </div>
                   <div>
-                    Confirmed Cases: <b>{this.state.total}</b>
+                    {this.t('confirmed_cases')}: <b>{this.state.total}</b>
                   </div>
                   <div>
-                    Deaths: <b>{this.state.totalDeaths}</b>
+                    {this.t('deaths')}: <b>{this.state.totalDeaths}</b>
                   </div>
                   <div style={{ fontSize: "7px" }}>
-                    *Note that Puerto Rico is now excluded from active case
-                    count as we do not have their recovery data
+                    {this.t('note_puerto_rico')}
                   </div>
                 </Card.Text>
               </Card.Body>
@@ -329,7 +330,7 @@ export default class Map extends Component {
                         x
                       </div>
                       <AccordionToggle eventKey="1" style={cardTextStyle}>
-                        Lowest Active Cases
+                        {this.t('lowest_active_cases')}
                       </AccordionToggle>
                       <Accordion.Collapse eventKey="1">
                         <div style={{ fontSize: 12 }}>
@@ -366,7 +367,7 @@ export default class Map extends Component {
                         x
                       </div>
                       <AccordionToggle eventKey="1" style={cardTextStyle}>
-                        Highest Active Cases
+                        {this.t('highest_active_cases')}
                       </AccordionToggle>
                       <Accordion.Collapse eventKey="1">
                         <div style={{ fontSize: 12 }}>
@@ -382,8 +383,7 @@ export default class Map extends Component {
                             </div>
                           ))}
                           <div style={{ fontSize: "7px" }}>
-                            Note that Puerto Rico is excluded as we do not have
-                            their recovery data
+                            {this.t('note_puerto_rico')}
                           </div>
                         </div>
                       </Accordion.Collapse>
@@ -405,3 +405,5 @@ export default class Map extends Component {
     );
   }
 }
+
+export default withTranslation()(Map)
