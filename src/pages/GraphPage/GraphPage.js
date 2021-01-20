@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withTranslation, useTranslation } from 'react-i18next'
 import isCaribbeanCountry from "../../functions/isCaribbeanCountryFull";
 import { countryList } from "../../data/fullCountryList";
 import getCOVIDInfo from "../../functions/fetchFromURL";
@@ -31,9 +32,10 @@ import {
 
 const data = [];
 
-export default class GraphPage extends Component {
+class GraphPage extends Component {
   constructor(props) {
     super(props);
+    this.t = props.t
     this.state = {
       data: [],
       selectedCountry: "Antigua and Barbuda",
@@ -73,11 +75,11 @@ export default class GraphPage extends Component {
             for (let j = 4; j < labels.length; j++) {
               let dataArrayPerCountry = [];
               dataArrayPerCountry["name"] = labels[j];
-              dataArrayPerCountry["Confirmed cases"] = parseInt(
+              dataArrayPerCountry[this.t('confirmed_cases')] = parseInt(
                 johnsHopkinsData[i][j]
               );
-              dataArrayPerCountry["Active cases"] = 2;
-              dataArrayPerCountry["Deaths"] = parseInt(
+              dataArrayPerCountry[this.t('active_cases')] = 2;
+              dataArrayPerCountry[this.t('deaths')] = parseInt(
                 this.state.deathsdata[i][j]
               );
               inner.push(dataArrayPerCountry);
@@ -137,7 +139,7 @@ export default class GraphPage extends Component {
       <div className={"graph-style"}>
         <Form>
           <Form.Group controlId="caribbeanForm.SelectCustom">
-            <Form.Label>Choose a country</Form.Label>
+            <Form.Label>{this.t('choose_country')}</Form.Label>
             <Form.Control
               ref={(select) => {
                 this.select = select;
@@ -147,7 +149,7 @@ export default class GraphPage extends Component {
               onChange={this.handleChange}
               defaultValue="Antigua and Barbuda"
             >
-              <option value="All countries">All countries</option>
+              <option value="All countries">{this.t('all_countries')}</option>
               {countryList.map((country) => (
                 <option value={country}>{country}</option>
               ))}
@@ -156,7 +158,7 @@ export default class GraphPage extends Component {
         </Form>
 
         {this.state.selectedCountry === "All countries" ? (
-          <div> Graph for all countries coming soon </div> //ReactComponent
+          <div>{this.t('all_countries_placeholder')}</div> //ReactComponent
         ) : (
           //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
 
@@ -177,52 +179,51 @@ export default class GraphPage extends Component {
               <Legend />
               <Line
                 type="monotone"
-                dataKey="Confirmed cases"
+                dataKey={this.t('confirmed_cases')}
                 stroke={confirmedCasesLineColour}
                 dot={false}
               />
               <Line
                 type="monotone"
-                dataKey="Active cases"
+                dataKey={this.t('active_cases')}
                 stroke={activeCasesLineColour}
                 dot={false}
               />
               <Line
                 type="monotone"
-                dataKey="Deaths"
+                dataKey={this.t('deaths')}
                 stroke={deathsLineColour}
                 dot={false}
               />
             </LineChart>
           </ResponsiveContainer>
         )}
-        <div className="disclaimer">Data source: JHU, updated once per day</div>
+        <div className="disclaimer">{this.t('disclaimer')}</div>
       </div>
     );
   }
 }
 
-export class CustomTooltip extends Component {
-  render() {
-    const { active } = this.props;
-
-    if (active) {
-      const { payload, label } = this.props;
-      return (
-        <div>
-          {" "}
-          {!!payload ? (
-            <div className="custom-tooltip">
-              <p className="label">{`${label}`}</p>
-              <p className="desc">{`${payload[0].value} confirmed case(s), ${payload[1].value} active case(s), ${payload[2].value} total deaths `}</p>
-            </div>
-          ) : (
-            <div> </div>
-          )}{" "}
-        </div>
-      );
-    }
-
-    return null;
+const CustomTooltip = ({active, ...props}) => {
+  const { t } = useTranslation()
+  if (active) {
+    const { payload, label } = props
+    return (
+      <div>
+        {" "}
+        {!!payload ? (
+          <div className="custom-tooltip">
+            <p className="label">{`${label}`}</p>
+            <p className="desc">{`${payload[0].value} ${t('confirmed_cases')}, ${payload[1].value} ${t('active_cases')}, ${payload[2].value} ${t('deaths')}`}</p>
+          </div>
+        ) : (
+          <div> </div>
+        )}{" "}
+      </div>
+    );
   }
+
+  return null;
 }
+
+export default withTranslation()(GraphPage)
