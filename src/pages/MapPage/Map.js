@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withTranslation } from 'react-i18next'
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import getCOVIDInfo from "../../functions/fetchFromURL";
@@ -31,9 +32,10 @@ let quickAddDeaths = [
 ];
 
 
-export default class Map extends Component {
+class Map extends Component {
   constructor(props) {
     super(props);
+    this.t=props.t
     this.state = {
       total: 0,
       totalDeaths: 0,
@@ -264,3 +266,5 @@ export default class Map extends Component {
     );
   }
 }
+
+export default withTranslation()(Map)

@@ -4,6 +4,7 @@ import { Card,Accordion } from "react-bootstrap";
 import emojiFlags from "emoji-flags";
 import fetchCountryCode from "../../functions/fetchCountryCode";
 import AccordionToggle from "../../components/AccordionToggle";
+import { withTranslation } from "react-i18next";
 
 const cardStyle = {
     width: "260px",
@@ -31,10 +32,11 @@ const cardStyle = {
 
 
 
-export default class LowestActiveCard extends Component {
+class LowestActiveCard extends Component {
 
     constructor(props) {
         super(props);
+        this.t=props.t
         this.state = {
           hideLowestActiveBox: false
         };
@@ -60,7 +62,7 @@ export default class LowestActiveCard extends Component {
                             x
                           </div>
                           <AccordionToggle eventKey="1" style={cardTextStyle}>
-                            Lowest Active Cases
+                          {this.t('lowest_active_cases')}
                           </AccordionToggle>
                           <Accordion.Collapse eventKey="1">
                             <div style={{ fontSize: 12 }}>
@@ -95,3 +97,4 @@ export default class LowestActiveCard extends Component {
     
 }
 
+export default withTranslation()(LowestActiveCard);

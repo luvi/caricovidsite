@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withTranslation } from "react-i18next";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountryFull";
 import { countryList } from "../../data/fullCountryList";
 import getCOVIDInfo from "../../functions/fetchFromURL";
@@ -9,7 +10,7 @@ import {
   graphGridColour,
 } from "../../constants";
 import parse from "csv-parse";
-import { Form,Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import ReactDOM from "react-dom";
 import {
   LineChart,
@@ -28,13 +29,14 @@ import {
   deathsLineColour,
 } from "./graph-line-colours";
 //import AllCountriesGraph from "./allCountriesGraph";
-import {CustomTooltip} from './GraphCustomTooltip'
+import CustomTooltip from "./GraphCustomTooltip";
 
 const data = [];
 
-export default class GraphPage extends Component {
+class GraphPage extends Component {
   constructor(props) {
     super(props);
+    this.t = props.t;
     this.state = {
       data: [],
       selectedCountry: "Antigua and Barbuda",
@@ -74,11 +76,11 @@ export default class GraphPage extends Component {
             for (let j = 4; j < labels.length; j++) {
               let dataArrayPerCountry = [];
               dataArrayPerCountry["name"] = labels[j];
-              dataArrayPerCountry["Confirmed cases"] = parseInt(
+              dataArrayPerCountry[this.t("confirmed_cases")] = parseInt(
                 johnsHopkinsData[i][j]
               );
-              dataArrayPerCountry["Active cases"] = 2;
-              dataArrayPerCountry["Deaths"] = parseInt(
+              dataArrayPerCountry[this.t("active_cases")] = 2;
+              dataArrayPerCountry[this.t("deaths")] = parseInt(
                 this.state.deathsdata[i][j]
               );
               inner.push(dataArrayPerCountry);
@@ -138,7 +140,7 @@ export default class GraphPage extends Component {
       <div className={"graph-style"}>
         <Form>
           <Form.Group controlId="caribbeanForm.SelectCustom">
-            <Form.Label>Choose a country</Form.Label>
+            <Form.Label>{this.t("choose_country")}</Form.Label>
             <Form.Control
               ref={(select) => {
                 this.select = select;
@@ -148,7 +150,7 @@ export default class GraphPage extends Component {
               onChange={this.handleChange}
               defaultValue="Antigua and Barbuda"
             >
-              <option value="All countries">All countries</option>
+              <option value="All countries">{this.t("all_countries")}</option>
               {countryList.map((country) => (
                 <option value={country}>{country}</option>
               ))}
@@ -157,7 +159,7 @@ export default class GraphPage extends Component {
         </Form>
 
         {this.state.selectedCountry === "All countries" ? (
-          <div> Graph for all countries coming soon </div> //ReactComponent
+          <div>{this.t("all_countries_placeholder")}</div> //ReactComponent
         ) : (
           //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
 
@@ -178,31 +180,43 @@ export default class GraphPage extends Component {
               <Legend />
               <Line
                 type="monotone"
-                dataKey="Confirmed cases"
+                dataKey={this.t("confirmed_cases")}
                 stroke={confirmedCasesLineColour}
                 dot={false}
               />
               <Line
                 type="monotone"
-                dataKey="Active cases"
+                dataKey={this.t("active_cases")}
                 stroke={activeCasesLineColour}
                 dot={false}
               />
               <Line
                 type="monotone"
-                dataKey="Deaths"
+                dataKey={this.t("deaths")}
                 stroke={deathsLineColour}
                 dot={false}
               />
             </LineChart>
           </ResponsiveContainer>
         )}
-         <Alert dismissable={true} key={1} variant={'secondary'} style={{color: 'gray', fontSize: '0.75rem',backgroundColor: '#273852', borderColor: '#273852', padding:'0.45rem', marginTop:'1rem'}}>
-         Data source: JHU, updated once per day
-       </Alert>
-        
+        <Alert
+          dismissable={true}
+          key={1}
+          variant={"secondary"}
+          style={{
+            color: "gray",
+            fontSize: "0.75rem",
+            backgroundColor: "#273852",
+            borderColor: "#273852",
+            padding: "0.45rem",
+            marginTop: "1rem",
+          }}
+        >
+          {this.t("disclaimer")}
+        </Alert>
       </div>
     );
   }
 }
 
+export default withTranslation()(GraphPage);

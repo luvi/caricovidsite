@@ -1,27 +1,30 @@
-import React, { Component } from "react";
+import React from "react";
+import { withTranslation, useTranslation } from "react-i18next";
 
-export class CustomTooltip extends Component {
-    render() {
-      const { active } = this.props;
-  
-      if (active) {
-        const { payload, label } = this.props;
-        return (
-          <div>
-            {" "}
-            {!!payload ? (
-              <div className="custom-tooltip">
-                <p className="label">{`${label}`}</p>
-                <p className="desc">{`${payload[0].value} confirmed case(s), ${payload[1].value} active case(s), ${payload[2].value} total deaths `}</p>
-              </div>
-            ) : (
-              <div> </div>
-            )}{" "}
+function CustomTooltip({ active, payload, label, ...props }) {
+  const { t } = useTranslation();
+
+  if (active) {
+    return (
+      <div>
+        {" "}
+        {!!payload ? (
+          <div className="custom-tooltip">
+            <p className="label">{`${label}`}</p>
+            <p className="desc">{`${payload[0].value} ${t(
+              "confirmed_cases"
+            )}, ${payload[1].value} ${t("active_cases")}, ${
+              payload[2].value
+            } ${t("deaths")}`}</p>
           </div>
-        );
-      }
-  
-      return null;
-    }
+        ) : (
+          <div> </div>
+        )}{" "}
+      </div>
+    );
   }
-  
+
+  return null;
+}
+
+export default withTranslation()(CustomTooltip);

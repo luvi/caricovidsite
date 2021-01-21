@@ -3,6 +3,7 @@ import { Card,Accordion } from "react-bootstrap";
 import emojiFlags from "emoji-flags";
 import fetchCountryCode from "../../functions/fetchCountryCode";
 import AccordionToggle from "../../components/AccordionToggle";
+import { withTranslation } from "react-i18next";
 
 const cardStyle = {
     width: "260px",
@@ -31,10 +32,11 @@ const cardStyle = {
 
 
 
-export default class HighestActiveCard extends Component {
+class HighestActiveCard extends Component {
 
     constructor(props) {
         super(props);
+        this.t=props.t
         this.state = {
 
           hideHighestActiveBox: false
@@ -62,7 +64,7 @@ export default class HighestActiveCard extends Component {
                         x
                       </div>
                       <AccordionToggle eventKey="1" style={cardTextStyle}>
-                        Highest Active Cases
+                      {this.t('highest_active_cases')}
                       </AccordionToggle>
                       <Accordion.Collapse eventKey="1">
                         <div style={{ fontSize: 12 }}>
@@ -78,8 +80,7 @@ export default class HighestActiveCard extends Component {
                             </div>
                           ))}
                           <div style={{ fontSize: "7px" }}>
-                            Note that Puerto Rico is excluded as we do not have
-                            their recovery data
+                          {this.t('note_puerto_rico')}
                           </div>
                         </div>
                       </Accordion.Collapse>
@@ -101,7 +102,7 @@ export default class HighestActiveCard extends Component {
     
 }
 
-
+export default withTranslation()(HighestActiveCard);
 
 
 
