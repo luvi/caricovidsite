@@ -49,18 +49,9 @@ export default class Map extends Component {
       date: "",
       lowestActiveCases: [],
       highestActiveCases: [],
-      hideHighestActiveBox: false,
       puertoRicoConfirmedCases: 0,
     };
   }
-
-  onClickHideHighest = () => {
-    this.setState({ hideHighestActiveBox: true });
-  };
-
-  onClickHideLowest = () => {
-    this.setState({ hideLowestActiveBox: true });
-  };
 
   sum(total, array) {
     return total + parseInt(array[array.length - 1]);

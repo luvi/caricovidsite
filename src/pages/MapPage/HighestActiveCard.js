@@ -30,17 +30,21 @@ const cardStyle = {
 
 
 
+
 export default class HighestActiveCard extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
 
-          hideLowestActiveBox: false
+          hideHighestActiveBox: false
 
         };
       }
 
+      onClickHideHighest = () => {
+        this.setState({ hideHighestActiveBox: true });
+      };
 
     render(){
         return(

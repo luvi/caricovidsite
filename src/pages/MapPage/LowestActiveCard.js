@@ -36,12 +36,13 @@ export default class LowestActiveCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
           hideLowestActiveBox: false
-
         };
       }
 
+      onClickHideLowest = () => {
+        this.setState({ hideLowestActiveBox: true });
+      };
 
     render(){
         return(
