@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withTranslation, useTranslation } from 'react-i18next'
+import { withTranslation } from "react-i18next";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountryFull";
 import { countryList } from "../../data/fullCountryList";
 import getCOVIDInfo from "../../functions/fetchFromURL";
@@ -10,7 +10,7 @@ import {
   graphGridColour,
 } from "../../constants";
 import parse from "csv-parse";
-import { Form } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import ReactDOM from "react-dom";
 import {
   LineChart,
@@ -29,13 +29,14 @@ import {
   deathsLineColour,
 } from "./graph-line-colours";
 //import AllCountriesGraph from "./allCountriesGraph";
+import CustomTooltip from "./GraphCustomTooltip";
 
 const data = [];
 
 class GraphPage extends Component {
   constructor(props) {
     super(props);
-    this.t = props.t
+    this.t = props.t;
     this.state = {
       data: [],
       selectedCountry: "Antigua and Barbuda",
@@ -75,11 +76,11 @@ class GraphPage extends Component {
             for (let j = 4; j < labels.length; j++) {
               let dataArrayPerCountry = [];
               dataArrayPerCountry["name"] = labels[j];
-              dataArrayPerCountry[this.t('confirmed_cases')] = parseInt(
+              dataArrayPerCountry[this.t("confirmed_cases")] = parseInt(
                 johnsHopkinsData[i][j]
               );
-              dataArrayPerCountry[this.t('active_cases')] = 2;
-              dataArrayPerCountry[this.t('deaths')] = parseInt(
+              dataArrayPerCountry[this.t("active_cases")] = 2;
+              dataArrayPerCountry[this.t("deaths")] = parseInt(
                 this.state.deathsdata[i][j]
               );
               inner.push(dataArrayPerCountry);
@@ -139,7 +140,7 @@ class GraphPage extends Component {
       <div className={"graph-style"}>
         <Form>
           <Form.Group controlId="caribbeanForm.SelectCustom">
-            <Form.Label>{this.t('choose_country')}</Form.Label>
+            <Form.Label>{this.t("choose_country")}</Form.Label>
             <Form.Control
               ref={(select) => {
                 this.select = select;
@@ -149,7 +150,7 @@ class GraphPage extends Component {
               onChange={this.handleChange}
               defaultValue="Antigua and Barbuda"
             >
-              <option value="All countries">{this.t('all_countries')}</option>
+              <option value="All countries">{this.t("all_countries")}</option>
               {countryList.map((country) => (
                 <option value={country}>{country}</option>
               ))}
@@ -158,7 +159,7 @@ class GraphPage extends Component {
         </Form>
 
         {this.state.selectedCountry === "All countries" ? (
-          <div>{this.t('all_countries_placeholder')}</div> //ReactComponent
+          <div>{this.t("all_countries_placeholder")}</div> //ReactComponent
         ) : (
           //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
 
@@ -179,51 +180,43 @@ class GraphPage extends Component {
               <Legend />
               <Line
                 type="monotone"
-                dataKey={this.t('confirmed_cases')}
+                dataKey={this.t("confirmed_cases")}
                 stroke={confirmedCasesLineColour}
                 dot={false}
               />
               <Line
                 type="monotone"
-                dataKey={this.t('active_cases')}
+                dataKey={this.t("active_cases")}
                 stroke={activeCasesLineColour}
                 dot={false}
               />
               <Line
                 type="monotone"
-                dataKey={this.t('deaths')}
+                dataKey={this.t("deaths")}
                 stroke={deathsLineColour}
                 dot={false}
               />
             </LineChart>
           </ResponsiveContainer>
         )}
-        <div className="disclaimer">{this.t('disclaimer')}</div>
+        <Alert
+          dismissable={true}
+          key={1}
+          variant={"secondary"}
+          style={{
+            color: "gray",
+            fontSize: "0.75rem",
+            backgroundColor: "#273852",
+            borderColor: "#273852",
+            padding: "0.45rem",
+            marginTop: "1rem",
+          }}
+        >
+          {this.t("disclaimer")}
+        </Alert>
       </div>
     );
   }
 }
 
-const CustomTooltip = ({active, ...props}) => {
-  const { t } = useTranslation()
-  if (active) {
-    const { payload, label } = props
-    return (
-      <div>
-        {" "}
-        {!!payload ? (
-          <div className="custom-tooltip">
-            <p className="label">{`${label}`}</p>
-            <p className="desc">{`${payload[0].value} ${t('confirmed_cases')}, ${payload[1].value} ${t('active_cases')}, ${payload[2].value} ${t('deaths')}`}</p>
-          </div>
-        ) : (
-          <div> </div>
-        )}{" "}
-      </div>
-    );
-  }
-
-  return null;
-}
-
-export default withTranslation()(GraphPage)
+export default withTranslation()(GraphPage);

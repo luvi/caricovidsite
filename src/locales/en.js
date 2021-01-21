@@ -21,7 +21,7 @@ const en = {
     own_data_set: 'Our own open source dataset',
     tests: 'tests',
     tests_disclaimer: 'Beta, not yet updated daily', 
-    tests_title: 'Tests (Beta)',
+    tests_title: 'Tests',
     title: 'Caribbean COVID Map',
     twitter_handle: '@JaniquekaJohn',
     updated: 'Updated',

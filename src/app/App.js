@@ -24,9 +24,6 @@ export default () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="justify-content-end" activeKey="/home">
             <Nav.Item>
-              <Nav.Link style={{ color: "white", paddingRight: 10 }} onClick={() => i18n.changeLanguage('en')}>{t('language_english')}</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
               <Nav.Link style={{ color: "white", paddingRight: 10 }} href="/tests">{t('tests_title')}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
@@ -37,6 +34,9 @@ export default () => {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link style={{ color: "white" }} href="/credits">{t('credits')}</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link style={{ color: "white", paddingRight: 10 }} onClick={() => i18n.changeLanguage('en')}>{t('language_english')}</Nav.Link>
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>

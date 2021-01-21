@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { withTranslation } from 'react-i18next'
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
-import { Card, Accordion } from "react-bootstrap";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
 import isCaribbeanCountry from "../../functions/isCaribbeanCountry";
@@ -16,12 +15,13 @@ import {
 import createCaribbeanDataArray from "./createCaribbeanDataArray";
 import TinyQueue from "tinyqueue";
 import setMarkers from "./setMarkers";
-import emojiFlags from "emoji-flags";
-import fetchCountryCode from "../../functions/fetchCountryCode";
 import _ from "lodash";
 import moment from "moment";
 
-import AccordionToggle from "../../components/AccordionToggle";
+import UpdatedCard from "./UpdatedCard.js";
+import StatsCard from "./StatsCard.js";
+import LowestActiveCard from "./LowestActiveCard.js";
+import HighestActiveCard from "./HighestActiveCard.js";
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -31,30 +31,6 @@ let quickAddDeaths = [
   ["", "Belize", "17.195465", "-88.268587", "2"],
 ];
 
-// let puertoRicoRecovered = "100"
-
-const cardStyle = {
-  width: "260px",
-  backgroundColor: "#1A2637",
-  borderRadius: "1",
-  marginTop: "0px",
-};
-
-const dismissMessageStyle = {
-  color: "white",
-  fontSize: "11px",
-  textDecoration: "none",
-  cursor: "pointer",
-  bordersize: "1px",
-  borderColor: "white",
-  marginTop: "0px",
-  marginLeft: "80%",
-};
-
-const cardTextStyle = {
-  color: "white",
-  padding: "0px",
-};
 
 class Map extends Component {
   constructor(props) {
@@ -75,19 +51,9 @@ class Map extends Component {
       date: "",
       lowestActiveCases: [],
       highestActiveCases: [],
-      hideHighestActiveBox: false,
-      hideLowestActiveBox: false,
       puertoRicoConfirmedCases: 0,
     };
   }
-
-  onClickHideHighest = () => {
-    this.setState({ hideHighestActiveBox: true });
-  };
-
-  onClickHideLowest = () => {
-    this.setState({ hideLowestActiveBox: true });
-  };
 
   sum(total, array) {
     return total + parseInt(array[array.length - 1]);
@@ -285,116 +251,11 @@ class Map extends Component {
     return (
       <div>
         <div className="statsContainer">
-          <div className="statsCard">
-            <Card type="rounded-0" style={cardStyle}>
-              <Card.Body>
-                <Card.Text style={cardTextStyle}>
-                  <div>
-                    {this.t('updated')}: <b>{this.state.date}</b>
-                  </div>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </div>
-          <div className="statsCard">
-            <Card type="rounded-0" style={cardStyle}>
-              <Card.Body>
-                <Card.Text style={cardTextStyle}>
-                  <div>
-                    {this.t('active_cases')}: <b>{this.state.totalActiveCases}</b>{" "}
-                  </div>
-                  <div>
-                    {this.t('confirmed_cases')}: <b>{this.state.total}</b>
-                  </div>
-                  <div>
-                    {this.t('deaths')}: <b>{this.state.totalDeaths}</b>
-                  </div>
-                  <div style={{ fontSize: "7px" }}>
-                    {this.t('note_puerto_rico')}
-                  </div>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </div>
-
-          {this.state.hideLowestActiveBox ? null : (
-            <div className="statsCard">
-              <Accordion>
-                <Card type="rounded-0" style={cardStyle}>
-                  <Card.Body>
-                    <Card.Text style={cardTextStyle}>
-                      <div
-                        style={dismissMessageStyle}
-                        onClick={this.onClickHideLowest}
-                      >
-                        x
-                      </div>
-                      <AccordionToggle eventKey="1" style={cardTextStyle}>
-                        {this.t('lowest_active_cases')}
-                      </AccordionToggle>
-                      <Accordion.Collapse eventKey="1">
-                        <div style={{ fontSize: 12 }}>
-                          {this.state.lowestActiveCases.map((caseEntry) => (
-                            <div>
-                              <b>{caseEntry.activeCases}</b>{" "}
-                              {
-                                emojiFlags.countryCode(
-                                  fetchCountryCode(caseEntry.caribbeanName)
-                                ).emoji
-                              }{" "}
-                              {caseEntry.caribbeanName}
-                            </div>
-                          ))}
-                        </div>
-                      </Accordion.Collapse>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Accordion>
-            </div>
-          )}
-
-          {this.state.hideHighestActiveBox ? null : (
-            <div className="statsCard">
-              <Accordion>
-                <Card type="rounded-0" style={cardStyle}>
-                  <Card.Body>
-                    <Card.Text style={cardTextStyle}>
-                      <div
-                        style={dismissMessageStyle}
-                        onClick={this.onClickHideHighest}
-                      >
-                        x
-                      </div>
-                      <AccordionToggle eventKey="1" style={cardTextStyle}>
-                        {this.t('highest_active_cases')}
-                      </AccordionToggle>
-                      <Accordion.Collapse eventKey="1">
-                        <div style={{ fontSize: 12 }}>
-                          {this.state.highestActiveCases.map((caseEntry) => (
-                            <div>
-                              <b>{caseEntry.activeCases}</b>{" "}
-                              {
-                                emojiFlags.countryCode(
-                                  fetchCountryCode(caseEntry.caribbeanName)
-                                ).emoji
-                              }{" "}
-                              {caseEntry.caribbeanName}
-                            </div>
-                          ))}
-                          <div style={{ fontSize: "7px" }}>
-                            {this.t('note_puerto_rico')}
-                          </div>
-                        </div>
-                      </Accordion.Collapse>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Accordion>
-            </div>
-          )}
+            <UpdatedCard date={this.state.date}/>
+            <StatsCard totalActiveCases={this.state.totalActiveCases} total={this.state.total} totalDeaths={this.state.totalDeaths}/>
+            <LowestActiveCard lowestActiveCases={this.state.lowestActiveCases} />
+            <HighestActiveCard highestActiveCases={this.state.highestActiveCases} />
         </div>
-
         <div
           ref={(el) => {
             this.mapContainer = el;

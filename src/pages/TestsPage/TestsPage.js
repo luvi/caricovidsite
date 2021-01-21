@@ -3,7 +3,7 @@ import { withTranslation } from 'react-i18next'
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import { testsURL, graphGridColour, barbadosTestsURL } from "../../constants";
 import parse from "csv-parse";
-import { Form } from "react-bootstrap";
+import { Form,Alert } from "react-bootstrap";
 import ReactDOM from "react-dom";
 import {
   LineChart,
@@ -21,6 +21,7 @@ import "./TestsPage.css";
 
 const svg = "Saint Vincent and the Grenadines";
 const bb = "Barbados";
+const svgCredit = "| Test data collected from the SVG Ministry of Health";
 
 class TestsPage extends Component {
   constructor(props) {
@@ -112,10 +113,14 @@ class TestsPage extends Component {
           </LineChart>
         </ResponsiveContainer>
 
-        <div className="disclaimer">
-          {this.t('tests_disclaimer')} 
-          {this.state.selectedCountry === bb ? this.t('credit_kevz') : ""}
-        </div>
+        <Alert dismissable={true} key={1} variant={'secondary'} style={{color: 'gray', fontSize: '0.75rem',backgroundColor: '#273852', borderColor: '#273852', padding:'0.45rem', marginTop:'1rem'}}>
+        {this.t('tests_disclaimer')} {this.state.selectedCountry === bb? this.t('credit_kevz') : svgCredit}
+       </Alert>
+
+       <Alert dismissable={true} key={1} variant={'secondary'} style={{color: 'gray', fontSize: '0.75rem',backgroundColor: '#273852', borderColor: '#273852', padding:'0.45rem', marginTop:'1rem'}}>
+        Interested in volunteering for data entry? contact me on <Alert.Link href="https://www.twitter.com/janiquekajohn" target="_blank">Twitter</Alert.Link>
+       </Alert>
+      
       </div>
     );
   }
