@@ -59,7 +59,7 @@ export default () => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <NavDropdown title="Language" id="basic-nav-dropdown">
+                <NavDropdown title={t("language")} id="basic-nav-dropdown">
                   <NavDropdown.Item >
                     <Nav.Link
                       style={{ color: "black", paddingRight: 10 }}

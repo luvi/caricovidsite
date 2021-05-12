@@ -15,6 +15,7 @@ const es = {
       developer: 'Desarrollador',
       disclaimer: 'Fuente de datos: JHU, actualizado una vez al día’',
       highest_active_cases: 'Casos activos más altos',
+      language: 'Idioma',
       language_english: 'in',
       language_french: 'fr',
       lowest_active_cases: 'Casos activos más bajos',
