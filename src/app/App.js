@@ -9,7 +9,6 @@ import Map from "../pages/MapPage/Map";
 import Credits from "../pages/CreditsPage/Credits";
 import GraphPage from "../pages/GraphPage/GraphPage";
 import TestsPage from "../pages/TestsPage/TestsPage";
-import Testing from "../pages/TestingPage/Testing";
 
 export default () => {
   const { t, i18n } = useTranslation();
@@ -100,7 +99,6 @@ export default () => {
             />
             <Route path="/graphs" component={GraphPage} />
             <Route path="/tests" component={TestsPage} />
-            <Route path="/testing" component={Testing} />
           </Switch>
         </div>
       </Router>

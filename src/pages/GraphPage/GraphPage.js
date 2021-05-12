@@ -76,11 +76,11 @@ class GraphPage extends Component {
             for (let j = 4; j < labels.length; j++) {
               let dataArrayPerCountry = [];
               dataArrayPerCountry["name"] = labels[j];
-              dataArrayPerCountry[this.t("confirmed_cases")] = parseInt(
+              dataArrayPerCountry["Confirmed cases"] = parseInt(
                 johnsHopkinsData[i][j]
               );
-              dataArrayPerCountry[this.t("active_cases")] = 2;
-              dataArrayPerCountry[this.t("deaths")] = parseInt(
+              dataArrayPerCountry["Active cases"] = 2;
+              dataArrayPerCountry["Deaths"] = parseInt(
                 this.state.deathsdata[i][j]
               );
               inner.push(dataArrayPerCountry);
@@ -180,19 +180,19 @@ class GraphPage extends Component {
               <Legend />
               <Line
                 type="monotone"
-                dataKey={this.t("confirmed_cases")}
+                dataKey={"Confirmed cases"}
                 stroke={confirmedCasesLineColour}
                 dot={false}
               />
               <Line
                 type="monotone"
-                dataKey={this.t("active_cases")}
+                dataKey={"Active cases"}
                 stroke={activeCasesLineColour}
                 dot={false}
               />
               <Line
                 type="monotone"
-                dataKey={this.t("deaths")}
+                dataKey={"Deaths"}
                 stroke={deathsLineColour}
                 dot={false}
               />
