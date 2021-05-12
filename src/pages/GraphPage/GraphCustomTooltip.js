@@ -1,7 +1,7 @@
 import React from "react";
 import { withTranslation, useTranslation } from "react-i18next";
 
-function CustomTooltip({ active, payload, label, ...props }) {
+function CustomTooltip({ active, payload, label}) {
   const { t } = useTranslation();
 
   if (active) {

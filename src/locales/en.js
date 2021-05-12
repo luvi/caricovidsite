@@ -16,6 +16,7 @@ const en = {
     disclaimer: 'Data source: JHU, updated once per day',
     highest_active_cases: 'Highest active cases',
     language_english: 'en',
+    language_french: 'fr',
     lowest_active_cases: 'Lowest active cases',
     note_puerto_rico: '*Note that Puerto Rico is excluded for now as we do not have their recovery data',
     own_data_set: 'Our own open source dataset',

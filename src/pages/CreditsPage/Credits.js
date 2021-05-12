@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useTranslation } from 'react-i18next'
 
-const Credits = () => {
-  const { t } = useTranslation()
+const Credits = (props) => {
+  const { t,i18n } = useTranslation()
 
   useEffect(() => {
     document.body.style.backgroundColor = "#1A2637";
+    console.log(props.Lang)
+    //i18n.changeLanguage(language);
   }, [])
 
   return (
