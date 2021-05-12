@@ -77,6 +77,14 @@ export default () => {
                       {t("language_french")}
                     </Nav.Link>
                   </NavDropdown.Item>
+                  <NavDropdown.Item >
+                    <Nav.Link
+                      style={{ color: "black", paddingRight: 10 }}
+                      onClick={() => changeLanguage("es")}
+                    >
+                      es
+                    </Nav.Link>
+                  </NavDropdown.Item>
                 </NavDropdown>
               </Nav.Item>
             </Nav>
