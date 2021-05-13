@@ -1,19 +1,22 @@
-   export default (map, mapboxgl, cleanedUpArray) => {
-
-    cleanedUpArray.forEach((element) => {
+   export default async (map, mapboxgl, cleanedUpArray, vaccinationData) => {
+    
+    
+      cleanedUpArray.forEach((element) => {
 
         let caribbeanName = element.caribbeanName
-        let numCases = element.confirmedCases
-        let numRecovered = element.recoveredCases
-        let numDeaths = element.numDeaths
+        let numCases = new Intl.NumberFormat().format(element.confirmedCases)
+        let numRecovered = new Intl.NumberFormat().format(element.recoveredCases)
+        let activeCases = new Intl.NumberFormat().format(element.activeCases)
+        let numDeaths = new Intl.NumberFormat().format(element.numDeaths)
+        let totalVaccinations = vaccinationData[caribbeanName]?.total_vaccinations
    
    //shows a different size based on the number of cases, but minimum size is 20
-    let size = Math.max(15, Math.min(parseInt(numCases) / 5, 60));
+    let size = Math.max(15, Math.min(parseInt(element.activeCases) / 5, 60));
 
     let popup = new mapboxgl.Popup({ offset: 25, className: 'popups' }).setHTML(
-      `<h6>${caribbeanName}</h6> <strong>${element.activeCases}</strong> active cases, 
+      `<div class="caribbeanName">${caribbeanName}</div> <strong>${activeCases}</strong> active cases, 
       <strong>${numCases}</strong> confirmed, <strong>${numDeaths}</strong> death(s), 
-      <strong>${numRecovered}</strong> recovered`
+      <strong>${numRecovered}</strong> recovered${totalVaccinations ?  `, Total vaccinated <strong>${new Intl.NumberFormat().format(parseInt(totalVaccinations))}</strong>` : ""}`
     );
     
     // add marker to map
@@ -31,4 +34,8 @@
       .addTo(map);
     })
 
+
+
+  
+    
     }

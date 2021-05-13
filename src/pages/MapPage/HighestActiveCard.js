@@ -70,7 +70,7 @@ class HighestActiveCard extends Component {
                         <div style={{ fontSize: 12 }}>
                           {this.props.highestActiveCases.map((caseEntry) => (
                             <div>
-                              <b>{caseEntry.activeCases}</b>{" "}
+                              <b>{new Intl.NumberFormat().format(caseEntry.activeCases)}</b>{" "}
                               {
                                 emojiFlags.countryCode(
                                   fetchCountryCode(caseEntry.caribbeanName)

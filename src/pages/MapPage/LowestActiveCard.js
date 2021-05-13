@@ -68,7 +68,7 @@ class LowestActiveCard extends Component {
                             <div style={{ fontSize: 12 }}>
                               {this.props.lowestActiveCases.map((caseEntry) => (
                                 <div>
-                                  <b>{caseEntry.activeCases}</b>{" "}
+                                  <b>{new Intl.NumberFormat().format(caseEntry.activeCases)}</b>{" "}
                                   {
                                     emojiFlags.countryCode(
                                       fetchCountryCode(caseEntry.caribbeanName)

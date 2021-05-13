@@ -12,8 +12,15 @@ code {
     monospace;
 }
 
+.caribbeanName {
+  font: 1rem 'Open Sans', sans-serif;
+  font-weight: 300;
+  padding-bottom: 0.5rem;
+}
+
 .popups {
   font: 12px/20px 'Open Sans', sans-serif;
+  font-weight: 500;
   border-radius: 9px;
   text-align: center;
 }

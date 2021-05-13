@@ -13,3 +13,5 @@ export const unitedStatesCaseSource =
   export const graphGridColour = "#2c4d5c"
 
   export const barbadosTestsURL = "https://raw.githubusercontent.com/luvi/caricoviddata/master/barbadosTestData.csv"
+
+  export const vaccinationNumbersURL = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.json"

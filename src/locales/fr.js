@@ -10,7 +10,7 @@ const fr = {
       credit_kevz: '| Données des testes proviennent de @KevzPolitics sur Twitter',
       credits: 'Credites',
       credits_disclaimer: 'veuillez noter que les mises à jour peuvent avoir un léger retard.',
-      data_sources: 'Sources de données: Johns Hopkins, @KevzPolitics, Trinidad Express, Dominica News Online',
+      data_sources: 'Sources de données: Johns Hopkins, @KevzPolitics, Trinidad Express, Dominica News Online, Our World In Data',
       deaths: 'Morts',
       developer: 'Développeur',
       disclaimer: 'source de données : JHU, Mise à jour une fois par jour',

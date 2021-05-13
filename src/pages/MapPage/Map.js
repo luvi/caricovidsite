@@ -4,13 +4,14 @@ import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
-import isCaribbeanCountry from "../../functions/isCaribbeanCountry";
+import {covidData, vaccines} from "../../functions/isCaribbeanCountry";
 import {
   url,
   deathsSource,
   myOverrideURL,
   recoveredSourceURL,
   unitedStatesCaseSource,
+  vaccinationNumbersURL,
 } from "../../constants";
 import createCaribbeanDataArray from "./createCaribbeanDataArray";
 import TinyQueue from "tinyqueue";
@@ -52,6 +53,7 @@ class Map extends Component {
       lowestActiveCases: [],
       highestActiveCases: [],
       puertoRicoConfirmedCases: 0,
+      vaccinationData: []
     };
   }
 
@@ -70,6 +72,18 @@ class Map extends Component {
     let caribbeanDataDeaths;
     let recoveredArr;
 
+    getCOVIDInfo(vaccinationNumbersURL).then((body) => {
+      let obj = JSON.parse(body)
+      obj = obj.filter(vaccines)
+      
+      let vaccineData = []
+      obj.map((countryElement) => {
+        vaccineData[countryElement.country] = _.last(countryElement.data);
+      })
+      this.setState({vaccinationData: vaccineData})
+      console.log(vaccineData)
+    })
+
     getCOVIDInfo(url)
       .then((body) => {
         parse(body, (err, output) => {
@@ -78,7 +92,7 @@ class Map extends Component {
             date: moment(_.last(arr[0])).format("dddd, MMMM Do YYYY"),
           }); //date of latest entry
 
-          johnsHopkinsData = arr.filter(isCaribbeanCountry);
+          johnsHopkinsData = arr.filter(covidData);
           johnsHopkinsCountries = new Set();
         });
 
@@ -87,7 +101,7 @@ class Map extends Component {
       .then((body) => {
         //Read JohnsDeathCSV
         parse(body, (err, output) => {
-          caribbeanDataDeaths = output.filter(isCaribbeanCountry);
+          caribbeanDataDeaths = output.filter(covidData);
           caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddDeaths);
         });
 
@@ -150,7 +164,7 @@ class Map extends Component {
       })
       .then((body) => {
         parse(body, (err, output) => {
-          recoveredArr = output.filter(isCaribbeanCountry);
+          recoveredArr = output.filter(covidData);
 
           // recoveredArr.forEach((jhDataElement) => {
           //   let caribbeanName = jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
@@ -190,7 +204,7 @@ class Map extends Component {
           this.state.caribbeanDataRecovered
         );
         this.setState(cleanedUpArray);
-        setMarkers(map, mapboxgl, cleanedUpArray);
+        setMarkers(map, mapboxgl, cleanedUpArray,this.state.vaccinationData);
         this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
 
         this.setState({
@@ -252,7 +266,7 @@ class Map extends Component {
       <div>
         <div className="statsContainer">
             <UpdatedCard date={this.state.date}/>
-            <StatsCard totalActiveCases={this.state.totalActiveCases} total={this.state.total} totalDeaths={this.state.totalDeaths}/>
+            <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)}/>
             <LowestActiveCard lowestActiveCases={this.state.lowestActiveCases} />
             <HighestActiveCard highestActiveCases={this.state.highestActiveCases} />
         </div>
