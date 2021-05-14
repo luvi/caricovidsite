@@ -6,8 +6,6 @@ const Credits = (props) => {
 
   useEffect(() => {
     document.body.style.backgroundColor = "#1A2637";
-    console.log(props.Lang)
-    //i18n.changeLanguage(language);
   }, [])
 
   return (
@@ -28,6 +26,7 @@ const Credits = (props) => {
 
         <div>
           {t('data_sources')}
+          , Mathieu, E., Ritchie, H., Ortiz-Ospina, E. et al. A global database of COVID-19 vaccinations. Nat Hum Behav (2021). https://doi.org/10.1038/s41562-021-01122-8
         </div>
         <div>
           <a href="https://github.com/luvi/caricoviddata">
