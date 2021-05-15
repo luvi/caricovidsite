@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Map from "../pages/MapPage/Map";
 import Credits from "../pages/CreditsPage/Credits";
 import GraphPage from "../pages/GraphPage/GraphPage";
-import TestsPage from "../pages/TestsPage/TestsPage";
+import VaccinePage from "../pages/VaccinePage/VaccinePage";
 
 export default () => {
   const { t, i18n } = useTranslation();
@@ -37,9 +37,9 @@ export default () => {
               <Nav.Item>
                 <Nav.Link
                   style={{ color: "white", paddingRight: 10 }}
-                  href="/tests"
+                  href="/vaccination"
                 >
-                  {t("tests_title")}
+                  {t("vaccines_title")}
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
@@ -98,7 +98,7 @@ export default () => {
               render={(props) => <Credits {...props} Lang={lang} />}
             />
             <Route path="/graphs" component={GraphPage} />
-            <Route path="/tests" component={TestsPage} />
+            <Route path="/vaccination" component={VaccinePage} />
           </Switch>
         </div>
       </Router>

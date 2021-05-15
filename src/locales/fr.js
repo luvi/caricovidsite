@@ -27,6 +27,7 @@ const fr = {
       title: 'carte COVID des Caraïbes',
       twitter_handle: '@JaniquekaJohn',
       updated: 'Mis à jour',
+      vaccines_title: 'Vaccines'
     }
    }
    

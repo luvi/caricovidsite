@@ -4,7 +4,7 @@ const en = {
     all_countries: 'All Countries',
     all_countries_placeholder: 'Graph for all countries coming soon',
     bvi_news: 'BVI News',
-    case_graphs: 'Case Graphs',
+    case_graphs: 'Cases',
     choose_country: 'Choose a country',
     confirmed_cases: 'Confirmed cases',
     credit_kevz: '| Test data collected from @KevzPolitics on Twitter',
@@ -27,6 +27,7 @@ const en = {
     title: 'Caribbean COVID Map',
     twitter_handle: '@JaniquekaJohn',
     updated: 'Updated',
+    vaccines_title: 'Vaccines'
   }
 }
 

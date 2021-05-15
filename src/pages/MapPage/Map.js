@@ -81,7 +81,6 @@ class Map extends Component {
         vaccineData[countryElement.country] = _.last(countryElement.data);
       })
       this.setState({vaccinationData: vaccineData})
-      console.log(vaccineData)
     })
 
     getCOVIDInfo(url)

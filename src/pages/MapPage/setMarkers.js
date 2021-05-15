@@ -7,7 +7,7 @@ export default async (map, mapboxgl, cleanedUpArray, vaccinationData) => {
     let numDeaths = new Intl.NumberFormat().format(element.numDeaths);
     let totalVaccinations = vaccinationData[caribbeanName]?.total_vaccinations;
 
-    //shows a different size based on the number of cases, but minimum size is 20
+    //shows a different size based on the number of active cases, but minimum size is 20
     let size = Math.max(15, Math.min(parseInt(element.activeCases) / 5, 60));
 
     let popup = new mapboxgl.Popup({ offset: 25, className: "popups" }).setHTML(
