@@ -29,6 +29,10 @@ const Credits = () => {
               {t("twitter_handle")}
             </a>{" "}
             <br />
+            <a href="https://github.com/luvi/caricovidsite">
+              {t("github_contributors")}
+            </a>{" "}
+            <br/>
             {t("data_sources")}
             , Mathieu, E., Ritchie, H., Ortiz-Ospina, E. et al. A global
             database of COVID-19 vaccinations. Nat Hum Behav (2021).
