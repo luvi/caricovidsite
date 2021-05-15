@@ -1,57 +1,51 @@
 import React, { useEffect } from "react";
-import { useTranslation } from 'react-i18next'
-
-const Credits = (props) => {
-  const { t,i18n } = useTranslation()
+import { useTranslation } from "react-i18next";
+import { Card, Button } from "react-bootstrap";
+const Credits = () => {
+  const { t } = useTranslation();
 
   useEffect(() => {
     document.body.style.backgroundColor = "#1A2637";
-  }, [])
+  }, []);
 
   return (
-    <div>
-      <div
+    <div
+      style={{
+        marginTop: "100px",
+      }}
+    >
+      <Card
         style={{
-          marginTop: "100px",
-          display: "flex",
-          flexDirection: "column",
-          position: "relative",
+          backgroundColor: "#1A2637",
           color: "white",
+          border: "none",
         }}
-        className="sourcesContainer"
       >
-        <div>
-          {t('developer')}: <a href="https://twitter.com/JaniquekaJohn">{t('twitter_handle')}</a>
-        </div>
-
-        <div>
-          {t('data_sources')}
-          , Mathieu, E., Ritchie, H., Ortiz-Ospina, E. et al. A global database of COVID-19 vaccinations. Nat Hum Behav (2021). https://doi.org/10.1038/s41562-021-01122-8
-        </div>
-        <div>
-          <a href="https://github.com/luvi/caricoviddata">
-          {t('own_data_set')}
-          </a>
-        </div>
-        <div>{t('bvi_news')}</div>
-        <div> </div>
-        <div></div>
-        <div class="disclaimer">
-          {t('credits_disclaimer')}
-        </div>
-      </div>
-
-      <div style={{
-        display: "flex",
-        margin: "auto",
-        flexDirection: "column",
-        position: "relative",
-        color: "white",
-
-      }}>
-      </div>
+        <Card.Body>
+          <Card.Title>This project has been made possible by </Card.Title>
+          <Card.Text>
+            {t("developer")}:{" "}
+            <a href="https://twitter.com/JaniquekaJohn">
+              {t("twitter_handle")}
+            </a>{" "}
+            <br />
+            {t("data_sources")}
+            , Mathieu, E., Ritchie, H., Ortiz-Ospina, E. et al. A global
+            database of COVID-19 vaccinations. Nat Hum Behav (2021).
+            https://doi.org/10.1038/s41562-021-01122-8
+            <br />
+            <a href="https://github.com/luvi/caricoviddata">
+              {t("own_data_set")}
+            </a>
+            <br />
+            {t("bvi_news")}
+            <div class="disclaimer">{t("credits_disclaimer")}</div>
+          </Card.Text>
+          <Button variant="dark" href="https://www.buymeacoffee.com/mekeilia" target="_blank">Support the developer</Button>
+        </Card.Body>
+      </Card>
     </div>
   );
-}
+};
 
-export default Credits
+export default Credits;
