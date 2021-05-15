@@ -200,7 +200,7 @@ class GraphPage extends Component {
           </ResponsiveContainer>
         )}
         <Alert
-          dismissable={true}
+          dismissable={"true"}
           key={1}
           variant={"secondary"}
           style={{

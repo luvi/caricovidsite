@@ -14,6 +14,7 @@ const en = {
     deaths: 'Deaths',
     developer: 'Developer',
     disclaimer: 'Data source: JHU, updated once per day',
+    github_contributors: 'Github contributors',
     highest_active_cases: 'Highest active cases',
     language: 'Language',
     language_english: 'en',

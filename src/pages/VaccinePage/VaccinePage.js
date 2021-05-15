@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from "react";
 import {Alert} from "react-bootstrap"
-import { Bar } from "react-chartjs-2";
+import { Bar,defaults } from "react-chartjs-2";
 import { vaccines } from "../../functions/isCaribbeanCountry";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import _ from "lodash";
 import { vaccinationNumbersURL } from "../../constants";
 import { withTranslation,useTranslation } from "react-i18next";
-
+defaults.color = 'white'
+defaults.backgroundColor = 'rgb(230, 243, 255)'
+defaults.borderColor = 'rgb(88,88,88)'
+//defaults.legend.position = 'bottom'
 function VaccinePage(props) {
   const { t } = useTranslation();
   const [vaccineData, setVaccineData] = useState(null);
   const [vaccineCountries, setVaccineCountries] = useState(null);
   const [peopleVaccinated, setPeopleVaccinated] = useState(null);
   const [peopleFullyVaccinated, setPeopleFullyVaccinated] = useState(null);
-
+  
 
   const options = {
     indexAxis: 'y',
+    responsive: true,
     title: {
       display: true,
       text: "People vaccinated per 100",
@@ -24,12 +28,15 @@ function VaccinePage(props) {
     },
     legend: {
       display: true,
-      position: "bottom",
+      position: 'left',
     },
+    maintainAspectRation:false
   }
   let data = [];
 
   useEffect(() => {
+   // console.log(defaults)
+ 
     document.body.style.backgroundColor = "#1A2637";
     getCOVIDInfo(vaccinationNumbersURL)
       .then((body) => {
@@ -75,6 +82,7 @@ function VaccinePage(props) {
 
   return (
     <>
+   
     <div style={{ padding: "100px 20px 100px 20px" }}>
       <Bar
         data={data}
@@ -82,7 +90,7 @@ function VaccinePage(props) {
       />
       <div style={{display:'flex',justifyContent: "center"}}>
       <Alert
-          dismissable={true}
+          dismissable={"true"}
           key={1}
           variant={"secondary"}
           style={{
