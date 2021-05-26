@@ -97,7 +97,7 @@ export default () => {
               path="/credits"
               render={(props) => <Credits {...props} Lang={lang} />}
             />
-            <Route path="/graphs" component={GraphPage} />
+            <Route path="/graphs"> <GraphPage/> </Route>
             <Route path="/vaccination" component={VaccinePage} />
           </Switch>
         </div>

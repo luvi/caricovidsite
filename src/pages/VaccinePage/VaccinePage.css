@@ -1,0 +1,9 @@
+@media screen and (max-width : 906px){
+    .div-only-mobile{
+     visibility:visible;
+     color: white;
+     text-transform: uppercase;
+     font-size: 0.75rem;
+     padding-bottom: 0.75rem;
+     }
+   }

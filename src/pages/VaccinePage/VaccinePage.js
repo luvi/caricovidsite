@@ -6,6 +6,7 @@ import getCOVIDInfo from "../../functions/fetchFromURL";
 import _ from "lodash";
 import { vaccinationNumbersURL } from "../../constants";
 import { withTranslation,useTranslation } from "react-i18next";
+import "./VaccinePage.css";
 defaults.color = 'white'
 defaults.backgroundColor = 'rgb(230, 243, 255)'
 defaults.borderColor = 'rgb(88,88,88)'
@@ -84,6 +85,7 @@ function VaccinePage(props) {
     <>
    
     <div style={{ padding: "100px 20px 100px 20px" }}>
+      <div className="div-only-mobile">Please turn device landscape for best viewing experience</div>
       <Bar
         data={data}
         options={options}
