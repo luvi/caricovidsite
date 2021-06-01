@@ -60,7 +60,7 @@ function VaccinePage(props) {
         });
         setVaccineCountries(Object.keys(vaccineData));
         setVaccineData(vaccineData);
-        console.log(vaccineData)
+        //console.log(vaccineData)
         setPeopleVaccinated(
           Object.values(vaccineData).map(
             (obj) => obj.people_vaccinated_per_hundred
@@ -117,7 +117,7 @@ function VaccinePage(props) {
         >
           Source: Our World in Data, there may be update delays
         </Alert>
-        <CSVLink data={[]}>Download me</CSVLink>;
+        {/* <CSVLink data={vaccineData}>Download me</CSVLink>; */}
         </div>
     </div>
     
