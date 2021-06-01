@@ -7,6 +7,7 @@ import _ from "lodash";
 import { vaccinationNumbersURL } from "../../constants";
 import { withTranslation,useTranslation } from "react-i18next";
 import "./VaccinePage.css";
+import { CSVLink} from "react-csv";
 defaults.color = 'white'
 defaults.backgroundColor = 'rgb(230, 243, 255)'
 defaults.borderColor = 'rgb(88,88,88)'
@@ -22,14 +23,23 @@ function VaccinePage(props) {
   const options = {
     indexAxis: 'y',
     responsive: true,
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true
+      }
+    },
     title: {
       display: true,
       text: "People vaccinated per 100",
       fontSize: 20,
     },
-    legend: {
-      display: true,
-      position: 'left',
+    plugins: {
+      legend: {
+        position: 'bottom',
+      }
     },
     maintainAspectRation:false
   }
@@ -50,7 +60,7 @@ function VaccinePage(props) {
         });
         setVaccineCountries(Object.keys(vaccineData));
         setVaccineData(vaccineData);
-        //console.log(vaccineData)
+        console.log(vaccineData)
         setPeopleVaccinated(
           Object.values(vaccineData).map(
             (obj) => obj.people_vaccinated_per_hundred
@@ -70,12 +80,12 @@ function VaccinePage(props) {
     datasets: [
       {
         label: "People vaccinated per 100",
-        backgroundColor: "rgba(75,192,192,1)",
+        backgroundColor: "rgba(244,211,94)",
         data: peopleVaccinated,
       },
       {
         label: "People fully vaccinated per 100",
-        backgroundColor: "rgba(0, 212, 255, 1)",
+        backgroundColor: "rgba(238, 150, 75)",
         data: peopleFullyVaccinated,
       },
     ],
@@ -107,6 +117,7 @@ function VaccinePage(props) {
         >
           Source: Our World in Data, there may be update delays
         </Alert>
+        <CSVLink data={[]}>Download me</CSVLink>;
         </div>
     </div>
     

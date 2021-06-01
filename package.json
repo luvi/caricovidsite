@@ -19,6 +19,7 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-chartjs-2": "^3.0.3",
+    "react-csv": "^2.0.3",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.8.5",
     "react-router": "^3.2.6",
