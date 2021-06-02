@@ -85,7 +85,7 @@ function VaccinePage(props) {
       },
       {
         label: "People fully vaccinated per 100",
-        backgroundColor: "rgba(238, 150, 75)",
+        backgroundColor: "rgba(249, 87, 56)",
         data: peopleFullyVaccinated,
       },
     ],
