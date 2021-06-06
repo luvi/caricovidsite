@@ -44,6 +44,10 @@ const Credits = () => {
             <br />
             {t("bvi_news")}
             <div class="disclaimer">{t("credits_disclaimer")}</div>
+            <div>
+                {this.t("note_puerto_rico")}
+                Note that segregated data for St.Vincent and the Grenadines administered vaccine doses is not currently available.
+            </div>
           </Card.Text>
           <Button variant="dark" href="https://www.buymeacoffee.com/mekeilia" target="_blank">Support the developer</Button>
         </Card.Body>

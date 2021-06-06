@@ -25,7 +25,7 @@ class StatsCard extends Component {
     return (
       <div className="statsCard">
         <Card type="rounded-0" style={cardStyle}>
-          <Card.Body>
+          <Card.Body className="div-only-mobile-cards">
             <Card.Text style={cardTextStyle}>
               <div>
                 {this.t("active_cases")}: <b>{this.props.totalActiveCases}</b>{" "}
@@ -35,9 +35,6 @@ class StatsCard extends Component {
               </div>
               <div>
                 {this.t("deaths")}: <b>{this.props.totalDeaths}</b>
-              </div>
-              <div style={{ fontSize: "7px" }}>
-                {this.t("note_puerto_rico")}
               </div>
             </Card.Text>
           </Card.Body>

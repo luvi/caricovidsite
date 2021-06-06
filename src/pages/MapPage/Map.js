@@ -18,11 +18,10 @@ import TinyQueue from "tinyqueue";
 import setMarkers from "./setMarkers";
 import _ from "lodash";
 import moment from "moment";
+import ListCard from './ListCard';
 
 import UpdatedCard from "./UpdatedCard.js";
 import StatsCard from "./StatsCard.js";
-import LowestActiveCard from "./LowestActiveCard.js";
-import HighestActiveCard from "./HighestActiveCard.js";
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
@@ -266,8 +265,8 @@ class Map extends Component {
         <div className="statsContainer">
             <UpdatedCard date={this.state.date}/>
             <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)}/>
-            <LowestActiveCard lowestActiveCases={this.state.lowestActiveCases} />
-            <HighestActiveCard highestActiveCases={this.state.highestActiveCases} />
+            <ListCard title={this.t('lowest_active_cases')} cases={this.state.lowestActiveCases} />
+            <ListCard title={this.t('highest_active_cases')} cases={this.state.highestActiveCases} />
         </div>
         <div
           ref={(el) => {

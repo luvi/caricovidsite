@@ -47,6 +47,21 @@ code {
   text-align: left;
 }
 
+@media screen and (max-width : 906px){
+  .statsContainer {
+    justify-content: space-between;
+    align-Content: right;
+    flex-flow: column wrap;
+    position: absolute;
+    display: flex;
+    margin:auto;
+    top: 5rem;
+    right: 30px;
+    z-index: 99;
+    text-align: left;
+  }
+}
+
 .statsCard{
   margin-bottom: 10px; 
   position: relative;

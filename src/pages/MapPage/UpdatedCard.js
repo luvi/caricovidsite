@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 import { withTranslation } from "react-i18next";
+import "./Cards.css";
 
 const cardStyle = {
   width: "260px",
@@ -24,8 +25,8 @@ class UpdatedCard extends Component {
     return (
       <div className="statsCard">
         <Card type="rounded-0" style={cardStyle}>
-          <Card.Body>
-            <Card.Text style={cardTextStyle}>
+          <Card.Body className="div-only-mobile-cards">
+            <Card.Text  style={cardTextStyle}>
               <div>
                 {this.t("updated")}: <b>{this.props.date}</b>
               </div>

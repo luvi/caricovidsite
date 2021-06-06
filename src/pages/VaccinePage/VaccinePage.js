@@ -115,7 +115,8 @@ function VaccinePage(props) {
             marginTop: "1rem"
           }}
         >
-          Source: Our World in Data, there may be update delays
+          Source: Our World in Data, there may be update delays.
+          Segregated data not available for SVG.
         </Alert>
         {/* <CSVLink data={vaccineData}>Download me</CSVLink>; */}
         </div>
