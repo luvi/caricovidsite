@@ -1,5 +1,12 @@
+.div-only-mobile-cards{
+    color: white;
+}
+
+
 @media screen and (max-width : 906px){
+
     .div-only-mobile-cards{
      padding: 0.3rem;
+     color: white;
      }
 }

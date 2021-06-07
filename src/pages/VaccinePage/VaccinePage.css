@@ -1,3 +1,12 @@
+.toggle-button > .a:active {
+  align-items: right;
+  color:white;
+}
+
+.div-only-mobile{
+  visibility:hidden;
+  }
+
 @media screen and (max-width : 906px){
     .div-only-mobile{
      visibility:visible;
@@ -6,4 +15,4 @@
      font-size: 0.75rem;
      padding-bottom: 0.75rem;
      }
-   }
+}
