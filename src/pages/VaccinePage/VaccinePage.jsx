@@ -62,7 +62,7 @@ function VaccinePage(props) {
         });
         setVaccineCountries(Object.keys(vaccineData));
         setVaccineData(vaccineData);
-        console.log(vaccineData);
+        //console.log(vaccineData);
         setPeopleVaccinated(
           Object.values(vaccineData).map(
             (obj) => obj.people_vaccinated_per_hundred
