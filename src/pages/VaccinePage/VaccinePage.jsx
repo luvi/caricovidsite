@@ -5,7 +5,7 @@ import { vaccines } from "../../functions/isCaribbeanCountry";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import _ from "lodash";
 import { vaccinationNumbersURL } from "../../constants";
-import { withTranslation, useTranslation } from "react-i18next";
+import { withTranslation} from "react-i18next";
 import "./VaccinePage.css";
 import { Table , Button} from "antd";
 defaults.color = "white";
@@ -13,7 +13,7 @@ defaults.backgroundColor = "rgb(230, 243, 255)";
 defaults.borderColor = "rgb(88,88,88)";
 
 function VaccinePage(props) {
-  const { t } = useTranslation();
+
   const [vaccineData, setVaccineData] = useState(null);
   const [vaccineCountries, setVaccineCountries] = useState(null);
   const [peopleVaccinated, setPeopleVaccinated] = useState(null);

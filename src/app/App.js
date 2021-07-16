@@ -9,14 +9,14 @@ import Map from "../pages/MapPage/Map";
 import Credits from "../pages/CreditsPage/Credits";
 import GraphPage from "../pages/GraphPage/GraphPage";
 import VaccinePage from "../pages/VaccinePage/VaccinePage";
+import i18n from "../locales";
 
 export default () => {
-  const { t, i18n } = useTranslation();
-  const [lang, setLang] = useState(null);
+  const { t } = useTranslation();
+  //const [lang, setLang] = useState(null);
 
   const changeLanguage = (languageCode) => {
     i18n.changeLanguage(languageCode);
-    setLang(languageCode);
   };
 
   return (
@@ -63,7 +63,7 @@ export default () => {
                   <NavDropdown.Item >
                     <Nav.Link
                       style={{ color: "black", paddingRight: 10 }}
-                      onClick={() => changeLanguage("en")}
+                      onClick={() => i18n.changeLanguage("en")}
                     >
                       {t("language_english")}
                     </Nav.Link>
@@ -71,7 +71,7 @@ export default () => {
                   <NavDropdown.Item >
                     <Nav.Link
                       style={{ color: "black", paddingRight: 10 }}
-                      onClick={() => changeLanguage("fr")}
+                      onClick={() => i18n.changeLanguage("fr")}
                     >
                       {t("language_french")}
                     </Nav.Link>
@@ -79,7 +79,7 @@ export default () => {
                   <NavDropdown.Item >
                     <Nav.Link
                       style={{ color: "black", paddingRight: 10 }}
-                      onClick={() => changeLanguage("es")}
+                      onClick={() => i18n.changeLanguage('es')}
                     >
                       es
                     </Nav.Link>
@@ -95,7 +95,7 @@ export default () => {
             <Route exact path="/" component={Map} />
             <Route
               path="/credits"
-              render={(props) => <Credits {...props} Lang={lang} />}
+              render={(props) => <Credits {...props} />}
             />
             <Route path="/graphs"> <GraphPage/> </Route>
             <Route path="/vaccination" component={VaccinePage} />

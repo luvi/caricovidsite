@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
-import { useTranslation } from "react-i18next";
 import { Card, Button } from "react-bootstrap";
+import { useTranslation } from 'react-i18next';
+
 const Credits = () => {
-  const { t } = useTranslation();
+
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     document.body.style.backgroundColor = "#1A2637";
@@ -45,7 +47,9 @@ const Credits = () => {
             {t("bvi_news")}
             <div class="disclaimer">{t("credits_disclaimer")}</div>
             <div>
-                {this.t("note_puerto_rico")}
+                {t("note_puerto_rico")}
+              </div>
+              <div>
                 Note that segregated data for St.Vincent and the Grenadines administered vaccine doses is not currently available.
             </div>
           </Card.Text>
