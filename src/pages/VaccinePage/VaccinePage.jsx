@@ -62,10 +62,10 @@ function VaccinePage(props) {
         });
         setVaccineCountries(Object.keys(vaccineData));
         setVaccineData(vaccineData);
-        //console.log(vaccineData);
+        console.warn(vaccineData);
         setPeopleVaccinated(
           Object.values(vaccineData).map(
-            (obj) => obj.people_vaccinated_per_hundred
+            (obj) => obj.people_vaccinated_per_hundred - obj.people_fully_vaccinated_per_hundred
           )
         );
         setPeopleFullyVaccinated(
@@ -87,12 +87,12 @@ function VaccinePage(props) {
     labels: vaccineCountries,
     datasets: [
       {
-        label: "People vaccinated per 100",
+        label: "% partially vaccinated",
         backgroundColor: "rgba(244,211,94)",
         data: peopleVaccinated,
       },
       {
-        label: "People fully vaccinated per 100",
+        label: "% fully vaccinated",
         backgroundColor: "rgba(249, 87, 56)",
         data: peopleFullyVaccinated,
       },
