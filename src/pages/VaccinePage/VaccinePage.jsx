@@ -165,7 +165,7 @@ function VaccinePage(props) {
             }}
           >
             Source: Our World in Data, there may be update delays. Segregated
-            data not available for SVG.
+            data not available for Haiti.
           </Alert>
         </div>
       </div>

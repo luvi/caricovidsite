@@ -1,0 +1,15 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "persisting Caribbean relevant COVID data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Janique-ka John",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.6.0"
+  }
+}
