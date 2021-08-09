@@ -65,7 +65,10 @@ class ListCard extends Component {
           <div className="statsCard">
             <Accordion>
               <Card type="rounded-0" style={cardStyle}>
-                <Card.Body className="div-only-mobile-cards" style={cardBodyStyle}>
+                <Card.Body
+                  className="div-only-mobile-cards"
+                  style={cardBodyStyle}
+                >
                   <Card.Text style={cardTextStyle}>
                     <div
                       style={dismissMessageStyle}
@@ -85,11 +88,10 @@ class ListCard extends Component {
                                 caseEntry.activeCases
                               )}
                             </b>{" "}
-                            {
+                            {fetchCountryCode(caseEntry.caribbeanName) &&
                               emojiFlags.countryCode(
                                 fetchCountryCode(caseEntry.caribbeanName)
-                              ).emoji
-                            }{" "}
+                              ).emoji}
                             {caseEntry.caribbeanName}
                           </div>
                         ))}
