@@ -16,6 +16,12 @@ const cardTextStyle = {
   padding: "0px",
 };
 
+const disclaimerStyle = {
+  fontSize: "10px",
+  color: "white",
+  padding: "0px",
+};
+
 class UpdatedCard extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +35,7 @@ class UpdatedCard extends Component {
             <Card.Text  style={cardTextStyle}>
               <div>
                 {this.t("updated")}: <b>{this.props.date}</b>
+                <div style={disclaimerStyle}>*Johns Hopkins University, our data source, is experiencing an issue regarding recovery data, active cases</div>
               </div>
             </Card.Text>
           </Card.Body>
