@@ -11,9 +11,9 @@ export default async (map, mapboxgl, cleanedUpArray, vaccinationData) => {
     let size = Math.max(15, Math.min(parseInt(element.activeCases) / 5, 60));
 
     let popup = new mapboxgl.Popup({ offset: 25, className: "popups" }).setHTML(
-      `<div class="caribbeanName">${caribbeanName}</div> <strong>${activeCases}</strong> active cases, 
-      <strong>${numCases}</strong> confirmed, <strong>${numDeaths}</strong> death(s), 
-      <strong>${numRecovered}</strong> recovered${
+      `<div class="caribbeanName">${caribbeanName}</div>
+      <strong>${numCases}</strong> confirmed, <strong>${numDeaths}</strong> death(s)
+      ${
         totalVaccinations
           ? `, <strong>${new Intl.NumberFormat().format(
               parseInt(totalVaccinations)

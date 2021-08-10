@@ -35,7 +35,6 @@ class UpdatedCard extends Component {
             <Card.Text  style={cardTextStyle}>
               <div>
                 {this.t("updated")}: <b>{this.props.date}</b>
-                <div style={disclaimerStyle}>*Johns Hopkins University, our data source, is experiencing an issue regarding recovery data, active cases</div>
               </div>
             </Card.Text>
           </Card.Body>

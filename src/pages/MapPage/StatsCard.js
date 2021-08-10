@@ -28,9 +28,6 @@ class StatsCard extends Component {
           <Card.Body className="div-only-mobile-cards">
             <Card.Text style={cardTextStyle}>
               <div>
-                {this.t("active_cases")}: <b>{this.props.totalActiveCases}</b>{" "}
-              </div>
-              <div>
                 {this.t("confirmed_cases")}: <b>{this.props.total}</b>
               </div>
               <div>
