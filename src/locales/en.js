@@ -1,4 +1,4 @@
-const en = { 
+const en = {
   translation: {
     active_cases: 'Active cases',
     all_countries: 'All Countries',
@@ -13,7 +13,7 @@ const en = {
     data_sources: 'Data Sources: Johns Hopkins, @KevzPolitics, Trinidad Express, Dominica News Online, Our World In Data',
     deaths: 'Deaths',
     developer: 'Developer',
-    disclaimer: 'Data source: JHU, updated once per day',
+    disclaimer: 'Data source: JHU, updated once per day - Active case information no longer available. Visit @JaniquekaJohn on twitter for more information',
     github_contributors: 'Github contributors',
     highest_active_cases: 'Highest active cases',
     language: 'Language',
@@ -23,7 +23,7 @@ const en = {
     note_puerto_rico: '*Note that Puerto Rico is excluded for now as we do not have their recovery data',
     own_data_set: 'Our own open source dataset',
     tests: 'tests',
-    tests_disclaimer: 'Beta, not yet updated daily', 
+    tests_disclaimer: 'Beta, not yet updated daily',
     tests_title: 'Tests',
     title: 'Caribbean COVID Map',
     twitter_handle: '@JaniquekaJohn',

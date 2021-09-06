@@ -1,7 +1,7 @@
 import React from "react";
 import { withTranslation, useTranslation } from "react-i18next";
 
-function CustomTooltip({ active, payload, label}) {
+function CustomTooltip({ active, payload, label }) {
   const { t } = useTranslation();
 
   if (active) {
@@ -13,9 +13,8 @@ function CustomTooltip({ active, payload, label}) {
             <p className="label">{`${label}`}</p>
             <p className="desc">{`${payload[0].value} ${t(
               "confirmed_cases"
-            )}, ${payload[1].value} ${t("active_cases")}, ${
-              payload[2].value
-            } ${t("deaths")}`}</p>
+            )}, ${payload[1].value
+              } ${t("deaths")}`}</p>
           </div>
         ) : (
           <div> </div>

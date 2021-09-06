@@ -184,12 +184,12 @@ class GraphPage extends Component {
                 stroke={confirmedCasesLineColour}
                 dot={false}
               />
-              <Line
+              {/* <Line
                 type="monotone"
                 dataKey={"Active cases"}
                 stroke={activeCasesLineColour}
                 dot={false}
-              />
+              /> */}
               <Line
                 type="monotone"
                 dataKey={"Deaths"}
