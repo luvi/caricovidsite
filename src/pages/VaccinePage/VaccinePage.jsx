@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from '@ant-design/charts';
 import { Alert } from "react-bootstrap";
-import { defaults } from "react-chartjs-2";
 import { vaccines } from "../../functions/isCaribbeanCountry";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import _ from "lodash";
@@ -9,9 +8,7 @@ import { vaccinationNumbersURL } from "../../constants";
 import { withTranslation } from "react-i18next";
 import "./VaccinePage.css";
 import { Table, Button } from "antd";
-defaults.color = "white";
-defaults.backgroundColor = "rgb(230, 243, 255)";
-defaults.borderColor = "rgb(88,88,88)";
+
 
 
 function VaccinePage(props) {
