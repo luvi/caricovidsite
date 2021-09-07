@@ -1,54 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { Bar } from '@ant-design/charts';
 import { Alert } from "react-bootstrap";
-import { Bar, defaults } from "react-chartjs-2";
+import { defaults } from "react-chartjs-2";
 import { vaccines } from "../../functions/isCaribbeanCountry";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import _ from "lodash";
 import { vaccinationNumbersURL } from "../../constants";
-import { withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import "./VaccinePage.css";
-import { Table , Button} from "antd";
+import { Table, Button } from "antd";
 defaults.color = "white";
 defaults.backgroundColor = "rgb(230, 243, 255)";
 defaults.borderColor = "rgb(88,88,88)";
 
+
 function VaccinePage(props) {
 
   const [vaccineData, setVaccineData] = useState(null);
-  const [vaccineCountries, setVaccineCountries] = useState(null);
-  const [peopleVaccinated, setPeopleVaccinated] = useState(null);
-  const [peopleFullyVaccinated, setPeopleFullyVaccinated] = useState(null);
-  const [peopleVaccinatedRaw, setPeopleVaccinatedRaw] = useState(null);
-  const [peopleFullyVaccinatedRaw, setPeopleFullyVaccinatedRaw] =
-    useState(null);
+  const [vaccineDataA, setVaccineDataAnt] = useState(null);
   const [showRaw, setShowRaw] = useState(null);
 
-  const options = {
-    indexAxis: "y",
-    responsive: true,
-    scales: {
-      x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true,
-      },
-    },
-    title: {
-      display: true,
-      text: "People vaccinated per 100",
-      fontSize: 20,
-    },
-    plugins: {
-      legend: {
-        position: "bottom",
-      },
-    },
-    maintainAspectRation: false,
-  };
-
   useEffect(() => {
-    // console.log(defaults)
 
     document.body.style.backgroundColor = "#1A2637";
     getCOVIDInfo(vaccinationNumbersURL)
@@ -60,47 +32,60 @@ function VaccinePage(props) {
         obj.map((countryElement) => {
           vaccineData[countryElement.country] = _.last(countryElement.data);
         });
-        setVaccineCountries(Object.keys(vaccineData));
+
         setVaccineData(vaccineData);
-        console.warn(vaccineData);
-        setPeopleVaccinated(
-          Object.values(vaccineData).map(
-            (obj) => obj.people_vaccinated_per_hundred - obj.people_fully_vaccinated_per_hundred
-          )
-        );
-        setPeopleFullyVaccinated(
-          Object.values(vaccineData).map(
-            (obj) => obj.people_fully_vaccinated_per_hundred
-          )
-        );
-        setPeopleVaccinatedRaw(
-          Object.values(vaccineData).map((obj) => obj.people_vaccinated)
-        );
-        setPeopleFullyVaccinatedRaw(
-          Object.values(vaccineData).map((obj) => obj.people_fully_vaccinated)
-        );
+
+
+        const vaccineDataAnt1 = obj.map((countryElement) => {
+
+          const dat = _.last(countryElement.data);
+
+          return {
+            country: countryElement.country,
+            status: '% people fully vaccinated',
+            count: dat.people_fully_vaccinated_per_hundred
+          }
+        });
+
+        const vaccineDataAnt2 = obj.map((countryElement) => {
+
+          const dat = _.last(countryElement.data);
+
+          return {
+            country: countryElement.country,
+            status: '% people partially vaccinated',
+            count: dat.people_vaccinated_per_hundred - dat.people_fully_vaccinated_per_hundred
+          }
+        });
+
+        const finale = [...vaccineDataAnt1, ...vaccineDataAnt2]
+
+        setVaccineDataAnt(finale)
+        console.warn(finale)
+
+
       })
       .then();
   }, [null]);
 
-  const dataPercent = {
-    labels: vaccineCountries,
-    datasets: [
-      {
-        label: "% partially vaccinated",
-        backgroundColor: "rgba(244,211,94)",
-        data: peopleVaccinated,
-      },
-      {
-        label: "% fully vaccinated",
-        backgroundColor: "rgba(249, 87, 56)",
-        data: peopleFullyVaccinated,
-      },
-    ],
+
+
+  var config = {
+    data: vaccineDataA || [],
+    xField: 'count',
+    yField: 'country',
+    seriesField: 'status',
+    isPercent: false,
+    isStack: true,
+    height: 600,
+    colorField: 'status', // or seriesField in some cases
+    color: ['rgba(244,211,94)', 'rgba(249, 87, 56)'],
   };
 
-  const vals = vaccineData ? Object.entries(vaccineData): null
- 
+
+
+  const vals = vaccineData ? Object.entries(vaccineData) : null
+
   const dataForTable = vals?.map((el) => {
     const key = el[1];
     return { country: el[0], date: key.date, people_fully_vaccinated: key.people_fully_vaccinated, people_vaccinated: key.people_vaccinated };
@@ -118,13 +103,13 @@ function VaccinePage(props) {
       dataIndex: "people_fully_vaccinated",
       key: "people_fully_vaccinated",
       sorter: (a, b) => a.people_fully_vaccinated - b.people_fully_vaccinated,
-      sortDirections: ['descend','ascend']
-    },{
+      sortDirections: ['descend', 'ascend']
+    }, {
       title: "People vaccinated",
       dataIndex: "people_vaccinated",
       key: "people_vaccinated",
       sorter: (a, b) => a.people_vaccinated - b.people_vaccinated,
-      sortDirections: ['descend','ascend']
+      sortDirections: ['descend', 'ascend']
     },
     {
       title: "Date updated",
@@ -137,8 +122,8 @@ function VaccinePage(props) {
 
   return (
     <>
-      <div style={{ padding: "100px 20px 100px 20px" }}>
-      <Button
+      <div style={{ display: 'flex', flexDirection: 'column', padding: "100px 20px 100px 20px" }}>
+        <Button style={{ width: '300px', alignSelf: 'center' }}
           onClick={() => {
             setShowRaw(!showRaw);
           }}
@@ -148,7 +133,7 @@ function VaccinePage(props) {
         <div className="div-only-mobile">
           Please turn device landscape for best viewing experience
         </div>
-       {showRaw ? <Table dataSource={dataForTable} columns={columns} /> : <Bar data={dataPercent} options={options} />}
+        {showRaw ? <Table dataSource={dataForTable} columns={columns} /> : <Bar {...config} />}
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Alert
             dismissable={"true"}
@@ -164,8 +149,7 @@ function VaccinePage(props) {
               marginTop: "1rem",
             }}
           >
-            Source: Our World in Data, there may be update delays. Segregated
-            data not available for Haiti.
+            Source: Our World in Data, there may be update delays.
           </Alert>
         </div>
       </div>
