@@ -4,7 +4,7 @@ import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import parse from "csv-parse";
-import {covidData, vaccines} from "../../functions/isCaribbeanCountry";
+import { covidData, vaccines } from "../../functions/isCaribbeanCountry";
 import {
   url,
   deathsSource,
@@ -35,7 +35,7 @@ let quickAddDeaths = [
 class Map extends Component {
   constructor(props) {
     super(props);
-    this.t=props.t
+    this.t = props.t
     this.state = {
       total: 0,
       totalDeaths: 0,
@@ -74,12 +74,12 @@ class Map extends Component {
     getCOVIDInfo(vaccinationNumbersURL).then((body) => {
       let obj = JSON.parse(body)
       obj = obj.filter(vaccines)
-      
+
       let vaccineData = []
       obj.map((countryElement) => {
         vaccineData[countryElement.country] = _.last(countryElement.data);
       })
-      this.setState({vaccinationData: vaccineData})
+      this.setState({ vaccinationData: vaccineData })
     })
 
     getCOVIDInfo(url)
@@ -202,7 +202,7 @@ class Map extends Component {
           this.state.caribbeanDataRecovered
         );
         this.setState(cleanedUpArray);
-        setMarkers(map, mapboxgl, cleanedUpArray,this.state.vaccinationData);
+        setMarkers(map, mapboxgl, cleanedUpArray, this.state.vaccinationData);
         this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
 
         this.setState({
@@ -263,10 +263,9 @@ class Map extends Component {
     return (
       <div>
         <div className="statsContainer">
-            <UpdatedCard date={this.state.date}/>
-            <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)}/>
-            <ListCard title={this.t('lowest_active_cases')} cases={this.state.lowestActiveCases} />
-            <ListCard title={this.t('highest_active_cases')} cases={this.state.highestActiveCases} />
+          <UpdatedCard date={this.state.date} />
+          <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)} />
+
         </div>
         <div
           ref={(el) => {
