@@ -31,7 +31,7 @@ function VaccinePage(props) {
         });
 
         setVaccineData(vaccineData);
-
+        console.log(vaccineData)
 
         const vaccineDataAnt1 = obj.map((countryElement) => {
 
@@ -47,18 +47,18 @@ function VaccinePage(props) {
         const vaccineDataAnt2 = obj.map((countryElement) => {
 
           const dat = _.last(countryElement.data);
-
+          const partiallyvaccinated = dat.people_vaccinated_per_hundred - dat.people_fully_vaccinated_per_hundred
           return {
             country: countryElement.country,
             status: '% people partially vaccinated',
-            count: dat.people_vaccinated_per_hundred - dat.people_fully_vaccinated_per_hundred
+            count: partiallyvaccinated ? parseFloat(partiallyvaccinated.toFixed(2)) : 'n/a'
           }
         });
 
         const finale = [...vaccineDataAnt1, ...vaccineDataAnt2]
 
         setVaccineDataAnt(finale)
-        console.warn(finale)
+
 
 
       })
