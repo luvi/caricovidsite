@@ -163,7 +163,7 @@ class Map extends Component {
       .then((body) => {
         parse(body, (err, output) => {
           recoveredArr = output.filter(covidData);
-          console.warn(recoveredArr)
+
           // recoveredArr.forEach((jhDataElement) => {
           //   let caribbeanName = jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
 

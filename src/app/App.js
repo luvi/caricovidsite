@@ -6,6 +6,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Map from "../pages/MapPage/Map";
+import Map2 from "../pages/MapPage/Map2"
 import Credits from "../pages/CreditsPage/Credits";
 import GraphPage from "../pages/GraphPage/GraphPage";
 import VaccinePage from "../pages/VaccinePage/VaccinePage";
@@ -93,11 +94,12 @@ export default () => {
         <div>
           <Switch>
             <Route exact path="/" component={Map} />
+            <Route exact path="/mapsecret" component={Map2} />
             <Route
               path="/credits"
               render={(props) => <Credits {...props} />}
             />
-            <Route path="/graphs"> <GraphPage/> </Route>
+            <Route path="/graphs"> <GraphPage /> </Route>
             <Route path="/vaccination" component={VaccinePage} />
           </Switch>
         </div>
