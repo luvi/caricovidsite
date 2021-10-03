@@ -22,17 +22,27 @@ class StatsCard extends Component {
   }
 
   render() {
+
+
     return (
       <div className="statsCard">
         <Card type="rounded-0" style={cardStyle}>
           <Card.Body className="div-only-mobile-cards">
             <Card.Text style={cardTextStyle}>
-              <div>
-                {this.t("confirmed_cases")}: <b>{this.props.total}</b>
-              </div>
+              {this.props.totalActiveCases && <div>
+                {this.t("active_cases")}: <b>{this.props.totalActiveCases}</b>
+              </div>}
               <div>
                 {this.t("deaths")}: <b>{this.props.totalDeaths}</b>
               </div>
+              {this.props.totalCritical && <div>
+                {this.t("critical_condition")}: <b>{this.props.totalCritical}</b>
+              </div>}
+              <div>
+                {this.t("confirmed_cases")}: <b>{this.props.total}</b>
+              </div>
+
+
             </Card.Text>
           </Card.Body>
         </Card>
