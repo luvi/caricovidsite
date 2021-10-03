@@ -264,7 +264,7 @@ class Map extends Component {
       <div>
         <div className="statsContainer">
           <UpdatedCard date={this.state.date} />
-          <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)} />
+          <StatsCard total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)} />
 
         </div>
         <div
