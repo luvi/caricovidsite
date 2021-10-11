@@ -93,8 +93,8 @@ export default () => {
 
         <div>
           <Switch>
-            <Route exact path="/" component={Map} />
-            <Route exact path="/mapsecret" component={Map2} />
+            <Route exact path="/" component={Map2} />
+            <Route exact path="/mapsecret" component={Map} />
             <Route
               path="/credits"
               render={(props) => <Credits {...props} />}

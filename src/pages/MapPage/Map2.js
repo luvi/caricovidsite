@@ -4,7 +4,7 @@ import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import axios from 'axios'
 import { countryCodes } from '../../functions/ISOCaribbeanCountries'
-import _ from "lodash";
+import setMarkers from './setMarkers2'
 
 
 import UpdatedCard from "./UpdatedCard.js";
@@ -44,15 +44,8 @@ class Map2 extends Component {
             lng: -61,
             lat: 15,
             zoom: 4,
-            caribbeanData: [],
-            caribbeanDataDeaths: [],
-            caribbeanDataRecovered: [],
-            caribbeanDataActiveCases: [],
-            johnsHopkinsData: [],
-            date: "",
             lowestActiveCases: [],
             highestActiveCases: [],
-            puertoRicoConfirmedCases: 0,
             vaccinationData: [],
             countryInfo: []
         }
@@ -60,6 +53,7 @@ class Map2 extends Component {
 
 
     componentDidMount() {
+
         const map = new mapboxgl.Map({
             container: this.mapContainer,
             style: "mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o",
@@ -70,11 +64,8 @@ class Map2 extends Component {
         axios.get('https://disease.sh/v3/covid-19/countries/')
             .then(res => {
 
-                const cariData = res.data.filter(countryData =>
+                const cariData = res.data.filter(countryData => countryCodes.includes(countryData.countryInfo.iso2?.toString()))
 
-                    countryCodes.includes(countryData.countryInfo.iso2?.toString())
-                )
-                console.warn(cariData);
                 this.setState({ countryInfo: cariData })
                 const totalConfirmed = cariData.reduce(casesReducer, { cases: 0 })
                 this.setState({ total: totalConfirmed.cases })
@@ -88,31 +79,7 @@ class Map2 extends Component {
 
             }).then(() => {
 
-                this.state.countryInfo.map((country) => {
-
-
-                    let size = Math.max(15, Math.min(parseInt(country.active) / 10, 60));
-                    let popup = new mapboxgl.Popup({ offset: 25, className: "popups" }).setHTML(
-                        `<div class="caribbeanName">${country.country}</div> <strong>${country.active}</strong> active, <strong>${country.critical}</strong> in critical condition,
-      <strong>${country.cases}</strong> confirmed, <strong>${country.deaths}</strong> death(s), <strong>${country.recovered}</strong> recovered`
-                    );
-
-                    // add marker to map
-                    var el = document.createElement("div");
-                    el.className = "marker";
-                    el.style.backgroundColor = "red";
-                    el.style.width = size + "px";
-                    el.style.height = size + "px";
-                    el.style.borderRadius = "50%";
-                    el.style.opacity = "50%";
-
-
-                    new mapboxgl.Marker(el)
-                        .setLngLat({ lng: country.countryInfo.long, lat: country.countryInfo.lat })
-                        .setPopup(popup)
-                        .addTo(map);
-
-                })
+                this.state.countryInfo.map((country) => { setMarkers(map, country) })
 
             });
 
@@ -128,7 +95,6 @@ class Map2 extends Component {
                 <div className="statsContainer">
                     <UpdatedCard date={"every 10 minutes"} />
                     <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)} totalCritical={new Intl.NumberFormat().format(this.state.totalCritical)} />
-
                 </div>
                 <div
                     ref={(el) => {

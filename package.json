@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI= react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false CI= react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject"
   },
