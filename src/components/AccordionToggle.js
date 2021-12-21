@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
+import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 
 const AccordionToggle = ({ children, style, eventKey }) => {
 
     const [highlight, setHighlight] = useState(false)
-    const decoratedOnClick = useAccordionToggle(eventKey, () =>
+    const decoratedOnClick = useAccordionButton(eventKey, () =>
         setHighlight(!highlight)
     );
 
