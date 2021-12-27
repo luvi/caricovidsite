@@ -5,6 +5,7 @@ import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import axios from 'axios'
 import { countryCodes } from '../../functions/ISOCaribbeanCountries'
 import setMarkers from './setMarkers2'
+import ListCard from './ListCard'
 
 
 import UpdatedCard from "./UpdatedCard.js";
@@ -75,6 +76,16 @@ class Map2 extends Component {
                 this.setState({ totalDeaths: totalDeaths.deaths })
                 const totalCritical = cariData.reduce(criticalReducer, { critical: 0 })
                 this.setState({ totalCritical: totalCritical.critical })
+               
+                cariData.sort((a, b) => b.active - a.active)
+                this.setState({ highestActiveCases: cariData.slice(0, 5) })
+
+                cariData.sort((a,b) => a.active - b.active)
+                this.setState({ lowestActiveCases: cariData.slice(0, 5) })
+            
+                cariData.sort((a, b) => a.deathsPerOneMillion - b.deathsPerOneMillion)
+                this.setState({ lowestCovidDeaths: cariData.slice(0, 5) })
+           
 
 
             }).then(() => {
@@ -95,6 +106,9 @@ class Map2 extends Component {
                 <div className="statsContainer">
                     <UpdatedCard date={"every 10 minutes"} />
                     <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)} totalCritical={new Intl.NumberFormat().format(this.state.totalCritical)} />
+                    <ListCard title={'Highest Active Cases'} cases={this.state.highestActiveCases} param={'active'}/>
+                    <ListCard title={'Lowest Active Cases'} cases={this.state.lowestActiveCases} param={'active'}/>
+                    <ListCard title={'Lowest Deaths per 1000'} cases={this.state.lowestCovidDeaths} param={'deaths'}/>
                 </div>
                 <div
                     ref={(el) => {

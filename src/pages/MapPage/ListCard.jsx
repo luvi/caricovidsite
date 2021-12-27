@@ -81,18 +81,18 @@ class ListCard extends Component {
                     </AccordionToggle>
                     <Accordion.Collapse eventKey="1">
                       <div style={dataStyle}>
-                        {this.props.cases.map((caseEntry) => (
+                        {this.props.cases?.map((caseEntry) => (
                           <div>
                             <b>
                               {new Intl.NumberFormat().format(
-                                caseEntry.activeCases
+                                caseEntry[this.props.param]
                               )}
                             </b>{" "}
-                            {fetchCountryCode(caseEntry.caribbeanName) &&
+                            {fetchCountryCode(caseEntry.country) &&
                               emojiFlags.countryCode(
-                                fetchCountryCode(caseEntry.caribbeanName)
+                                fetchCountryCode(caseEntry.country)
                               ).emoji}
-                            {caseEntry.caribbeanName}
+                            {caseEntry.country}
                           </div>
                         ))}
                       </div>
