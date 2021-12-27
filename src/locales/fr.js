@@ -12,6 +12,7 @@ const fr = {
       credits_disclaimer: 'veuillez noter que les mises à jour peuvent avoir un léger retard.',
       data_sources: 'Sources de données: Johns Hopkins, @KevzPolitics, Trinidad Express, Dominica News Online, Our World In Data',
       deaths: 'Morts',
+      deaths_title: 'Morts',
       developer: 'Développeur',
       disclaimer: 'source de données : JHU, Mise à jour une fois par jour',
       github_contributors: 'Github contributors',

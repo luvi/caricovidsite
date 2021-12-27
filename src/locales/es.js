@@ -12,6 +12,7 @@ const es = {
       credits_disclaimer: 'Exención de responsabilidad: los datos mostrados en este sitio son por propósitos informativos solos, por favor, ten en cuenta retrasos de actualizaciones',
       data_sources: 'Fuentes de datos: Johns Hopkins, @KevzPolitics, Trinidad Express, Dominica News Online, Our World In Data',
       deaths: 'Muertes',
+      deaths_title: 'Muertes',
       developer: 'Desarrollador',
       disclaimer: 'Fuente de datos: JHU, actualizado una vez al día’',
       github_contributors: 'Github contributors',

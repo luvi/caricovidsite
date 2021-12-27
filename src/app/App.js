@@ -51,6 +51,15 @@ export default () => {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link
+                eventKey="link-5"
+                style={{ color: "white", paddingRight: 10 }}
+                href="/deaths"
+              >
+                {t("deaths_title")}
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
                 eventKey="link-2"
                 style={{ color: "white", paddingRight: 10 }}
                 href="/graphs"

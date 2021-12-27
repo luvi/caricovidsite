@@ -16,12 +16,6 @@ const cardTextStyle = {
   padding: "0px",
 };
 
-const disclaimerStyle = {
-  fontSize: "10px",
-  color: "white",
-  padding: "0px",
-};
-
 class UpdatedCard extends Component {
   constructor(props) {
     super(props);

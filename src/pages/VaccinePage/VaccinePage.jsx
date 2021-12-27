@@ -8,6 +8,8 @@ import { vaccinationNumbersURL } from "../../constants";
 import { useTranslation } from 'react-i18next';
 import "./VaccinePage.css";
 import { Table } from "antd";
+import { CSVLink } from "react-csv"
+import { columns } from './columns'
 
 
 
@@ -15,7 +17,7 @@ function VaccinePage(props) {
 
   const [vaccineData, setVaccineData] = useState(null);
   const [vaccineDataA, setVaccineDataAnt] = useState(null);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
 
   useEffect(() => {
@@ -32,7 +34,6 @@ function VaccinePage(props) {
         });
 
         setVaccineData(vaccineData);
-        console.log(vaccineData)
 
         const vaccineDataAnt1 = obj.map((countryElement) => {
 
@@ -57,14 +58,11 @@ function VaccinePage(props) {
         });
 
         const finale = [...vaccineDataAnt1, ...vaccineDataAnt2]
-
         setVaccineDataAnt(finale)
-
-
 
       })
       .then();
-  }, [null]);
+  }, []);
 
 
 
@@ -95,41 +93,6 @@ function VaccinePage(props) {
   });
 
 
-  const columns = [
-    {
-      title: "Country",
-      dataIndex: "country",
-      key: "country"
-    },
-    {
-      title: "People fully vaccinated",
-      dataIndex: "people_fully_vaccinated",
-      key: "people_fully_vaccinated",
-      sorter: (a, b) => a.people_fully_vaccinated - b.people_fully_vaccinated,
-      sortDirections: ['descend', 'ascend']
-    }, {
-      title: "People vaccinated",
-      dataIndex: "people_vaccinated",
-      key: "people_vaccinated",
-      sorter: (a, b) => a.people_vaccinated - b.people_vaccinated,
-      sortDirections: ['descend', 'ascend']
-    },
-    {
-      title: "People fully vaccinated per 100",
-      dataIndex: "people_fully_vaccinated_per_hundred",
-      key: "people_fully_vaccinated_per_hundred",
-      sorter: (a, b) => a.people_fully_vaccinated_per_hundred - b.people_fully_vaccinated_per_hundred,
-      sortDirections: ['descend', 'ascend']
-    },
-    {
-      title: "Date updated",
-      dataIndex: "date",
-      key: "date",
-    }
-  ];
-
-
-
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', padding: "100px 20px 100px 20px" }}>
@@ -144,7 +107,15 @@ function VaccinePage(props) {
         <br />
         <h5 className='subtitle'> Table </h5>
         <br />
+
         <Table dataSource={dataForTable} columns={columns} />
+        <div className='export-button'><CSVLink
+          filename={`${new Date()}_vaccine_data_caricovidmap.csv`}
+          data={dataForTable ?? []}
+          className="export-button"
+        >
+          Export to Vaccine Data to CSV
+        </CSVLink></div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Alert
             dismissable={"true"}

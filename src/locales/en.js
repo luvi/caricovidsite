@@ -13,6 +13,7 @@ const en = {
     critical_condition: 'In critical condition',
     data_sources: 'Data Sources: Johns Hopkins, @KevzPolitics, Trinidad Express, Dominica News Online, Our World In Data',
     deaths: 'Deaths',
+    deaths_title: 'Deaths',
     developer: 'Developer',
     disclaimer: 'Data source: JHU, updated once per day - Active case information no longer available. Visit @JaniquekaJohn on twitter for more information',
     github_contributors: 'Github contributors',

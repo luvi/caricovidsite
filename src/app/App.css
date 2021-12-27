@@ -11,7 +11,7 @@
 }
 
 .header-color{
-  background-color: #212f45;
+  background-color: #212f45
 }
 .brand {
   color: #fff;
@@ -26,6 +26,25 @@
 
 .subtitle {
   font-size: 1.2em;
+}
+
+.export-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 1em;
+}
+
+.export-button {
+  background-color: #4d5f7c;
+  color: #fff;
+  font-size: 0.79em;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 0.50rem;
+  width: 13rem;
+  padding: 0.2rem;
+  align-self: flex-end;
 }
 
 .App-header {

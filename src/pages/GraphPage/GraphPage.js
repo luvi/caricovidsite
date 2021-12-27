@@ -28,7 +28,7 @@ import {
   confirmedCasesLineColour,
   deathsLineColour,
 } from "./graph-line-colours";
-//import AllCountriesGraph from "./allCountriesGraph";
+
 import CustomTooltip from "./GraphCustomTooltip";
 
 const data = [];
@@ -137,6 +137,7 @@ class GraphPage extends Component {
 
   render() {
     return (
+      
       <div className={"graph-style"}>
         <Form>
           <Form.Group controlId="caribbeanForm.SelectCustom">
@@ -164,6 +165,8 @@ class GraphPage extends Component {
         ) : (
           //  <AllCountriesGraph countryData={[this.state.allCountriesData]}/>
 
+     
+          
           <ResponsiveContainer width="99%" height={500}>
             <LineChart
               data={this.state.data[this.state.selectedCountry]}
