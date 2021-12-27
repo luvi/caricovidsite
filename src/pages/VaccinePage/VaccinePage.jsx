@@ -5,9 +5,9 @@ import { vaccines } from "../../functions/isCaribbeanCountry";
 import getCOVIDInfo from "../../functions/fetchFromURL";
 import _ from "lodash";
 import { vaccinationNumbersURL } from "../../constants";
-import { withTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import "./VaccinePage.css";
-import { Table, Button } from "antd";
+import { Table } from "antd";
 
 
 
@@ -15,7 +15,8 @@ function VaccinePage(props) {
 
   const [vaccineData, setVaccineData] = useState(null);
   const [vaccineDataA, setVaccineDataAnt] = useState(null);
-  const [showRaw, setShowRaw] = useState(null);
+  const { t, i18n } = useTranslation();
+
 
   useEffect(() => {
 
@@ -136,7 +137,7 @@ function VaccinePage(props) {
         <div className="div-only-mobile">
           Please turn device landscape for best viewing experience
         </div>
-        <div style={{ alignSelf: 'flex-start' }}> <h4 className='title'> Vaccinination rates across the region </h4></div>
+        <div style={{ alignSelf: 'flex-start' }}> <h4 className='title'> {t('vaccination_region')}</h4></div>
         <br />
         <h5 className='subtitle'> Bar Chart </h5>
         <Bar {...config} />
@@ -167,4 +168,4 @@ function VaccinePage(props) {
   );
 }
 
-export default withTranslation()(VaccinePage);
+export default VaccinePage;

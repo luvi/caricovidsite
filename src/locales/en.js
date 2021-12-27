@@ -29,7 +29,8 @@ const en = {
     title: 'Caribbean COVID Map',
     twitter_handle: '@JaniquekaJohn',
     updated: 'Updated',
-    vaccines_title: 'Vaccines'
+    vaccines_title: 'Vaccines',
+    
   }
 }
 

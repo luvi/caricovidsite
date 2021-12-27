@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 const Credits = () => {
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     document.body.style.backgroundColor = "#1A2637";

@@ -28,6 +28,7 @@ const es = {
       title: 'Mapa de COVID en el Caribe',
       twitter_handle: '@JaniquekaJohn',
       updated: 'Actualizado',
+      vaccination_region: 'Porcentaje de vacunación en la región.'
     }
   }
   

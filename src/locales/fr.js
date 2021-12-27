@@ -28,7 +28,8 @@ const fr = {
       title: 'carte COVID des Caraïbes',
       twitter_handle: '@JaniquekaJohn',
       updated: 'Mis à jour',
-      vaccines_title: 'Vaccines'
+      vaccines_title: 'Vaccines',
+      vaccination_region: 'Pourcentage de vaccination dans la région.'
     }
    }
    
