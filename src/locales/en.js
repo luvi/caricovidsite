@@ -30,7 +30,8 @@ const en = {
     twitter_handle: '@JaniquekaJohn',
     updated: 'Updated',
     vaccines_title: 'Vaccines',
-    
+    vaccination_region: 'Percentage of people vaccinated in the region.'
+
   }
 }
 
