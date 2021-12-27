@@ -85,7 +85,12 @@ function VaccinePage(props) {
 
   const dataForTable = vals?.map((el) => {
     const key = el[1];
-    return { country: el[0], date: key.date, people_fully_vaccinated: key.people_fully_vaccinated, people_vaccinated: key.people_vaccinated };
+    return {
+      country: el[0], date: key.date, people_fully_vaccinated: key.people_fully_vaccinated,
+      people_vaccinated: key.people_vaccinated,
+      people_fully_vaccinated_per_hundred: key.people_fully_vaccinated_per_hundred,
+      people_vaccinated_per_hundred: key.people_vaccinated_per_hundred
+    };
   });
 
 
@@ -109,6 +114,13 @@ function VaccinePage(props) {
       sortDirections: ['descend', 'ascend']
     },
     {
+      title: "People fully vaccinated per 100",
+      dataIndex: "people_fully_vaccinated_per_hundred",
+      key: "people_fully_vaccinated_per_hundred",
+      sorter: (a, b) => a.people_fully_vaccinated_per_hundred - b.people_fully_vaccinated_per_hundred,
+      sortDirections: ['descend', 'ascend']
+    },
+    {
       title: "Date updated",
       dataIndex: "date",
       key: "date",
@@ -124,14 +136,14 @@ function VaccinePage(props) {
         <div className="div-only-mobile">
           Please turn device landscape for best viewing experience
         </div>
-        <div style={{alignSelf:'flex-start'}}> <h4 className='title'> Vaccinination rates across the region </h4></div>
-        <br/> 
+        <div style={{ alignSelf: 'flex-start' }}> <h4 className='title'> Vaccinination rates across the region </h4></div>
+        <br />
         <h5 className='subtitle'> Bar Chart </h5>
         <Bar {...config} />
-        <br/>
+        <br />
         <h5 className='subtitle'> Table </h5>
-        <br/>
-        <Table dataSource={dataForTable} columns={columns} /> 
+        <br />
+        <Table dataSource={dataForTable} columns={columns} />
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Alert
             dismissable={"true"}

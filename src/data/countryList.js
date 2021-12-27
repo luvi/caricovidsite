@@ -19,7 +19,6 @@ export const countryList = [
     "Martinique",
     "Montserrat",
     "Netherlands Antilles",
-    //"Puerto Rico",
     "Saint Barthelemy",
     "Saint Kitts and Nevis",
     "Saint Lucia",
@@ -28,9 +27,8 @@ export const countryList = [
     "Trinidad and Tobago",
     "Turks and Caicos Islands",
     "US Virgin Islands",
-   // "Venezuela",
     "Guyana",
     "French Guiana",
     "Suriname"
-   // "Panama"
+
   ];
