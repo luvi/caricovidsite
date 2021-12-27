@@ -157,6 +157,7 @@ class GraphPage extends Component {
             </Form.Control>
           </Form.Group>
         </Form>
+        <br/>
 
         {this.state.selectedCountry === "All countries" ? (
           <div>{this.t("all_countries_placeholder")}</div> //ReactComponent

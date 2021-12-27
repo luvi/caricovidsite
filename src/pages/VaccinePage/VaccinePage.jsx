@@ -120,17 +120,18 @@ function VaccinePage(props) {
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', padding: "100px 20px 100px 20px" }}>
-        <Button style={{ width: '300px', alignSelf: 'center' }}
-          onClick={() => {
-            setShowRaw(!showRaw);
-          }}
-        >
-          Toggle data view
-        </Button>
+
         <div className="div-only-mobile">
           Please turn device landscape for best viewing experience
         </div>
-        {showRaw ? <Table dataSource={dataForTable} columns={columns} /> : <Bar {...config} />}
+        <div style={{alignSelf:'flex-start'}}> <h4 className='title'> Vaccinination rates across the region </h4></div>
+        <br/> 
+        <h5 className='subtitle'> Bar Chart </h5>
+        <Bar {...config} />
+        <br/>
+        <h5 className='subtitle'> Table </h5>
+        <br/>
+        <Table dataSource={dataForTable} columns={columns} /> 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Alert
             dismissable={"true"}
