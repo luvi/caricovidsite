@@ -8,6 +8,8 @@ import VaccinePage from './pages/VaccinePage/VaccinePage';
 
 import * as serviceWorker from './serviceWorker';
 
+import './locales';
+
 import { render } from "react-dom";
 import {
   BrowserRouter,

@@ -5,11 +5,11 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Outlet, useLocation } from "react-router-dom";
-import i18n from "../locales";
+
 import Map2 from "../pages/MapPage/Map2";
 
 export default () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   //const [lang, setLang] = useState(null);
   const [selected, setSelected] = useState("");
 
