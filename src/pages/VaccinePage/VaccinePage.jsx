@@ -10,13 +10,14 @@ import "./VaccinePage.css";
 import { Table } from "antd";
 import { CSVLink } from "react-csv"
 import { columns } from './columns'
+import { Spin, Space } from 'antd';
 
 
 
 function VaccinePage(props) {
 
   const [vaccineData, setVaccineData] = useState(null);
-  const [vaccineDataA, setVaccineDataAnt] = useState(null);
+  const [vaccineDataBarGraph, setVaccineDataBarGraph] = useState(null);
   const { t } = useTranslation();
 
 
@@ -58,7 +59,7 @@ function VaccinePage(props) {
         });
 
         const finale = [...vaccineDataAnt1, ...vaccineDataAnt2]
-        setVaccineDataAnt(finale)
+        setVaccineDataBarGraph(finale)
 
       })
       .then();
@@ -67,7 +68,7 @@ function VaccinePage(props) {
 
 
   var config = {
-    data: vaccineDataA || [],
+    data: vaccineDataBarGraph || [],
     xField: 'count',
     yField: 'country',
     seriesField: 'status',
@@ -103,7 +104,9 @@ function VaccinePage(props) {
         <div style={{ alignSelf: 'flex-start' }}> <h4 className='title'> {t('vaccination_region')}</h4></div>
         <br />
         <h5 className='subtitle'> Bar Chart </h5>
-        <Bar {...config} />
+        {vaccineDataBarGraph ? <Bar {...config} /> : <Space size="middle">
+          <Spin size="large" />
+        </Space>}
         <br />
         <h5 className='subtitle'> Table </h5>
         <br />

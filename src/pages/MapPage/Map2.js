@@ -10,28 +10,10 @@ import ListCard from './ListCard'
 
 import UpdatedCard from "./UpdatedCard.js";
 import StatsCard from "./StatsCard.js";
+import {casesReducer, activeReducer, criticalReducer, deathsReducer} from './calculationReducers'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const casesReducer = (previousValue, currentValue) => {
-
-    return { cases: previousValue.cases + currentValue.cases };
-}
-
-const activeReducer = (previousValue, currentValue) => {
-
-    return { active: previousValue.active + currentValue.active };
-}
-
-const deathsReducer = (previousValue, currentValue) => {
-
-    return { deaths: previousValue.deaths + currentValue.deaths };
-}
-
-const criticalReducer = (previousValue, currentValue) => {
-
-    return { critical: previousValue.critical + currentValue.critical };
-}
 
 class Map2 extends Component {
 
@@ -99,8 +81,6 @@ class Map2 extends Component {
 
 
     render() {
-
-
         return (
             <div>
                 <div className="statsContainer">

@@ -20,7 +20,6 @@ export default () => {
   const handleSelect = (eventKey) => {
 
     setSelected(eventKey.toString());
-    console.warn(selected)
 
   }
 
