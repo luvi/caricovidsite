@@ -1,25 +1,11 @@
-export default async (map, mapboxgl, cleanedUpArray, vaccinationData) => {
-  cleanedUpArray.forEach((element) => {
-    let caribbeanName = element.caribbeanName;
-    let numCases = new Intl.NumberFormat().format(element.confirmedCases);
-    let numRecovered = new Intl.NumberFormat().format(element.recoveredCases);
-    let activeCases = new Intl.NumberFormat().format(element.activeCases);
-    let numDeaths = new Intl.NumberFormat().format(element.numDeaths);
-    let totalVaccinations = vaccinationData[caribbeanName]?.total_vaccinations;
+import mapboxgl from "mapbox-gl";
 
-    //shows a different size based on the number of active cases, but minimum size is 20
-    let size = Math.max(15, Math.min(parseInt(element.activeCases) / 5, 60));
+export default (map, country) => {
 
+    let size = Math.max(15, Math.min(parseInt(country.active) / 10, 60));
     let popup = new mapboxgl.Popup({ offset: 25, className: "popups" }).setHTML(
-      `<div class="caribbeanName">${caribbeanName}</div>
-      <strong>${numCases}</strong> confirmed, <strong>${numDeaths}</strong> death(s)
-      ${
-        totalVaccinations
-          ? `, <strong>${new Intl.NumberFormat().format(
-              parseInt(totalVaccinations)
-            )}</strong> vaccine doses administered`
-          : ""
-      }`
+        `<div class="caribbeanName">${country.country}</div> <strong>${country.active}</strong> active, <strong>${country.critical}</strong> in critical condition,
+<strong>${country.cases}</strong> confirmed, <strong>${country.deaths}</strong> death(s), <strong>${country.recovered}</strong> recovered`
     );
 
     // add marker to map
@@ -31,9 +17,9 @@ export default async (map, mapboxgl, cleanedUpArray, vaccinationData) => {
     el.style.borderRadius = "50%";
     el.style.opacity = "50%";
 
+
     new mapboxgl.Marker(el)
-      .setLngLat({ lng: element.longitude, lat: element.latitude })
-      .setPopup(popup)
-      .addTo(map);
-  });
-};
+        .setLngLat({ lng: country.countryInfo.long, lat: country.countryInfo.lat })
+        .setPopup(popup)
+        .addTo(map);
+}

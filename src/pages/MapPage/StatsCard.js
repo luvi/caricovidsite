@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { Card } from "react-bootstrap";
-import { withTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const cardStyle = {
   width: "260px",
@@ -15,40 +15,32 @@ const cardTextStyle = {
   padding: "0px",
 };
 
-class StatsCard extends Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t;
-  }
+const StatsCard  = ({totalActiveCases, totalCritical, totalDeaths, total}) => {
 
-  render() {
-
-
+    const {t} = useTranslation();
+    
     return (
       <div className="statsCard">
         <Card type="rounded-0" style={cardStyle}>
           <Card.Body className="div-only-mobile-cards">
             <Card.Text style={cardTextStyle}>
-              {this.props.totalActiveCases && <div>
-                {this.t("active_cases")}: <b>{this.props.totalActiveCases}</b>
+              {totalActiveCases && <div>
+                {t("active_cases")}: <b>{totalActiveCases}</b>
               </div>}
               <div>
-                {this.t("deaths")}: <b>{this.props.totalDeaths}</b>
+                {t("deaths")}: <b>{totalDeaths}</b>
               </div>
-              {this.props.totalCritical && <div>
-                {this.t("critical_condition")}: <b>{this.props.totalCritical}</b>
+              {totalCritical && <div>
+                {t("critical_condition")}: <b>{totalCritical}</b>
               </div>}
               <div>
-                {this.t("confirmed_cases")}: <b>{this.props.total}</b>
+                {t("confirmed_cases")}: <b>{total}</b>
               </div>
-
-
             </Card.Text>
           </Card.Body>
         </Card>
       </div>
     );
   }
-}
 
-export default withTranslation()(StatsCard);
+export default StatsCard;

@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Outlet, useLocation } from "react-router-dom";
 
-import Map2 from "../pages/MapPage/Map2";
+import Map2 from "../pages/MapPage/Map";
 
 export default () => {
   const { t, i18n } = useTranslation();

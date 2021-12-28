@@ -2,280 +2,96 @@ import React, { Component } from "react";
 import { withTranslation } from 'react-i18next'
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
-import getCOVIDInfo from "../../functions/fetchFromURL";
-import parse from "csv-parse";
-import { covidData, vaccines } from "../../functions/isCaribbeanCountry";
-import {
-  url,
-  deathsSource,
-  myOverrideURL,
-  recoveredSourceURL,
-  unitedStatesCaseSource,
-  vaccinationNumbersURL,
-} from "../../constants";
-import createCaribbeanDataArray from "./createCaribbeanDataArray";
-import TinyQueue from "tinyqueue";
-import setMarkers from "./setMarkers";
-import _ from "lodash";
-import moment from "moment";
-import ListCard from './ListCard';
+import axios from 'axios'
+import { countryCodes } from '../../functions/ISOCaribbeanCountries'
+import setMarkers from './setMarkers'
+import ListCard from './ListCard'
+
 
 import UpdatedCard from "./UpdatedCard.js";
 import StatsCard from "./StatsCard.js";
+import {casesReducer, activeReducer, criticalReducer, deathsReducer} from './calculationReducers'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-let quickAddDeaths = [
-  ["", "Trinidad and Tobago", "10.6918", "-61.2225", "2"],
-  //["", "Puerto Rico", "18.2208", "-66.5901", "230"],
-  ["", "Belize", "17.195465", "-88.268587", "2"],
-];
+
+class Map2 extends Component {
+
+    constructor(props) {
+        super(props);
+        this.t = props.t
+        this.state = {
+            total: 0,
+            totalDeaths: 0,
+            totalActiveCases: 0,
+            lng: -61,
+            lat: 15,
+            zoom: 4,
+            lowestActiveCases: [],
+            highestActiveCases: [],
+            vaccinationData: [],
+            countryInfo: []
+        }
+    }
 
 
-class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.t = props.t
-    this.state = {
-      total: 0,
-      totalDeaths: 0,
-      totalActiveCases: 0,
-      lng: -61,
-      lat: 15,
-      zoom: 4,
-      caribbeanData: [],
-      caribbeanDataDeaths: [],
-      caribbeanDataRecovered: [],
-      caribbeanDataActiveCases: [],
-      johnsHopkinsData: [],
-      date: "",
-      lowestActiveCases: [],
-      highestActiveCases: [],
-      puertoRicoConfirmedCases: 0,
-      vaccinationData: []
-    };
-  }
+    componentDidMount() {
 
-  sum(total, array) {
-    return total + parseInt(array[array.length - 1]);
-  }
-
-  componentDidMount() {
-    console.log(
-      "developer: @JaniquekaJohn, Open Source https://github.com/luvi/caricovidsite"
-    );
-
-    let johnsHopkinsData;
-    let johnsHopkinsCountries;
-    let myCSVData;
-    let caribbeanDataDeaths;
-    let recoveredArr;
-
-    getCOVIDInfo(vaccinationNumbersURL).then((body) => {
-      let obj = JSON.parse(body)
-      obj = obj.filter(vaccines)
-
-      let vaccineData = []
-      obj.map((countryElement) => {
-        vaccineData[countryElement.country] = _.last(countryElement.data);
-      })
-      this.setState({ vaccinationData: vaccineData })
-    })
-
-    getCOVIDInfo(url)
-      .then((body) => {
-        parse(body, (err, output) => {
-          const arr = output;
-          this.setState({
-            date: moment(_.last(arr[0])).format("dddd, MMMM Do YYYY"),
-          }); //date of latest entry
-
-          johnsHopkinsData = arr.filter(covidData);
-          johnsHopkinsCountries = new Set();
+        const map = new mapboxgl.Map({
+            container: this.mapContainer,
+            style: "mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o",
+            center: [this.state.lng, this.state.lat],
+            zoom: this.state.zoom,
         });
 
-        return getCOVIDInfo(deathsSource);
-      })
-      .then((body) => {
-        //Read JohnsDeathCSV
-        parse(body, (err, output) => {
-          caribbeanDataDeaths = output.filter(covidData);
-          caribbeanDataDeaths = caribbeanDataDeaths.concat(quickAddDeaths);
-        });
+        axios.get('https://disease.sh/v3/covid-19/countries/')
+            .then(res => {
 
-        return getCOVIDInfo(myOverrideURL);
-      })
-      .then((myOverrideData) => {
-        //Read my CSV
-        parse(myOverrideData, (err, output) => {
-          myCSVData = output;
+                const cariData = res.data.filter(countryData => countryCodes.includes(countryData.countryInfo.iso2?.toString()))
 
-          // let prData = myCSVData.filter(
-          //   (entry) => entry[1] === 'Puerto Rico'
-          // )
+                this.setState({ countryInfo: cariData })
+                const totalConfirmed = cariData.reduce(casesReducer, { cases: 0 })
+                this.setState({ total: totalConfirmed.cases })
+                const totalActive = cariData.reduce(activeReducer, { active: 0 })
+                this.setState({ totalActiveCases: totalActive.active })
+                const totalDeaths = cariData.reduce(deathsReducer, { deaths: 0 })
+                this.setState({ totalDeaths: totalDeaths.deaths })
+                const totalCritical = cariData.reduce(criticalReducer, { critical: 0 })
+                this.setState({ totalCritical: totalCritical.critical })
+               
+                cariData.sort((a, b) => b.active - a.active)
+                this.setState({ highestActiveCases: cariData.slice(0, 5) })
 
-          // this.setState({puertoRicoConfirmedCases: parseInt(_.last(prData[0]))})
-
-          //pick the higher case count out of my override data, and Johns Hopkins Data (Confirmed cases)
-          johnsHopkinsData.forEach((jhDataElement) => {
-            let caribbeanName =
-              jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
-
-            johnsHopkinsCountries.add(caribbeanName); //create set of all countries johns has
-            let numCases = _.last(jhDataElement);
-            let myDataCountry = myCSVData.filter(
-              (entry) =>
-                entry[0] === caribbeanName || entry[1] === caribbeanName
-            );
-
-            if (caribbeanName === "Belize") {
-              //Johns Hopkins coordinates are incorrect
-
-              jhDataElement[2] = "17.195465";
-              jhDataElement[3] = "-88.268587";
-            }
-
-            if (typeof myDataCountry[0] !== "undefined") {
-              myDataCountry = myDataCountry[0];
-              let myCaseCount = _.last(myDataCountry);
-
-              jhDataElement[jhDataElement.length - 1] = Math.max(
-                numCases,
-                myCaseCount
-              );
-            }
-            //add the data that I have that Johns Hopkins does not.
-
-            myCSVData = myCSVData.filter((arr) => {
-              return !(
-                johnsHopkinsCountries.has(arr[0]) ||
-                johnsHopkinsCountries.has(arr[1])
-              );
+                cariData.sort((a,b) => a.active - b.active)
+                this.setState({ lowestActiveCases: cariData.slice(0, 5) })
+            
+                cariData.sort((a, b) => a.deathsPerOneMillion - b.deathsPerOneMillion)
+                this.setState({ lowestCovidDeaths: cariData.slice(0, 5) })
+           
+            }).then(() => {
+                this.state.countryInfo.map((country) => { setMarkers(map, country) })
             });
-          });
-        });
+    }
 
-        return getCOVIDInfo(myOverrideURL);
-      })
-      .then(() => {
-        return getCOVIDInfo(recoveredSourceURL);
-      })
-      .then((body) => {
-        parse(body, (err, output) => {
-          recoveredArr = output.filter(covidData);
-
-          // recoveredArr.forEach((jhDataElement) => {
-          //   let caribbeanName = jhDataElement[0] === "" ? jhDataElement[1] : jhDataElement[0];
-
-          //   if (caribbeanName === 'Puerto Rico') { //Johns Hopkins coordinates are incorrect
-          //     jhDataElement[recoveredArr.size - 1] = puertoRicoRecovered;
-          //   }})
-        });
-
-        return getCOVIDInfo(unitedStatesCaseSource);
-      })
-      .then((body) => {
-        //TODO: Make Puerto Rico Data read from US JohnsHopkins file
-        // let puertoRicoData;
-
-        // parse(body, (output) => {
-        //   puertoRicoData = output[0].filter((data) => {
-        //     return data[7] === "Puerto Rico";
-        //   });
-        // });
-        // johnsHopkinsData.concat(puertoRicoData);
-
-        this.setState({ caribbeanDataRecovered: recoveredArr });
-        johnsHopkinsData = johnsHopkinsData.concat(myCSVData);
-
-        let totalRecovered = this.state.caribbeanDataRecovered.reduce(
-          this.sum,
-          0
+    render() {
+        return (
+            <div>
+                <div className="statsContainer">
+                    <UpdatedCard date={"every 10 minutes"} />
+                    <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)} totalCritical={new Intl.NumberFormat().format(this.state.totalCritical)} />
+                    <ListCard title={'Highest Active Cases'} cases={this.state.highestActiveCases} param={'active'}/>
+                    <ListCard title={'Lowest Active Cases'} cases={this.state.lowestActiveCases} param={'active'}/>
+                    <ListCard title={'Lowest Deaths per 1000'} cases={this.state.lowestCovidDeaths} param={'deaths'}/>
+                </div>
+                <div
+                    ref={(el) => {
+                        this.mapContainer = el;
+                    }}
+                    className="mapContainer"
+                />
+            </div>
         );
-
-        this.setState({ caribbeanDataDeaths: caribbeanDataDeaths });
-        this.setState({ totalDeaths: caribbeanDataDeaths.reduce(this.sum, 0) });
-        this.setState({ caribbeanData: johnsHopkinsData });
-        let cleanedUpArray = createCaribbeanDataArray(
-          this.state.caribbeanData,
-          this.state.caribbeanDataDeaths,
-          this.state.caribbeanDataRecovered
-        );
-        this.setState(cleanedUpArray);
-        setMarkers(map, mapboxgl, cleanedUpArray, this.state.vaccinationData);
-        this.setState({ total: johnsHopkinsData.reduce(this.sum, 0) });
-
-        this.setState({
-          totalActiveCases:
-            this.state.total -
-            totalRecovered -
-            this.state.totalDeaths -
-            this.state.puertoRicoConfirmedCases,
-        });
-
-        let queue = new TinyQueue([...cleanedUpArray], function (a, b) {
-          return a.activeCases - b.activeCases;
-        });
-        let highestActiveQueue = new TinyQueue(
-          [...cleanedUpArray],
-          function (a, b) {
-            return b.activeCases - a.activeCases;
-          }
-        );
-        let lowestActiveCases = [];
-        let highestActiveCases = [];
-        let topNumberOfCases = 5;
-        for (let i = 0; i < topNumberOfCases; i++) {
-          lowestActiveCases.push(queue.pop());
-        }
-
-        for (let i = 0; i < topNumberOfCases; i++) {
-          let value = highestActiveQueue.pop();
-
-          if (value.caribbeanName !== "Puerto Rico") {
-            highestActiveCases.push(value);
-          } else {
-            i--;
-          }
-        }
-
-        this.setState({ lowestActiveCases });
-        this.setState({ highestActiveCases });
-      });
-
-    const map = new mapboxgl.Map({
-      container: this.mapContainer,
-      style: "mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o",
-      center: [this.state.lng, this.state.lat],
-      zoom: this.state.zoom,
-    });
-
-    map.on("move", () => {
-      this.setState({
-        lng: map.getCenter().lng.toFixed(4),
-        lat: map.getCenter().lat.toFixed(4),
-        zoom: map.getZoom().toFixed(2),
-      });
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="statsContainer">
-          <UpdatedCard date={this.state.date} />
-          <StatsCard total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)} />
-
-        </div>
-        <div
-          ref={(el) => {
-            this.mapContainer = el;
-          }}
-          className="mapContainer"
-        />
-      </div>
-    );
-  }
+    }
 }
 
-export default withTranslation()(Map)
+export default withTranslation()(Map2)
