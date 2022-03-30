@@ -2,6 +2,7 @@ import mapboxgl from "mapbox-gl";
 
 export default (map, country) => {
 
+    if (country) {
     let size = Math.max(15, Math.min(parseInt(country.active) / 10, 60));
     let popup = new mapboxgl.Popup({ offset: 25, className: "popups" }).setHTML(
         `<div class="caribbeanName">${country.country}</div> <strong>${country.active}</strong> active, <strong>${country.critical}</strong> in critical condition,
@@ -22,4 +23,5 @@ export default (map, country) => {
         .setLngLat({ lng: country.countryInfo.long, lat: country.countryInfo.lat })
         .setPopup(popup)
         .addTo(map);
+    }
 }

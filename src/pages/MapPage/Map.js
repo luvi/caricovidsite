@@ -1,97 +1,113 @@
-import React, { Component } from "react";
-import { withTranslation } from 'react-i18next'
+import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from 'react-i18next'
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../../MAPBOX_ACCESS_TOKEN.js";
 import axios from 'axios'
 import { countryCodes } from '../../functions/ISOCaribbeanCountries'
 import setMarkers from './setMarkers'
+
+import UpdatedCard from './UpdatedCard'
+import StatsCard from './StatsCard'
 import ListCard from './ListCard'
 
 
-import UpdatedCard from "./UpdatedCard.js";
-import StatsCard from "./StatsCard.js";
 import {casesReducer, activeReducer, criticalReducer, deathsReducer} from './calculationReducers'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
+// {
+//     total: 0,
+//     totalDeaths: 0,
+//     totalActiveCases: 0,
+//     lng: -61,
+//     lat: 15,
+//     zoom: 4,
+//     lowestActiveCases: [],
+//     highestActiveCases: [],
+//     vaccinationData: [],
+//     countryInfo: []
+// }
+const Map2 = () => {
+    const {t} = useTranslation();
+    const [countryInfo, setCountryInfo] = useState([])
+    const [total, setTotal] = useState(0)
+    const [totalDeaths, setTotalDeaths] = useState(0)
+    const [totalActiveCases, setTotalActiveCases] = useState(0)
+    const [totalCritical, setTotalCritical] = useState(0)
+    const [lowestActiveCases, setLowestActiveCases] = useState([])
+    const [highestActiveCases, setHighestActiveCases] = useState([])
+    const [lowestDeaths, setLowestDeaths] = useState([])
+    const [lng, setLng] = useState(-61)
+    const [lat, setLat] = useState(15)
+    const [zoom, setZoom] = useState(4)
+    const mapContainer = useRef(null);
 
-class Map2 extends Component {
+    const map = useRef(null)
 
-    constructor(props) {
-        super(props);
-        this.t = props.t
-        this.state = {
-            total: 0,
-            totalDeaths: 0,
-            totalActiveCases: 0,
-            lng: -61,
-            lat: 15,
-            zoom: 4,
-            lowestActiveCases: [],
-            highestActiveCases: [],
-            vaccinationData: [],
-            countryInfo: []
-        }
-    }
+useEffect(() => {
+
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+    container: mapContainer.current,
+    style: 'mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o',
+    center: [lng, lat],
+    zoom: zoom
+    });
+    });
 
 
-    componentDidMount() {
 
-        const map = new mapboxgl.Map({
-            container: this.mapContainer,
-            style: "mapbox://styles/luvisaccharine/ck84wx1570bzg1iqfbqelhs3o",
-            center: [this.state.lng, this.state.lat],
-            zoom: this.state.zoom,
-        });
+    useEffect(()=>{
+
 
         axios.get('https://disease.sh/v3/covid-19/countries/')
             .then(res => {
 
                 const cariData = res.data.filter(countryData => countryCodes.includes(countryData.countryInfo.iso2?.toString()))
 
-                this.setState({ countryInfo: cariData })
+                setCountryInfo(cariData)
                 const totalConfirmed = cariData.reduce(casesReducer, { cases: 0 })
-                this.setState({ total: totalConfirmed.cases })
+                setTotal(totalConfirmed.cases)
+
                 const totalActive = cariData.reduce(activeReducer, { active: 0 })
-                this.setState({ totalActiveCases: totalActive.active })
+                setTotalActiveCases(totalActive.active)
+
                 const totalDeaths = cariData.reduce(deathsReducer, { deaths: 0 })
-                this.setState({ totalDeaths: totalDeaths.deaths })
+                setTotalDeaths(totalDeaths.deaths)
+
                 const totalCritical = cariData.reduce(criticalReducer, { critical: 0 })
-                this.setState({ totalCritical: totalCritical.critical })
+                setTotalCritical(totalCritical.critical)
                
                 cariData.sort((a, b) => b.active - a.active)
-                this.setState({ highestActiveCases: cariData.slice(0, 5) })
+                setHighestActiveCases(cariData.slice(0, 5) )
 
                 cariData.sort((a,b) => a.active - b.active)
-                this.setState({ lowestActiveCases: cariData.slice(0, 5) })
+                setLowestActiveCases(cariData.slice(0, 5))
             
                 cariData.sort((a, b) => a.deathsPerOneMillion - b.deathsPerOneMillion)
-                this.setState({ lowestCovidDeaths: cariData.slice(0, 5) })
+                setLowestDeaths(cariData.slice(0, 5))
            
             }).then(() => {
-                this.state.countryInfo.map((country) => { setMarkers(map, country) })
+                countryInfo.forEach((country) => { setMarkers(map, country) })
             });
-    }
+    }, [countryInfo]) 
 
-    render() {
+    
         return (
             <div>
                 <div className="statsContainer">
                     <UpdatedCard date={"every 10 minutes"} />
-                    <StatsCard totalActiveCases={new Intl.NumberFormat().format(this.state.totalActiveCases)} total={new Intl.NumberFormat().format(this.state.total)} totalDeaths={new Intl.NumberFormat().format(this.state.totalDeaths)} totalCritical={new Intl.NumberFormat().format(this.state.totalCritical)} />
-                    <ListCard title={'Highest Active Cases'} cases={this.state.highestActiveCases} param={'active'}/>
-                    <ListCard title={'Lowest Active Cases'} cases={this.state.lowestActiveCases} param={'active'}/>
-                    <ListCard title={'Lowest Deaths per 1000'} cases={this.state.lowestCovidDeaths} param={'deaths'}/>
+                    <StatsCard totalActiveCases={new Intl.NumberFormat().format(totalActiveCases)} total={new Intl.NumberFormat().format(total)} totalDeaths={new Intl.NumberFormat().format(totalDeaths)} totalCritical={new Intl.NumberFormat().format(totalCritical)} />
+                    <ListCard title={'Highest Active Cases'} cases={highestActiveCases} param={'active'}/>
+                    <ListCard title={'Lowest Active Cases'} cases={lowestActiveCases} param={'active'}/>
+                    <ListCard title={'Lowest Deaths per 1000'} cases={lowestDeaths} param={'deaths'}/>
                 </div>
                 <div
-                    ref={(el) => {
-                        this.mapContainer = el;
-                    }}
+                    ref={mapContainer}
                     className="mapContainer"
                 />
             </div>
         );
-    }
 }
 
-export default withTranslation()(Map2)
+export default Map2
