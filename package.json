@@ -24,7 +24,7 @@
     "react-bootstrap": "^2.0.4",
     "react-csv": "^2.0.3",
     "react-dom": "^16.13.1",
-    "react-i18next": "^11.13.0",
+    "react-i18next": "^11.18.6",
     "react-router-dom": "^6.2.1",
     "react-scripts": "3.4.1",
     "react-test-renderer": "^16.13.1",
