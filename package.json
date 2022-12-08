@@ -28,7 +28,7 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "3.4.1",
     "react-test-renderer": "^16.13.1",
-    "recharts": "^1.8.5",
+    "recharts": "^2.2.0",
     "tinyqueue": "^2.0.3"
   },
   "scripts": {
