@@ -9,7 +9,7 @@
   "author": "Janique-ka John",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "pg": "^8.6.0"
   }
 }
